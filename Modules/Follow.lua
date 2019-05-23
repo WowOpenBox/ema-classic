@@ -31,7 +31,7 @@ local L = LibStub( "AceLocale-3.0" ):GetLocale( "Core" )
 EMA.parentDisplayName = L["TOON"]
 EMA.moduleDisplayName = L["FOLLOW"]
 -- Icon 
-EMA.moduleIcon = "Interface\\Addons\\EMA\\Media\\FollowIcon.tga"
+EMA.moduleIcon = "Interface\\Addons\\EMA-Classic\\Media\\FollowIcon.tga"
 -- order
 EMA.moduleOrder = 50
 

@@ -36,9 +36,9 @@ EMA.parentDisplayNameToon = L["TOON"]
 EMA.parentDisplayNameMerchant = L["VENDER"]
 EMA.moduleDisplayName = L["TOON"]
 -- Icon 
-EMA.moduleIcon = "Interface\\Addons\\EMA\\Media\\Toon.tga"
-EMA.moduleIconWarnings = "Interface\\Addons\\EMA\\Media\\WarningIcon.tga"
-EMA.moduleIconRepair = "Interface\\Addons\\EMA\\Media\\moduleIconRepair.tga"
+EMA.moduleIcon = "Interface\\Addons\\EMA-Classic\\Media\\Toon.tga"
+EMA.moduleIconWarnings = "Interface\\Addons\\EMA-Classic\\Media\\WarningIcon.tga"
+EMA.moduleIconRepair = "Interface\\Addons\\EMA-Classic\\Media\\moduleIconRepair.tga"
 -- order
 EMA.moduleOrder = 40
 

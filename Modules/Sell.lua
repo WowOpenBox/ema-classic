@@ -35,7 +35,7 @@ EMA.parentDisplayName = L["VENDER"]
 EMA.moduleDisplayName = L["VENDER"]
 EMA.moduleDisplayVenderName = L["VENDER_LIST_MODULE"]
 -- Icon 
-EMA.moduleIcon = "Interface\\Addons\\EMA\\Media\\SellIcon.tga"
+EMA.moduleIcon = "Interface\\Addons\\EMA-Classic\\Media\\SellIcon.tga"
 -- order
 EMA.moduleOrder = 80
 EMA.moduleListOrder	 = 1

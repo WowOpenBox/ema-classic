@@ -37,7 +37,7 @@ local L = LibStub( "AceLocale-3.0" ):GetLocale( "Core" )
 EMA.parentDisplayName = L["QUEST"]
 EMA.moduleDisplayName = L["TRACKER"]
 -- Icon
-EMA.moduleIcon = "Interface\\Addons\\EMA\\Media\\QuestTrackerIcon.tga"
+EMA.moduleIcon = "Interface\\Addons\\EMA-Classic\\Media\\QuestTrackerIcon.tga"
 -- order
 EMA.moduleOrder = 20
 

@@ -35,7 +35,7 @@ local L = LibStub( "AceLocale-3.0" ):GetLocale( "Core" )
 EMA.parentDisplayName = L["INTERACTION"]
 EMA.moduleDisplayName = L["Mail"]
 -- Icon 
-EMA.moduleIcon = "Interface\\Addons\\EMA\\Media\\MailIcon.tga"
+EMA.moduleIcon = "Interface\\Addons\\EMA-Classic\\Media\\MailIcon.tga"
 -- order
 EMA.moduleOrder = 20
 

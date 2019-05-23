@@ -31,7 +31,7 @@ local L = LibStub( "AceLocale-3.0" ):GetLocale( "Core" )
 EMA.parentDisplayName = L["TOON"]
 EMA.moduleDisplayName = L["TALK"]
 -- Icon 
-EMA.moduleIcon = "Interface\\Addons\\EMA\\Media\\ChatIcon.tga"
+EMA.moduleIcon = "Interface\\Addons\\EMA-Classic\\Media\\ChatIcon.tga"
 -- order
 EMA.moduleOrder = 99
 

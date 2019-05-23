@@ -35,7 +35,7 @@ local L = LibStub( "AceLocale-3.0" ):GetLocale( "Core" )
 EMA.parentDisplayName = L["INTERACTION"]
 EMA.moduleDisplayName = L["TRADE"]
 -- Icon 
-EMA.moduleIcon = "Interface\\Addons\\EMA\\Media\\TradeIcon.tga"
+EMA.moduleIcon = "Interface\\Addons\\EMA-Classic\\Media\\TradeIcon.tga"
 -- order
 EMA.moduleOrder = 10
 
