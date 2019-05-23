@@ -727,9 +727,9 @@ function EMA:OnEnable()
 	EMA:RegisterEvent( "PLAYER_REGEN_DISABLED" )
 	EMA:RegisterEvent( "PLAYER_REGEN_ENABLED" )	
 	EMA:RegisterEvent( "PLAYER_CONTROL_GAINED" )
-	EMA:RegisterEvent( "UNIT_ENTERING_VEHICLE" )
-	EMA:RegisterEvent( "UNIT_EXITING_VEHICLE" )
-	EMA:RegisterEvent( "UI_ERROR_MESSAGE", "PVP_FOLLOW" )
+--	EMA:RegisterEvent( "UNIT_ENTERING_VEHICLE" )
+--	EMA:RegisterEvent( "UNIT_EXITING_VEHICLE" )
+--	EMA:RegisterEvent( "UI_ERROR_MESSAGE", "PVP_FOLLOW" )
 	-- Initialise key bindings.
 	EMA.keyBindingFrame = CreateFrame( "Frame", nil, UIParent )
 	EMA:RegisterEvent( "UPDATE_BINDINGS" )		
@@ -876,7 +876,9 @@ end
 
 function EMA:AUTOFOLLOW_BEGIN( event, target, ... )	
 	EMA.currentFollowTarget = target
-	EMA.isFollowing = true	
+	---EMA:Print("test", target )
+	EMA.isFollowing = true
+	
 end
 
 function EMA:AUTOFOLLOW_END( event, ... )
@@ -913,10 +915,12 @@ function EMA:AutoFollowEndSend()
 		canWarn = false
 	end
 	--Do not warn if a passenger in a vehicle.
+--[[
 	if UnitInVehicle("Player") == true and UnitControllingVehicle("player") == false then
 		--EMA:Print("UnitInVehicle")
 		canWarn = false
 	end
+]]	
 	-- Do not warn if any other members in combat?
 	if EMA.db.doNotWarnFollowBreakMembersInCombat == true and EMA:AreTeamMembersInCombat() == true or UnitAffectingCombat("player") == true then
 		--EMA:Print("doNotWarnFollowBreakMembersInCombat")

@@ -2444,8 +2444,8 @@ function EMA:SendExperienceStatusUpdateCommand()
 		local artifactForNextPoint = 100
 		local artifactPointsAvailable = 0
 		local artifactPointsSpent = 0
-		
-
+	-- TODO REMOVE ALL!	
+--[[
 	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem() 
 	if (azeriteItemLocation) and HasArtifactEquipped() == false then 
 		local azeriteXP, azeriteTotalXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation)
@@ -2459,6 +2459,7 @@ function EMA:SendExperienceStatusUpdateCommand()
 		artifactPointsAvailable = 0
 		artifactPointsSpent	= 0	
 	end	
+]]	
 --Remove From 8.0
 --[[
 		local honorXP = UnitHonor("player")
@@ -3249,24 +3250,24 @@ function EMA:OnEnable()
 	EMA:RegisterEvent( "PLAYER_LEVEL_UP" )		
 	EMA:RegisterEvent( "UNIT_HEALTH" )
 	EMA:RegisterEvent( "UNIT_MAXHEALTH" )
-	EMA:RegisterEvent( "UNIT_HEAL_PREDICTION" )
+--	EMA:RegisterEvent( "UNIT_HEAL_PREDICTION" )
 	--TODO Adds support for 8.0.x
-	if EMAPrivate.Core.isBetaBuild() == true then
+--	if EMAPrivate.Core.isBetaBuild() == true then
 		EMA:RegisterEvent( "UNIT_POWER_UPDATE", "UNIT_POWER" )
-	else
-		EMA:RegisterEvent( "UNIT_POWER", "UNIT_POWER" )
-	end
+--	else
+--		EMA:RegisterEvent( "UNIT_POWER", "UNIT_POWER" )
+--	end
 	EMA:RegisterEvent( "UNIT_MAXPOWER", "UNIT_POWER" )
 	EMA:RegisterEvent( "UNIT_DISPLAYPOWER" )
 	EMA:RegisterEvent( "CHAT_MSG_COMBAT_FACTION_CHANGE" )
 	EMA:RegisterEvent( "UNIT_POWER_FREQUENT")
-	EMA:RegisterEvent( "RUNE_POWER_UPDATE" )
-	EMA:RegisterEvent( "PLAYER_TALENT_UPDATE")
+--	EMA:RegisterEvent( "RUNE_POWER_UPDATE" )
+--	EMA:RegisterEvent( "PLAYER_TALENT_UPDATE")
 	--EMA:RegisterEvent( "HONOR_XP_UPDATE" )
 	--EMA:RegisterEvent( "HONOR_LEVEL_UPDATE" )
 	--EMA:RegisterEvent( "HONOR_PRESTIGE_UPDATE" )
 	EMA:RegisterEvent( "GROUP_ROSTER_UPDATE" )
-	EMA:RegisterEvent( "ARTIFACT_XP_UPDATE" )
+--	EMA:RegisterEvent( "ARTIFACT_XP_UPDATE" )
 	EMA:RegisterEvent("UNIT_PORTRAIT_UPDATE")
 	EMA.SharedMedia.RegisterCallback( EMA, "LibSharedMedia_Registered" )
     EMA.SharedMedia.RegisterCallback( EMA, "LibSharedMedia_SetGlobal" )	

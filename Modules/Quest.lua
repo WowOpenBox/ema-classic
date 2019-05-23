@@ -257,15 +257,15 @@ function EMA:OnEnable()
     EMA:SecureHook( "SelectActiveQuest" )
     EMA:SecureHook( "SelectAvailableQuest" )
     EMA:SecureHook( "AcceptQuest" )
-	EMA:SecureHook( "AcknowledgeAutoAcceptQuest" )
+--	EMA:SecureHook( "AcknowledgeAutoAcceptQuest" )
     EMA:SecureHook( "CompleteQuest" )
 	EMA:SecureHook( "GetQuestReward" )
 	EMA:SecureHook( "ToggleFrame" )
 	EMA:SecureHook( "ToggleQuestLog" )
 	EMA:SecureHook( WorldMapFrame, "Hide", "QuestLogFrameHide" )
 	EMA:SecureHook( "ShowQuestComplete" )
-	EMA:SecureHook( "QuestMapQuestOptions_AbandonQuest" )
-	EMA:SecureHook( "QuestMapQuestOptions_TrackQuest" )
+--	EMA:SecureHook( "QuestMapQuestOptions_AbandonQuest" )
+--	EMA:SecureHook( "QuestMapQuestOptions_TrackQuest" )
 	
 end
 
@@ -1554,7 +1554,7 @@ function EMA:DoMagicAutoAcceptQuestGrrrr()
 		EMA.isInternalCommand = true
 		EMA:DebugMessage( "DoMagicAutoAcceptQuestGrrrr" )
 		EMA:EMASendMessageToTeam( EMA.db.messageArea, L["AUTO_ACCEPTED_PICKUPQUEST_QN"]( GetTitleText() ), false )
-		AcknowledgeAutoAcceptQuest()
+	--	AcknowledgeAutoAcceptQuest()
 		HideUIPanel( QuestFrame )
 		EMA.isInternalCommand = false
 	end
@@ -1614,29 +1614,29 @@ function EMA:QUEST_DETAIL()
 			-- Quest is shared from a player.
 			if EMA:CanAutoAcceptSharedQuestFromPlayer() == true then		
 				--TODO: is this even needed??? Can auto quests be shared from other players?? unsure so we add it in anyway.
-				if ( QuestFrame.autoQuest ) then
-					AcknowledgeAutoAcceptQuest()
-				else
+				--if ( QuestFrame.autoQuest ) then
+				--	AcknowledgeAutoAcceptQuest()
+				--else
 					EMA.isInternalCommand = true
 					EMA:EMASendMessageToTeam( EMA.db.messageArea, L["AUTOMATICALLY_ACCEPTED_QUEST"]( GetTitleText() ), false )
 					AcceptQuest()
 					EMA.isInternalCommand = false
-				end	
+				--end	
 			end			
 		else
 			-- Quest is from an NPC.
 			if (EMA.db.allAcceptAnyQuest == true) or ((EMA.db.onlyAcceptQuestsFrom == true) and (EMA.db.acceptFromNpc == true)) then		
 				--AutoQuest is Accepted no need to accept it again.
-				if ( QuestFrame.autoQuest ) then
-					AcknowledgeAutoAcceptQuest()
-				else 	
+			--	if ( QuestFrame.autoQuest ) then
+			--		AcknowledgeAutoAcceptQuest()
+			--	else 	
 					EMA.isInternalCommand = true
 					--EMA:DebugMessage( "QUEST_DETAIL - auto accept is: ", QuestGetAutoAccept() )
 					EMA:EMASendMessageToTeam( EMA.db.messageArea, L["AUTOMATICALLY_ACCEPTED_QUEST"]( GetTitleText() ), false )
 					AcceptQuest()
 					HideUIPanel( QuestFrame )
 					EMA.isInternalCommand = false
-				end
+			--	end
 			end
 		end
 	end	

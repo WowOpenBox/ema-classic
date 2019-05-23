@@ -186,8 +186,8 @@ function EMA:OnEnable()
 	EMA:RegisterEvent( "QUEST_AUTOCOMPLETE" )
 	EMA:RegisterEvent( "QUEST_COMPLETE" )
 	EMA:RegisterEvent( "QUEST_DETAIL" )
-	EMA:RegisterEvent( "SCENARIO_UPDATE" )
-	EMA:RegisterEvent( "SCENARIO_CRITERIA_UPDATE" )
+--	EMA:RegisterEvent( "SCENARIO_UPDATE" )
+--	EMA:RegisterEvent( "SCENARIO_CRITERIA_UPDATE" )
 	EMA:RegisterEvent( "PLAYER_ENTERING_WORLD" )
    -- Quest post hooks.
     EMA:SecureHook( "SelectActiveQuest" )
@@ -962,11 +962,14 @@ function EMA:UpdateHideBlizzardWatchFrame()
 		return
 	end
 	if EMA.db.hideBlizzardWatchFrame == true then
-		if ObjectiveTrackerFrame:IsVisible() then
-            ObjectiveTrackerFrame:Hide()
+		--if ObjectiveTrackerFrame:IsVisible() then
+		if QuestWatchFrame:IsVisible() then
+           --ObjectiveTrackerFrame:Hide()
+			QuestWatchFrame:Hide()
 		end
 	else
-        ObjectiveTrackerFrame:Show()
+        --ObjectiveTrackerFrame:Show()
+		QuestWatchFrame:Show()
 	end
 end
 
@@ -1279,9 +1282,9 @@ function EMA:QUEST_DETAIL()
 	if EMA.db.enableQuestWatcher == false then
 		return
 	end
-	if QuestGetAutoAccept() and QuestIsFromAreaTrigger() then
-		EMA:EMASendCommandToTeam( EMA.COMMAND_AUTO_QUEST_OFFER, GetQuestID() )
-	end
+--	if QuestGetAutoAccept() and QuestIsFromAreaTrigger() then
+--		EMA:EMASendCommandToTeam( EMA.COMMAND_AUTO_QUEST_OFFER, GetQuestID() )
+--	end
 end		
 
 function EMA:DoAutoQuestFieldOffer( characterName, questID )
@@ -1455,15 +1458,15 @@ function EMA:EMAQuestWatcherUpdate( useCache, questType )
 		return
 	end
 	--EMA:Print("updateQuestList", useCache, questType )
-	if questType == "scenario" or "all" then
-		EMA:EMAQuestWatcherScenarioUpdate(useCache)
-	end
+--	if questType == "scenario" or "all" then
+--		EMA:EMAQuestWatcherScenarioUpdate(useCache)
+--	end
 	if questType == "quest" or "all" then
 		EMA:EMAQuestWatcherQuestLogUpdate( useCache )
 	end
-	if questType == "worldQuest" or "all" then
-		EMA:EMAQuestWatcherWorldQuestUpdate( useCache )
-	end
+--	if questType == "worldQuest" or "all" then
+--		EMA:EMAQuestWatcherWorldQuestUpdate( useCache )
+--	end
 end
 
 -- Gathers messages from team.
@@ -1706,6 +1709,8 @@ function EMA:GetObjectiveHeaderInWatchList( questID, questName, objectiveIndex, 
 	return questHeaderPosition + 1	
 end
 
+--TODO CLEAN UP
+
 function EMA:GetQuestItemFromQuestID(findQuestID)
 	for iterateQuests=1,GetNumQuestLogEntries() do
 		local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID = GetQuestLogTitle(iterateQuests)
@@ -1747,6 +1752,7 @@ function EMA:GetQuestHeaderInWatchList( questID, questName, characterName )
 			return position
 		end
 	end
+	--[[
 	local questItemLink, questItemIcon = EMA:GetQuestItemFromQuestID(questID)
 	local icon = ""
 	if ( questItemIcon ~= nil ) then
@@ -1761,6 +1767,7 @@ function EMA:GetQuestHeaderInWatchList( questID, questName, characterName )
 			icon = GetInlineFactionIcon()
 		end
 	end	
+	]]
 	local questWatchInfo = EMA:CreateQuestWatchInfo( questID, "QUEST_HEADER", -1, "", questName, icon )
 	
 	EMA:UpdateTeamQuestCountAddCharacter( questWatchInfo, characterName )
@@ -2024,11 +2031,13 @@ function EMA:QuestWatcherQuestListDrawLine( frame, iterateDisplayRows, type, inf
 			-- Turn on the mouse for these buttons.
 		end
 	end
+	--[[
 	local questItemLink, questItemIcon = EMA:GetQuestItemFromQuestID(questID)
 	if questItemLink ~= nil and type == "QUEST_HEADER" then
 		EMA:UpdateQuestItemButton( iterateDisplayRows, questItemLink )
 		
 	end
+	]]
 	frame.questWatchList.rows[iterateDisplayRows].key = key
 end
 
@@ -2132,13 +2141,15 @@ function EMA:QuestWatcherQuestListRowClick( rowNumber, columnNumber )
             if columnNumber == 1 then
 				QuestMapFrame_OpenToQuestDetails( questID )
 			end
+		--[[
 			if columnNumber == 2 then
 				local questItemLink, questItemIcon = EMA:GetQuestItemFromQuestID(questID)
 				if questItemLink ~= nil then
 					local itemName = GetItemInfo(questItemLink)
 					EMA:UpdateQuestItemButton( rowNumber, itemName )
 				end
-		   end	
+		   end
+		]]   
 		end
 		if type == "OBJECTIVE_HEADER" then
 			if columnNumber == 1 then
@@ -2165,6 +2176,7 @@ function EMA.QuestWatcherQuestListRowRightClick( rowNumber, columnNumber )
 end
 
 function EMA.QuestWatcherQuestListRowOnEnter( rowNumber, columnNumber )
+	--[[
 	--EMA:Print("MouseOver", rowNumber, columnNumber)
 	local frame = EMAQuestWatcherFrame
 	local key = frame.questWatchList.rows[rowNumber].key
@@ -2174,14 +2186,15 @@ function EMA.QuestWatcherQuestListRowOnEnter( rowNumber, columnNumber )
 		--EMA:Print("test", information, questID)
 		GameTooltip:ClearAllPoints()
 		GameTooltip:SetPoint("TOPRIGHT", toolTipFrame, "TOPLEFT", 0, 0)
-		GameTooltip:SetOwner( toolTipFrame, "ANCHOR_PRESERVE")
+		GameTooltip:SetOwner( toolTipFrame, "ANCHOR_PRESERVE")	
 		if type == "QUEST_HEADER" and columnNumber == 2 then
 			local questItemLink, questItemIcon = EMA:GetQuestItemFromQuestID(questID)
 			if questItemLink ~= nil then
 				GameTooltip:SetHyperlink(questItemLink)
 				GameTooltip:Show()
 			end
-		end	
+		end
+		
 			if columnNumber == 1 then
 				toolTipFrame:SetAlpha( 1.0 )
 				if ( HaveQuestData(questID) and GetQuestLogRewardXP(questID) == 0 and GetNumQuestLogRewardCurrencies(questID) == 0
@@ -2236,6 +2249,7 @@ function EMA.QuestWatcherQuestListRowOnEnter( rowNumber, columnNumber )
 			end
 		end
 	end
+]]	
 end
 
 

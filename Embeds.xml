@@ -25,7 +25,7 @@
 	<Include file="Libs\AceSerializer-3.0\AceSerializer-3.0.xml" />
 	<Include file="Libs\LibSharedMedia-3.0\lib.xml" />
 	<Include file="Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml" />
-<!--	<Include file="Libs\LibBagUtils-1.0\LibBagUtils-1.0.xml" /> -->
+	<Include file="Libs\LibBagUtils-1.0\LibBagUtils-1.0.xml" />
 	<Include file="Libs\LibItemUpgradeInfo-1.0\LibItemUpgradeInfo-1.0.xml" />
 	<Script file="Libs\LibAuras\LibAuras.lua" /> 
 	<Script file="Libs\EMALibActionButton-1.0.lua" /> 

@@ -258,6 +258,7 @@ for k,v in pairs(bags.BANK) do
 	bags.BAGSBANK[k]=v
 end
 
+--[[
 -- Reagent Bank
 bags.REAGENTBANK[REAGENTBANK_CONTAINER] = REAGENTBANK_CONTAINER
 
@@ -270,7 +271,7 @@ local function iterbags(tab, cur)
 		cur = next(tab, cur)
 	end
 end
-
+]]
 local function iterbagsfam0(tab, cur)
 	cur = next(tab, cur)
 	while cur do
