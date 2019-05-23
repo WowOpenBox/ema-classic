@@ -1,0 +1,5 @@
+package-as: EMA
+
+manual-changelog: CHANGELOG.txt
+
+enable-nolib-creation: no

@@ -1,0 +1,13 @@
+﻿---------------------------
+ChangeLogs:
+---------------------------
+
+EMA Version: v1.13.2-Alpha-v0.1(1210000)
+Game Version: 1.13.2
+Release Date: 23/5/2019
+
+Port from v8.1.5-Release-v2.0(0122) > Version: v1.13.2-Alpha-v0.1(1210000)
+
+Builds without change logs setting up from Retil > Classic 1210000-121000*
+
+Initial release.

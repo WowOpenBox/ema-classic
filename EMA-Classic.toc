@@ -1,0 +1,28 @@
+## Interface: 11302
+## Title: EMA-Classic
+## Notes: Ebony's MultiBoxing Assistant Classic
+## Author: Jennifer Calladine 'Ebony'
+## Version: v1.13.2-Alpha-v0.1(1210001)
+## SavedVariables: CoreProfileDB, CommunicationsProfileDB, TeamProfileDB, TagProfileDB, MessageProfileDB, CurrProfileDB, DisplayTeamProfileDB, FollowProfileDB, GuildProfileDB, InteractionProfileDB, ItemUseProfileDB, PurchaseProfileDB, QuestProfileDB,  QuestWatcherProfileDB, SellProfileDB, TalkProfileDB, ToonProfileDB, TradeProfileDB, MailProfileDB, ISBoxerProfileDB
+
+#Libs
+Embeds.xml
+EbonyUtilities.lua
+
+#Locales
+Locales\Locales.xml
+
+#GUI
+GUI\EMAHelperSettings.lua
+
+#Core
+Core\Core.lua
+Core\Module.lua
+Core\Communications.lua
+
+Core\Team.lua
+Core\Tag.lua
+Core\Message.lua
+
+#Modules
+Modules\Modules.xml
