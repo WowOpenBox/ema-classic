@@ -941,7 +941,7 @@ function EMA:DoMerchantSellItems()
 					local iLvl = C_Item.GetCurrentItemLevel( location )
 					local _, itemCount = GetContainerItemInfo( bagID, slotID )
 					local itemName, _, _, _, _, _, _, _, _, _, itemSellPrice = GetItemInfo( itemLink )
-					local hasToy = PlayerHasToy(bagItemID)
+				--	local hasToy = PlayerHasToy(bagItemID)
 					--EMA:Print("ItemTest", bagItemID, itemLink, itemRarity, itemType, isBop, itemRarity, iLvl, itemSellPrice)
 					local canSell = false
 					local canDestroy = false
@@ -1023,6 +1023,7 @@ function EMA:DoMerchantSellItems()
 							end
 						end
 					end		
+					--[[
 					-- Toys
 					if EMA.db.autoSellToys == true then
 						if hasToy == true and isBop == true then
@@ -1058,6 +1059,7 @@ function EMA:DoMerchantSellItems()
 							end
 						end		
 					end
+					]]
 					-- Sell List/BackList
 					if EMA.db.globalSellList == true then
 						itemTable = EMA.db.global.autoSellOtherItemsListGlobal

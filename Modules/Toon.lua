@@ -1387,11 +1387,12 @@ function EMA:MERCHANT_SHOW( event, ... )
 	-- At least some cost...
 	if repairCost > 0 then
 		-- If allowed to use guild funds, then attempt to repair using guild funds.
-		if EMA.db.autoRepairUseGuildFunds == true then
+	--[[	if EMA.db.autoRepairUseGuildFunds == true then
 			if IsInGuild() and CanGuildBankRepair() then
 				RepairAllItems( 1 )
 			end
 		end
+	]]	
 		-- After guild funds used, still need to repair?
 		repairCost = GetRepairAllCost()
 		-- At least some cost...

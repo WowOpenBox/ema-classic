@@ -1403,7 +1403,8 @@ function EMA:EMAQuestWatcherQuestLogUpdate( useCache )
 							EMA:EMASendCommandToTeam( EMA.COMMAND_QUEST_WATCH_OBJECTIVE_UPDATE, questID, title, iterateObjectives, objectiveText, amountCompleted, isComplete, isComplete )																		   
 						end
 					end
-				end	
+				end
+			--[[
 			else
 				local objectiveFullText = GetQuestLogCompletionText(questLogIndex)
 				local iterateObjectives = 0
@@ -1413,6 +1414,7 @@ function EMA:EMAQuestWatcherQuestLogUpdate( useCache )
 				if (EMA:QuestCacheUpdate( questID, iterateObjectives, amountCompleted, objectiveFinished ) == true) or (useCache == false) then
 					EMA:EMASendCommandToTeam( EMA.COMMAND_QUEST_WATCH_OBJECTIVE_UPDATE, questID, title, iterateObjectives, objectiveText, amountCompleted, isComplete, isComplete )
 				end
+			]]
 			end
 		end			
 	end

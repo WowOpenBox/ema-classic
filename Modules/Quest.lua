@@ -36,7 +36,7 @@ EMA.parentDisplayName = L["QUEST"]
 EMA.moduleDisplayName = L["QUEST"]
 -- Icon 
 EMA.moduleIcon = "Interface\\Addons\\EMA-Classic\\Media\\QuestIcon.tga"
-EMA.moduleCompletionIcon = "Interface\\Addons\\EMA\\Media\\QuestCompletionIcon.tga"
+EMA.moduleCompletionIcon = "Interface\\Addons\\EMA-Classic\\Media\\QuestCompletionIcon.tga"
 -- order
 EMA.moduleOrder = 50
 EMA.moduleCompletionOrder = 1

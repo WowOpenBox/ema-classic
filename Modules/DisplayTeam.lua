@@ -2817,7 +2817,7 @@ function EMA:SendHealthStatusUpdateCommand(unit)
 				--EMA:Print("itsme", unit)
 				local playerHealth = UnitHealth( unit )
 				local playerMaxHealth = UnitHealthMax( unit )
-				local inComingHeal = UnitGetIncomingHeals( unit )
+			--	local inComingHeal = UnitGetIncomingHeals( unit )
 				local _, class = UnitClass ("player")
 				
 				if EMA.db.showTeamListOnMasterOnly == true then
@@ -2831,7 +2831,7 @@ function EMA:SendHealthStatusUpdateCommand(unit)
 		else
 			local playerHealth = UnitHealth( unit )
 			local playerMaxHealth = UnitHealthMax( unit )
-			local inComingHeal = UnitGetIncomingHeals( unit )
+		--	local inComingHeal = UnitGetIncomingHeals( unit )
 			local characterName, characterRealm = UnitName( unit )
 			local _, class = UnitClass ( unit )
 			local character = EMAUtilities:AddRealmToNameIfNotNil( characterName, characterRealm )
