@@ -2,6 +2,22 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.2-Alpha-v0.1(1210005)
+Game Version: 1.13.2
+Release Date: 16/6/2019
+
+-- Renamed Files so i don't get Confused what am working on -- jennifer
+
+## DisplayTeam
+	-- Rouges and Druilds Combo Points added, Removed all other classess. -- Renamed to support Combo Points Olny
+	-- Removed Artifact Power
+	
+
+
+
+
+---------------------------
+
 EMA Version: v1.13.2-Alpha-v0.1(1210000)
 Game Version: 1.13.2
 Release Date: 23/5/2019

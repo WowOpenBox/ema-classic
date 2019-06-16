@@ -262,11 +262,10 @@ function EMA:OnEnable()
 	EMA:SecureHook( "GetQuestReward" )
 	EMA:SecureHook( "ToggleFrame" )
 	EMA:SecureHook( "ToggleQuestLog" )
-	EMA:SecureHook( WorldMapFrame, "Hide", "QuestLogFrameHide" )
 	EMA:SecureHook( "ShowQuestComplete" )
 --	EMA:SecureHook( "QuestMapQuestOptions_AbandonQuest" )
 --	EMA:SecureHook( "QuestMapQuestOptions_TrackQuest" )
-	
+--	EMA:SecureHook( "QuestLog" )
 end
 
 -- Called when the addon is disabled.
@@ -1719,16 +1718,22 @@ function EMA:EMADoQuest_TrackQuest(questID, questLogIndex)
 	--EMA:Print("test", questID, questLogIndex )
 	if ( not IsQuestWatched(questID) ) then
 		AddQuestWatch(questLogIndex, true)
-		QuestSuperTracking_OnQuestTracked(questID)
+		AutoQuestWatch_Insert(questLogIndex, QUEST_WATCH_NO_EXPIRE)
+		QuestWatch_Update()
 	end
+	QuestLog_SetSelection(questLogIndex)
+	QuestLog_Update()
 end
 
 
 function EMA:EMADoQuest_UnTrackQuest(questID, questLogIndex)
 	--EMA:Print("test2", questID, questLogIndex )
 	if ( IsQuestWatched(questLogIndex) ) then
-		QuestObjectiveTracker_UntrackQuest(nil, questID)
+		RemoveQuestWatch(questLogIndex)
+		QuestWatch_Update()
 	end
+	QuestLog_SetSelection(questLogIndex)
+	QuestLog_Update()
 end
 
 function EMA:QuestMapQuestOptions_EMA_DoAbandonQuest( sender, questID, title )
@@ -1749,15 +1754,15 @@ end
 function EMA:CreateEMAMiniQuestLogFrame()
     EMAMiniQuestLogFrame = CreateFrame( "Frame", "EMAMiniQuestLogFrame", QuestLogFrame )
     local frame = EMAMiniQuestLogFrame
-	frame:SetWidth( 470 )
-	frame:SetHeight( 40 )
+	frame:SetWidth( 270 )
+	frame:SetHeight( 60 )
 	frame:SetFrameStrata( "HIGH" )
 	frame:SetToplevel( true )
 	frame:SetClampedToScreen( true )
 	frame:EnableMouse( true )
 	frame:SetMovable( true )	
 	frame:ClearAllPoints()
-	frame:SetPoint("BOTTOMRIGHT", QuestLogFrame, "BOTTOMRIGHT", 0, 0)
+	frame:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 40, -10)
 		frame:SetBackdrop( {
 		bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background", 
 		edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border", 
@@ -1788,7 +1793,7 @@ function EMA:CreateEMAMiniQuestLogFrame()
 	--Track All Button
 	local trackButton = CreateFrame( "Button", "trackButton", frame, "UIPanelButtonTemplate" )
 	trackButton:SetScript( "OnClick", function()  EMA:DoTrackAllQuestsFromAllToons() end )
-	trackButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 260, -10)
+	trackButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 35, -30)
 	trackButton:SetHeight( 20 )
 	trackButton:SetWidth( 100 )
 	trackButton:SetText( L["TRACK_ALL"] )	
@@ -1798,7 +1803,7 @@ function EMA:CreateEMAMiniQuestLogFrame()
 	-- Untrack All
 	local unTrackButton = CreateFrame( "Button", "unTrackButton", frame, "UIPanelButtonTemplate" )
 	unTrackButton:SetScript( "OnClick", function()  EMA:DoUnTrackAllQuestsFromAllToons() end )
-	unTrackButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 360, -10)
+	unTrackButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 160, -30)
 	unTrackButton:SetHeight( 20 )
 	unTrackButton:SetWidth( 100 )
 	unTrackButton:SetText( L["UNTRACK_ALL"] )	
@@ -1923,7 +1928,7 @@ function EMA:GetRelevantQuestInfo(questLogIndex)
 end
 
 function EMA:ToggleFrame( frame )
-	if frame == WorldMapFrame then
+	if frame == QuestLogFrame then
 		EMA:ToggleQuestLog()
 	end
 end
@@ -1931,7 +1936,7 @@ end
 function EMA:ToggleQuestLog()
 	-- This sorts out hooking on L or marcioMenu button
 	if EMA.db.showEMAQuestLogWithWoWQuestLog == true then
-		if WorldMapFrame:IsVisible() and QuestMapFrame:IsVisible() then
+		if QuestLogFrame:IsVisible() then
 			EMA:ToggleShowQuestCommandWindow( true )
 		else
 			EMA:ToggleShowQuestCommandWindow( false )

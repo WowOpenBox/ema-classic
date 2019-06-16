@@ -1481,6 +1481,7 @@ local function SettingsCreateDisplayOptions( top )
 		EMA.SettingsToggleShowXpStatus,
 		L["SHOW_XP_HELP"]
 	)	
+--[[
 	EMA.settingsControl.displayOptionsCheckBoxShowArtifactStatus = EMAHelperSettings:CreateCheckBox( 
 		EMA.settingsControl, 
 		thirdWidth, 
@@ -1490,7 +1491,7 @@ local function SettingsCreateDisplayOptions( top )
 		EMA.SettingsToggleShowArtifactStatus,
 		L["ARTIFACT_BAR_HELP"]
 	)		
---[[
+
 	EMA.settingsControl.displayOptionsCheckBoxShowHonorStatus = EMAHelperSettings:CreateCheckBox( 
 		EMA.settingsControl, 
 		thirdWidth, 
@@ -1500,12 +1501,13 @@ local function SettingsCreateDisplayOptions( top )
 		EMA.SettingsToggleShowHonorStatus,
 		L["HONORXP_HELP"]
 	)
-]]	
+	
 	movingTop = movingTop - checkBoxHeight - verticalSpacing	
+]]	
 	EMA.settingsControl.displayOptionsCheckBoxShowRepStatus = EMAHelperSettings:CreateCheckBox( 
 		EMA.settingsControl, 
 		thirdWidth, 
-		left, 
+		left2, 
 		movingTop, 
 		L["REPUTATION_BAR"],
 		EMA.SettingsToggleShowRepStatus,
@@ -1642,7 +1644,7 @@ local function SettingsCreateDisplayOptions( top )
 	EMA.settingsControl.displayOptionsPowerStatusHeightSlider:SetCallback( "OnValueChanged", EMA.SettingsChangePowerStatusHeight )
 	movingTop = movingTop - sliderHeight - sectionSpacing
 	-- Create Combo Point status.
-	EMAHelperSettings:CreateHeading( EMA.settingsControl, L["CLASS_BAR_HEADER"], movingTop, true )
+	EMAHelperSettings:CreateHeading( EMA.settingsControl, L["COMBO_BAR_HEADER"], movingTop, true )
 	movingTop = movingTop - headingHeight
 	EMA.settingsControl.displayOptionsCheckBoxShowComboStatus = EMAHelperSettings:CreateCheckBox( 
 		EMA.settingsControl, 
@@ -1661,15 +1663,6 @@ local function SettingsCreateDisplayOptions( top )
 		L["VALUES"],
 		EMA.SettingsToggleShowComboStatusValues,
 		L["VALUES_HELP"]
-	)	
-	EMA.settingsControl.displayOptionsCheckBoxShowComboStatusPercentage = EMAHelperSettings:CreateCheckBox( 
-		EMA.settingsControl, 
-		thirdWidth, 
-		left3, 
-		movingTop, 
-		L["PERCENTAGE"],
-		EMA.SettingsToggleShowComboStatusPercentage,
-		L["PERCENTAGE_HELP"] 
 	)			
 	movingTop = movingTop - checkBoxHeight - verticalSpacing
 	EMA.settingsControl.displayOptionsComboStatusWidthSlider = EMAHelperSettings:CreateSlider( 
@@ -1749,7 +1742,7 @@ function EMA:SettingsRefresh()
 	EMA.settingsControl.displayOptionsFollowStatusHeightSlider:SetValue( EMA.db.followStatusHeight )
 	EMA.settingsControl.displayOptionsCheckBoxShowExperienceStatus:SetValue( EMA.db.showExperienceStatus )
 	EMA.settingsControl.displayOptionsCheckBoxShowXpStatus:SetValue( EMA.db.showXpStatus )
-	EMA.settingsControl.displayOptionsCheckBoxShowArtifactStatus:SetValue( EMA.db.showArtifactStatus )
+--	EMA.settingsControl.displayOptionsCheckBoxShowArtifactStatus:SetValue( EMA.db.showArtifactStatus )
 --	EMA.settingsControl.displayOptionsCheckBoxShowHonorStatus:SetValue( EMA.db.showHonorStatus )
 	EMA.settingsControl.displayOptionsCheckBoxShowRepStatus:SetValue( EMA.db.showRepStatus )
 	EMA.settingsControl.displayOptionsCheckBoxShowExperienceStatusValues:SetValue( EMA.db.experienceStatusShowValues )
@@ -1769,7 +1762,6 @@ function EMA:SettingsRefresh()
 	EMA.settingsControl.displayOptionsPowerStatusHeightSlider:SetValue( EMA.db.powerStatusHeight )
 	EMA.settingsControl.displayOptionsCheckBoxShowComboStatus:SetValue( EMA.db.showComboStatus )
 	EMA.settingsControl.displayOptionsCheckBoxShowComboStatusValues:SetValue( EMA.db.comboStatusShowValues )
-	EMA.settingsControl.displayOptionsCheckBoxShowComboStatusPercentage:SetValue( EMA.db.comboStatusShowPercentage )	
 	EMA.settingsControl.displayOptionsComboStatusWidthSlider:SetValue( EMA.db.comboStatusWidth )
 	EMA.settingsControl.displayOptionsComboStatusHeightSlider:SetValue( EMA.db.comboStatusHeight )	
 	EMA.settingsControl.displayOptionsBackgroundColourPicker:SetColor( EMA.db.frameBackgroundColourR, EMA.db.frameBackgroundColourG, EMA.db.frameBackgroundColourB, EMA.db.frameBackgroundColourA )
@@ -1802,7 +1794,7 @@ function EMA:SettingsRefresh()
 		EMA.settingsControl.displayOptionsFollowStatusHeightSlider:SetDisabled( not EMA.db.showTeamList or not EMA.db.showFollowStatus)
 		EMA.settingsControl.displayOptionsCheckBoxShowExperienceStatus:SetDisabled( not EMA.db.showTeamList )
 		EMA.settingsControl.displayOptionsCheckBoxShowXpStatus:SetDisabled( not EMA.db.showTeamList or not EMA.db.showExperienceStatus)
-		EMA.settingsControl.displayOptionsCheckBoxShowArtifactStatus:SetDisabled( not EMA.db.showTeamList or not EMA.db.showExperienceStatus)
+--		EMA.settingsControl.displayOptionsCheckBoxShowArtifactStatus:SetDisabled( not EMA.db.showTeamList or not EMA.db.showExperienceStatus)
 --		EMA.settingsControl.displayOptionsCheckBoxShowHonorStatus:SetDisabled( not EMA.db.showTeamList or not EMA.db.showExperienceStatus)
 		EMA.settingsControl.displayOptionsCheckBoxShowRepStatus:SetDisabled( not EMA.db.showTeamList or not EMA.db.showExperienceStatus )
 		EMA.settingsControl.displayOptionsCheckBoxShowExperienceStatusValues:SetDisabled( not EMA.db.showTeamList or not EMA.db.showExperienceStatus )
@@ -1822,7 +1814,6 @@ function EMA:SettingsRefresh()
 		EMA.settingsControl.displayOptionsPowerStatusHeightSlider:SetDisabled( not EMA.db.showTeamList or not EMA.db.showPowerStatus )
 		EMA.settingsControl.displayOptionsCheckBoxShowComboStatus:SetDisabled( not EMA.db.showTeamList )
 		EMA.settingsControl.displayOptionsCheckBoxShowComboStatusValues:SetDisabled( not EMA.db.showTeamList or not EMA.db.showComboStatus )
-		EMA.settingsControl.displayOptionsCheckBoxShowComboStatusPercentage:SetDisabled( not EMA.db.showTeamList or not EMA.db.showComboStatus)
 		EMA.settingsControl.displayOptionsComboStatusWidthSlider:SetDisabled( not EMA.db.showTeamList or not EMA.db.showComboStatus)
 		EMA.settingsControl.displayOptionsComboStatusHeightSlider:SetDisabled( not EMA.db.showTeamList or not EMA.db.showComboStatus)
 		EMA.settingsControl.displayOptionsBackgroundColourPicker:SetDisabled( not EMA.db.showTeamList )
@@ -3059,7 +3050,7 @@ function EMA:UNIT_POWER_FREQUENT( event, Unit, powerType, ... )
 	--TODO there got to be a better way to clean this code up Checking to see if its the event we need and then send the command to the update if it is.	
 	--EMA:Print("EventTest", Unit, powerType) 
 	if Unit == "player" then
-		--EMA:Print("player", Unit, powerType)
+		EMA:Print("player", Unit, powerType)
 		if( event and powerType == "COMBO_POINTS" ) then
 			EMA:SendComboStatusUpdateCommand()
 		elseif( event and powerType == "SOUL_SHARDS" ) then
@@ -3068,7 +3059,7 @@ function EMA:UNIT_POWER_FREQUENT( event, Unit, powerType, ... )
 			EMA:SendComboStatusUpdateCommand()
 		elseif( event and powerType == "ARCANE_CHARGES" ) then
 			EMA:SendComboStatusUpdateCommand()	
-		elseif( event and powerType == "CHI" ) then
+		elseif( event and powerType == "MANA" ) then
 			EMA:SendComboStatusUpdateCommand()
 		else
 			return
@@ -3085,45 +3076,15 @@ function EMA:SendComboStatusUpdateCommand()
 	if EMA.db.showTeamList == true and EMA.db.showComboStatus == true then
 		-- get powerType from http://wowprogramming.com/docs/api_types#powerType as there no real API to get this infomation as of yet.
 		local Class = select(2, UnitClass("player"))
-		--EMA:Print("class", Class)
-		-- Combo Points
-		if Class == "DRUID" then
-			PowerType = 4
-		-- Combo Points
-		elseif Class == "ROGUE" then
-			PowerType = 4
-		-- Warlock's soulshards
-		elseif Class == "WARLOCK" then
-				PowerType = 7
-		-- Paladin Holy Power
-		elseif Class == "PALADIN" then
-			PowerType = 9
-		-- DEATHKNIGHT Runes
-		elseif Class == "DEATHKNIGHT" then
-			PowerType = 5
-		-- Mage ARCANE_CHARGES
-		elseif Class == "MAGE" then
-			PowerType = 16
-		-- Monk Cil
-		elseif Class == "MONK" then
-			PowerType = 12
-		else
+		local playerCombo = 0
+		local playerMaxCombo = MAX_COMBO_POINTS
+		if Class == "DRUID" or Class == "ROGUE" then
+			playerCombo = GetComboPoints("player", "target")	
+		else 
 			return
-		end		
-		
-		local playerCombo = UnitPower ( "player", PowerType)
-		local playerMaxCombo = UnitPowerMax( "player", PowerType)
-		
-		--Deathkight Dity Hacky Hacky.
-		if Class == "DEATHKNIGHT" then
-			for i=1, playerMaxCombo do
-				local start, duration, runeReady = GetRuneCooldown(i)
-					if not runeReady then
-						playerCombo = playerCombo - 1
-					end	
-			end
 		end	
-		--EMA:Print ("PowerType", PowerType, playerCombo, playerMaxCombo, class)
+		
+		EMA:Print ("PowerType", PowerType, playerCombo, playerMaxCombo, Class)
 		if EMA.db.showTeamListOnMasterOnly == true then
 			EMA:DebugMessage( "SendComboStatusUpdateCommand TO Master!" )
 			EMA:EMASendCommandToMaster( EMA.COMMAND_COMBO_STATUS_UPDATE, playerCombo, playerMaxCombo, class )
@@ -3251,12 +3212,9 @@ function EMA:OnEnable()
 	EMA:RegisterEvent( "UNIT_HEALTH" )
 	EMA:RegisterEvent( "UNIT_MAXHEALTH" )
 --	EMA:RegisterEvent( "UNIT_HEAL_PREDICTION" )
-	--TODO Adds support for 8.0.x
---	if EMAPrivate.Core.isBetaBuild() == true then
-		EMA:RegisterEvent( "UNIT_POWER_UPDATE", "UNIT_POWER" )
---	else
---		EMA:RegisterEvent( "UNIT_POWER", "UNIT_POWER" )
---	end
+
+	EMA:RegisterEvent( "UNIT_POWER_UPDATE", "UNIT_POWER" )
+
 	EMA:RegisterEvent( "UNIT_MAXPOWER", "UNIT_POWER" )
 	EMA:RegisterEvent( "UNIT_DISPLAYPOWER" )
 	EMA:RegisterEvent( "CHAT_MSG_COMBAT_FACTION_CHANGE" )

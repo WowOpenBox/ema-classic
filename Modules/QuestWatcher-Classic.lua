@@ -2133,25 +2133,17 @@ end
 
 
 function EMA:QuestWatcherQuestListRowClick( rowNumber, columnNumber )
-   -- EMA:Print( "QuestWatcherQuestListRowClick", rowNumber, columnNumber )
 	local frame = EMAQuestWatcherFrame
 	local key = frame.questWatchList.rows[rowNumber].key
 	if key ~= nil and key ~= "" then
 		local information, amount, type, questID, childrenAreHidden, keyStored = EMA:GetQuestWatchInfoFromKey( key )
         EMA:DebugMessage( "GetQuestWatchInfoFromKey", information, amount, type, questID, childrenAreHidden, keyStored, key )
+		local questIndex = EMA:GetQuestLogIndexByName( information )
 		if type == "QUEST_HEADER" then
             if columnNumber == 1 then
-				QuestMapFrame_OpenToQuestDetails( questID )
+				ShowUIPanel(QuestLogFrame)
+				QuestLog_SetSelection( questIndex )
 			end
-		--[[
-			if columnNumber == 2 then
-				local questItemLink, questItemIcon = EMA:GetQuestItemFromQuestID(questID)
-				if questItemLink ~= nil then
-					local itemName = GetItemInfo(questItemLink)
-					EMA:UpdateQuestItemButton( rowNumber, itemName )
-				end
-		   end
-		]]   
 		end
 		if type == "OBJECTIVE_HEADER" then
 			if columnNumber == 1 then
@@ -2178,80 +2170,7 @@ function EMA.QuestWatcherQuestListRowRightClick( rowNumber, columnNumber )
 end
 
 function EMA.QuestWatcherQuestListRowOnEnter( rowNumber, columnNumber )
-	--[[
-	--EMA:Print("MouseOver", rowNumber, columnNumber)
-	local frame = EMAQuestWatcherFrame
-	local key = frame.questWatchList.rows[rowNumber].key
-	local toolTipFrame = frame.questWatchList.rows[rowNumber].columns[columnNumber]
-	if key ~= nil and key ~= "" then
-		local information, amount, type, questID, childrenAreHidden, keyStored = EMA:GetQuestWatchInfoFromKey( key )
-		--EMA:Print("test", information, questID)
-		GameTooltip:ClearAllPoints()
-		GameTooltip:SetPoint("TOPRIGHT", toolTipFrame, "TOPLEFT", 0, 0)
-		GameTooltip:SetOwner( toolTipFrame, "ANCHOR_PRESERVE")	
-		if type == "QUEST_HEADER" and columnNumber == 2 then
-			local questItemLink, questItemIcon = EMA:GetQuestItemFromQuestID(questID)
-			if questItemLink ~= nil then
-				GameTooltip:SetHyperlink(questItemLink)
-				GameTooltip:Show()
-			end
-		end
-		
-			if columnNumber == 1 then
-				toolTipFrame:SetAlpha( 1.0 )
-				if ( HaveQuestData(questID) and GetQuestLogRewardXP(questID) == 0 and GetNumQuestLogRewardCurrencies(questID) == 0
-					and GetNumQuestLogRewards(questID) == 0 and GetQuestLogRewardMoney(questID) == 0 and GetQuestLogRewardArtifactXP(questID) == 0 ) then
-					GameTooltip:Hide()
-					return
-				end
-				GameTooltip:AddLine(L["REWARDS"], 1, 0.82, 0, 1)
-				GameTooltip:AddLine(L["REWARDS_TEXT"],1,1,1,1)
-				GameTooltip:AddLine(" ")
-				if ( not HaveQuestData(questID) ) then
-					GameTooltip:AddLine(RETRIEVING_DATA, RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b);
-				else
-					-- Taken From Blizzard BonusObjectiveTracker_ShowRewardsTooltip
-					-- xp
-					local xp = GetQuestLogRewardXP(questID);
-					if ( xp > 0 ) then
-						GameTooltip:AddLine(string.format(BONUS_OBJECTIVE_EXPERIENCE_FORMAT, xp), 1, 1, 1);
-					end
-					local artifactXP = GetQuestLogRewardArtifactXP(questID);
-					if ( artifactXP > 0 ) then
-						GameTooltip:AddLine(string.format(BONUS_OBJECTIVE_ARTIFACT_XP_FORMAT, artifactXP), 1, 1, 1);
-					end
-					-- currency
-					QuestUtils_AddQuestCurrencyRewardsToTooltip(questID, GameTooltip);
-					-- honor
-					local honorAmount = GetQuestLogRewardHonor(questID);
-					if ( honorAmount > 0 ) then
-						GameTooltip:AddLine(BONUS_OBJECTIVE_REWARD_WITH_COUNT_FORMAT:format("Interface\\ICONS\\Achievement_LegionPVPTier4", honorAmount, HONOR), 1, 1, 1);
-					end
-					-- money
-					local money = GetQuestLogRewardMoney(questID);
-					if ( money > 0 ) then
-						SetTooltipMoney(GameTooltip, money, nil);
-					end
-					-- items
-					local numQuestRewards = GetNumQuestLogRewards(questID);
-					for i = 1, numQuestRewards do
-						local name, texture, numItems, quality, isUsable = GetQuestLogRewardInfo(i, questID);
-						local text;
-						if ( numItems > 1 ) then
-							text = string.format(BONUS_OBJECTIVE_REWARD_WITH_COUNT_FORMAT, texture, HIGHLIGHT_FONT_COLOR:WrapTextInColorCode(numItems), name);
-						elseif( texture and name ) then
-							text = string.format(BONUS_OBJECTIVE_REWARD_FORMAT, texture, name);
-						end
-					if( text ) then
-						local color = ITEM_QUALITY_COLORS[quality];
-						GameTooltip:AddLine(text, color.r, color.g, color.b);
-					end
-				end
-				GameTooltip:Show()
-			end
-		end
-	end
-]]	
+
 end
 
 
