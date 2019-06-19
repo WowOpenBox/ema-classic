@@ -3050,7 +3050,7 @@ function EMA:UNIT_POWER_FREQUENT( event, Unit, powerType, ... )
 	--TODO there got to be a better way to clean this code up Checking to see if its the event we need and then send the command to the update if it is.	
 	--EMA:Print("EventTest", Unit, powerType) 
 	if Unit == "player" then
-		EMA:Print("player", Unit, powerType)
+		--EMA:Print("player", Unit, powerType)
 		if( event and powerType == "COMBO_POINTS" ) then
 			EMA:SendComboStatusUpdateCommand()
 		elseif( event and powerType == "SOUL_SHARDS" ) then

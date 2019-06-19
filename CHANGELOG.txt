@@ -2,7 +2,7 @@
 ChangeLogs:
 ---------------------------
 
-EMA Version: v1.13.2-Alpha-v0.1(1210005)
+EMA Version: v1.13.2-Alpha-v0.1(1210006)
 Game Version: 1.13.2
 Release Date: 16/6/2019
 
