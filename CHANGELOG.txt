@@ -2,7 +2,7 @@
 ChangeLogs:
 ---------------------------
 
-EMA Version: v1.13.2-Alpha-v0.1(1210006)
+EMA Version: v1.13.2-Alpha-v0.1(1210007)
 Game Version: 1.13.2
 Release Date: 16/6/2019
 
@@ -12,7 +12,9 @@ Release Date: 16/6/2019
 	-- Rouges and Druilds Combo Points added, Removed all other classess. -- Renamed to support Combo Points Olny
 	-- Removed Artifact Power
 	
-
+## Interaction
+	-- Removed Mount As They Are Nolonger Supported By The Mount System!
+	-- Removed Taxi Stop As They Are Not Support In Classic
 
 
 

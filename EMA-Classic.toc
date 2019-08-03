@@ -2,7 +2,7 @@
 ## Title: EMA-Classic
 ## Notes: Ebony's MultiBoxing Assistant Classic
 ## Author: Jennifer Calladine 'Ebony'
-## Version: v1.13.2-Alpha-v0.1(1210006)
+## Version: v1.13.2-Alpha-v0.1(1210007)
 ## SavedVariables: CoreProfileDB, CommunicationsProfileDB, TeamProfileDB, TagProfileDB, MessageProfileDB, CurrProfileDB, DisplayTeamProfileDB, FollowProfileDB, GuildProfileDB, InteractionProfileDB, ItemUseProfileDB, PurchaseProfileDB, QuestProfileDB,  QuestWatcherProfileDB, SellProfileDB, TalkProfileDB, ToonProfileDB, TradeProfileDB, MailProfileDB, ISBoxerProfileDB
 
 #Libs
