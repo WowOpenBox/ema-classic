@@ -2,6 +2,21 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.2-Beta-v0.2(1210008)
+Game Version: 1.13.2
+Release Date: 7/8/2019
+
+## Quest-watcher
+	-Should now Hide blizzard tracker
+	
+## Quest
+	- Share all quests should work again
+
+## DisplayTeam
+	- Cleared up Retil Stuff
+
+---------------------------
+
 EMA Version: v1.13.2-Alpha-v0.1(1210007)
 Game Version: 1.13.2
 Release Date: 16/6/2019

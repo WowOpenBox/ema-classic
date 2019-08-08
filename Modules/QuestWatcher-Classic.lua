@@ -179,6 +179,7 @@ function EMA:OnEnable()
 	EMA:RegisterEvent( "PLAYER_REGEN_DISABLED" )
 	EMA:RegisterEvent( "QUEST_WATCH_UPDATE" )
 	EMA:RegisterEvent( "QUEST_LOG_UPDATE")
+	EMA:RegisterEvent( "UNIT_QUEST_LOG_CHANGED", "QUEST_WATCH_UPDATE" )
 	EMA:RegisterEvent( "QUEST_WATCH_LIST_CHANGED", "QUEST_WATCH_UPDATE" )
 	-- For in the field auto quests. And Bonus Quests.
 	EMA:RegisterEvent("QUEST_ACCEPTED", "QUEST_WATCH_UPDATE")
@@ -186,8 +187,6 @@ function EMA:OnEnable()
 	EMA:RegisterEvent( "QUEST_AUTOCOMPLETE" )
 	EMA:RegisterEvent( "QUEST_COMPLETE" )
 	EMA:RegisterEvent( "QUEST_DETAIL" )
---	EMA:RegisterEvent( "SCENARIO_UPDATE" )
---	EMA:RegisterEvent( "SCENARIO_CRITERIA_UPDATE" )
 	EMA:RegisterEvent( "PLAYER_ENTERING_WORLD" )
    -- Quest post hooks.
     EMA:SecureHook( "SelectActiveQuest" )
@@ -198,10 +197,8 @@ function EMA:OnEnable()
 	EMA:SecureHook( "SetAbandonQuest" )
 	-- Update the quest watcher for watched quests.
 	EMA:ScheduleTimer( "EMAQuestWatcherUpdate", 1, false, "all" )
-	--EMA:ScheduleTimer( "EMAQuestWatcherScenarioUpdate", 1, false )
 	EMA:UpdateUnlockWatcherFrame()
-	-- To Hide After elv changes. --ebony
-	EMA:ScheduleTimer( "UpdateHideBlizzardWatchFrame", 2 )
+	EMA:ScheduleTimer( "UpdateHideBlizzardWatchFrame", 0.5 )
 	if EMA.db.enableQuestWatcher == true then
 		EMA:QuestWatcherQuestListScrollRefresh()
 	end
@@ -748,8 +745,7 @@ function EMA:EMAOnSettingsReceived( characterName, settings )
 		-- Refresh the settings.
 		EMA:SettingsRefresh()
 		EMA:UpdateUnlockWatcherFrame()
-		--EMA:UpdateHideBlizzardWatchFrame()
-		EMA:ScheduleTimer( "UpdateHideBlizzardWatchFrame", 2 )
+		EMA:ScheduleTimer( "UpdateHideBlizzardWatchFrame", 0.5 )
 		-- Tell the player.
 		EMA:Print( L["SETTINGS_RECEIVED_FROM_A"] ( characterName ) )
 	end
@@ -926,8 +922,7 @@ end
 
 function EMA:SettingsToggleHideBlizzardWatchFrame( event, checked )
 	EMA.db.hideBlizzardWatchFrame = checked
-	--EMA:UpdateHideBlizzardWatchFrame()
-	EMA:ScheduleTimer( "UpdateHideBlizzardWatchFrame", 2 )
+	EMA:ScheduleTimer( "UpdateHideBlizzardWatchFrame", 0.5 )
 	EMA:SettingsRefresh()
 end
 
@@ -962,13 +957,10 @@ function EMA:UpdateHideBlizzardWatchFrame()
 		return
 	end
 	if EMA.db.hideBlizzardWatchFrame == true then
-		--if ObjectiveTrackerFrame:IsVisible() then
 		if QuestWatchFrame:IsVisible() then
-           --ObjectiveTrackerFrame:Hide()
 			QuestWatchFrame:Hide()
 		end
 	else
-        --ObjectiveTrackerFrame:Show()
 		QuestWatchFrame:Show()
 	end
 end
@@ -1001,8 +993,7 @@ function EMA:AddQuestWatch( questIndex )
 	if EMA.db.enableQuestWatcher == false then
 		return
 	end
-	--EMA:UpdateHideBlizzardWatchFrame()
-	EMA:ScheduleTimer( "UpdateHideBlizzardWatchFrame", 2 )
+	EMA:ScheduleTimer( "UpdateHideBlizzardWatchFrame", 0.5 )
 	EMA:EMAQuestWatcherUpdate( true,  "all" )
 	--EMA:EMAQuestWatcherScenarioUpdate( true )
 end
@@ -1012,8 +1003,7 @@ function EMA:RemoveQuestWatch( questIndex )
 		return
     end
     EMA:DebugMessage( "RemoveQuestWatch", questIndex )
-	--EMA:UpdateHideBlizzardWatchFrame()
-    EMA:ScheduleTimer( "UpdateHideBlizzardWatchFrame", 2 )
+	EMA:ScheduleTimer( "UpdateHideBlizzardWatchFrame", 0.5 )
 	local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questID, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isStory = GetQuestLogTitle( questIndex )
     EMA:DebugMessage( "About to call RemoveQuestFromWatchList with value:", questID )
 	EMA:RemoveQuestFromWatchList( questID )
@@ -1042,8 +1032,10 @@ end
 function EMA:QUEST_WATCH_UPDATE( event, ... )
 	--EMA:Print("test4")
 	if EMA.db.enableQuestWatcher == true then
+		EMAApi.EMAApiTrackAllQuests()
+		EMA:ScheduleTimer( "UpdateHideBlizzardWatchFrame", 0.5 )
 		-- Wait a bit for the correct information to come through from the server...
-		EMA:ScheduleTimer( "EMAQuestWatcherUpdate", 1, true, "all" )		
+		EMA:ScheduleTimer( "EMAQuestWatcherUpdate", 1, true, "all" )	
 	end
 end
 
@@ -1051,6 +1043,8 @@ end
 function EMA:QUEST_LOG_UPDATE( event, ... )
 	--EMA:Print("QuestTestUpdates")
 	if EMA.db.enableQuestWatcher == true then
+		EMA:UpdateHideBlizzardWatchFrame()
+		--EMA:ScheduleTimer( "UpdateHideBlizzardWatchFrame", 0.5 )
 		-- Wait a bit for the correct information to come through from the server...
 		EMA:ScheduleTimer( "EMAQuestWatcherUpdate", 1, true, "all" )
 	end

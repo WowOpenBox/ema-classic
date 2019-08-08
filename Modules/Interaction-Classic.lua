@@ -123,7 +123,7 @@ end
 function EMA:OnEnable()
 	-- Hook the TaketaxiNode function.
 	EMA:SecureHook( "TakeTaxiNode" )
-	EMA:RegisterEvent( "PLAYER_ENTERING_WORLD" )
+--	EMA:RegisterEvent( "PLAYER_ENTERING_WORLD" )
 	EMA:RegisterEvent( "LOOT_READY" )
 	EMA:RegisterEvent( "TAXIMAP_OPENED" )
 	EMA:RegisterEvent( "TAXIMAP_CLOSED" )

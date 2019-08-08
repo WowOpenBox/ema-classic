@@ -72,7 +72,6 @@ EMA.settings = {
 		followStatusShowName = true,
 		showExperienceStatus = true,
 		showXpStatus = true,
-		showArtifactStatus = false,
 		showHonorStatus = false,
 		showRepStatus = false,
 		experienceStatusWidth = 100,
@@ -448,13 +447,7 @@ function EMA:SettingsUpdateStatusBarTexture()
 		characterStatusBar["followBar"]:GetStatusBarTexture():SetVertTile( false )		
 		characterStatusBar["experienceBar"]:SetStatusBarTexture( statusBarTexture )
 		characterStatusBar["experienceBar"]:GetStatusBarTexture():SetHorizTile( false )
-		characterStatusBar["experienceBar"]:GetStatusBarTexture():SetVertTile( false )
-		characterStatusBar["experienceArtBar"]:SetStatusBarTexture( statusBarTexture )
-		characterStatusBar["experienceArtBar"]:GetStatusBarTexture():SetHorizTile( false )
-		characterStatusBar["experienceArtBar"]:GetStatusBarTexture():SetVertTile( false )		
-	--	characterStatusBar["experienceHonorBar"]:SetStatusBarTexture( statusBarTexture )
-	--	characterStatusBar["experienceHonorBar"]:GetStatusBarTexture():SetHorizTile( false )
-	--	characterStatusBar["experienceHonorBar"]:GetStatusBarTexture():SetVertTile( false )		
+		characterStatusBar["experienceBar"]:GetStatusBarTexture():SetVertTile( false )	
 		characterStatusBar["reputationBar"]:SetStatusBarTexture( statusBarTexture )
 		characterStatusBar["reputationBar"]:GetStatusBarTexture():SetHorizTile( false )
 		characterStatusBar["reputationBar"]:GetStatusBarTexture():SetVertTile( false )		
@@ -476,8 +469,6 @@ function EMA:SettingsUpdateFontStyle()
 	for characterName, characterStatusBar in pairs( EMA.characterStatusBar ) do	
 		characterStatusBar["followBarText"]:SetFont( textFont , textSize , "OUTLINE")		
 		characterStatusBar["experienceBarText"]:SetFont( textFont , textSize , "OUTLINE")
-		characterStatusBar["experienceArtBarText"]:SetFont( textFont , textSize , "OUTLINE")
---		characterStatusBar["experienceHonorBarText"]:SetFont( textFont , textSize , "OUTLINE")
 		characterStatusBar["reputationBarText"]:SetFont( textFont , textSize , "OUTLINE")
 		characterStatusBar["healthBarText"]:SetFont( textFont , textSize , "OUTLINE")
 		characterStatusBar["powerBarText"]:SetFont( textFont , textSize , "OUTLINE")
@@ -572,62 +563,6 @@ function EMA:CreateEMATeamStatusBar( characterName, parentFrame )
 	experienceBarText.playerLevel = 1
 	characterStatusBar["experienceBarText"] = experienceBarText
 	EMA:UpdateExperienceStatus( characterName, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil )	
-	-- Set the artifactXP bar.
-	local experienceArtName = EMA.globalFramePrefix.."ExperienceArtBar"
-	local experienceArtBar = CreateFrame( "StatusBar", experienceArtName, parentFrame, "AnimatedStatusBarTemplate" ) --"TextStatusBar,SecureActionButtonTemplate" )
-	experienceArtBar.backgroundTexture = experienceArtBar:CreateTexture( experienceArtName.."BackgroundTexture", "ARTWORK" )
-	experienceArtBar.backgroundTexture:SetColorTexture( 1.0, 0.0, 0.0, 0.15 )
-	experienceArtBar:SetStatusBarTexture( statusBarTexture )
-	experienceArtBar:GetStatusBarTexture():SetHorizTile( false )
-	experienceArtBar:GetStatusBarTexture():SetVertTile( false )
-	experienceArtBar:SetMinMaxValues( 0, 100 )
-	experienceArtBar:SetValue( 100 )
-	experienceArtBar:SetFrameStrata( "LOW" )
-	local experienceArtBarClick = CreateFrame( "CheckButton", experienceArtName.."Click", parentFrame, "SecureActionButtonTemplate" )
-	experienceArtBarClick:SetAttribute( "unit", Ambiguate( characterName, "all" ) )
-	experienceArtBarClick:SetFrameStrata( "MEDIUM" )
-	characterStatusBar["experienceArtBar"] = experienceArtBar
-	characterStatusBar["experienceArtBarClick"] = experienceArtBarClick
-	local experienceArtBarText = experienceArtBar:CreateFontString( experienceArtName.."Text", "OVERLAY", "GameFontNormal" )
-	experienceArtBarText:SetTextColor( 1.00, 1.00, 1.00, 1.00 )
-	experienceArtBarText:SetFont( textFont , textSize, "OUTLINE")
-	experienceArtBarText:SetAllPoints()
-	experienceArtBarText.artifactName = "N/A"
-	experienceArtBarText.artifactXP = 0
-	experienceArtBarText.artifactForNextPoint = 100
-	experienceArtBarText.artifactPointsSpent = 1
-	experienceArtBarText.artifactPointsAvailable = 0
-	characterStatusBar["experienceArtBarText"] = experienceArtBarText
-	EMA:UpdateExperienceStatus( characterName, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil )
---[[
-	-- Set the HonorXP bar.
-	local experienceHonorName = EMA.globalFramePrefix.."ExperienceHonorBar"
-	local experienceHonorBar = CreateFrame( "StatusBar", experienceHonorName, parentFrame, "AnimatedStatusBarTemplate" ) --"TextStatusBar,SecureActionButtonTemplate" )
-	experienceHonorBar.backgroundTexture = experienceArtBar:CreateTexture( experienceArtName.."BackgroundTexture", "ARTWORK" )
-	experienceHonorBar.backgroundTexture:SetColorTexture( 1.0, 0.0, 0.0, 0.15 )
-	experienceHonorBar:SetStatusBarTexture( statusBarTexture )
-	experienceHonorBar:GetStatusBarTexture():SetHorizTile( false )
-	experienceHonorBar:GetStatusBarTexture():SetVertTile( false )
-	experienceHonorBar:SetMinMaxValues( 0, 100 )
-	experienceHonorBar:SetValue( 100 )
-	experienceHonorBar:SetFrameStrata( "LOW" )
-	local experienceHonorBarClick = CreateFrame( "CheckButton", experienceHonorName.."Click", parentFrame, "SecureActionButtonTemplate" )
-	experienceHonorBarClick:SetAttribute( "unit", Ambiguate( characterName, "all" ) )
-	experienceHonorBarClick:SetFrameStrata( "MEDIUM" )
-	characterStatusBar["experienceHonorBar"] = experienceHonorBar
-	characterStatusBar["experienceHonorBarClick"] = experienceHonorBarClick
-	local experienceHonorBarText = experienceHonorBar:CreateFontString( experienceHonorName.."Text", "OVERLAY", "GameFontNormal" )
-	experienceHonorBarText:SetTextColor( 1.00, 1.00, 1.00, 1.00 )
-	experienceHonorBarText:SetFont( textFont , textSize, "OUTLINE")
-	experienceHonorBarText:SetAllPoints()
-	experienceHonorBarText.honorLevel = 0
-	experienceHonorBarText.honorXP = 0
-	experienceHonorBarText.honorMax = 100
-	experienceHonorBarText.honorExhaustionStateID = 1
-	experienceHonorBarText.canPrestige = "N/A"
-	characterStatusBar["experienceHonorBarText"] = experienceHonorBarText
-	EMA:UpdateExperienceStatus( characterName, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil )	
-]]	
 	-- Set the reputation bar.
 	local reputationName = EMA.globalFramePrefix.."ReputationBar"
 	local reputationBar = CreateFrame( "StatusBar", reputationName, parentFrame, "AnimatedStatusBarTemplate" ) --"TextStatusBar,SecureActionButtonTemplate" )
@@ -792,10 +727,6 @@ function EMA:HideEMATeamStatusBar( characterName )
 	characterStatusBar["followBarClick"]:Hide()
 	characterStatusBar["experienceBar"]:Hide()
 	characterStatusBar["experienceBarClick"]:Hide()
-	characterStatusBar["experienceArtBar"]:Hide()
-	characterStatusBar["experienceArtBarClick"]:Hide()
---	characterStatusBar["experienceHonorBar"]:Hide()
---	characterStatusBar["experienceHonorBarClick"]:Hide()	
 	characterStatusBar["reputationBar"]:Hide()
 	characterStatusBar["reputationBarClick"]:Hide()	
 	characterStatusBar["healthBar"]:Hide()
@@ -931,10 +862,6 @@ function EMA:UpdateEMATeamStatusBar( characterName, characterPosition )
 	-- Display the experience bar.
 	local experienceBar	= characterStatusBar["experienceBar"]
 	local experienceBarClick = characterStatusBar["experienceBarClick"]
-	local experienceArtBar = characterStatusBar["experienceArtBar"]
-	local experienceArtBarClick	= characterStatusBar["experienceArtBarClick"]
-	local experienceHonorBar = characterStatusBar["experienceHonorBar"]
-	local experienceHonorBarClick = characterStatusBar["experienceHonorBarClick"]
 	local reputationBar	= characterStatusBar["reputationBar"]
 	local reputationBarClick = characterStatusBar["reputationBarClick"]	
 	if EMA.db.showExperienceStatus == true then
@@ -944,65 +871,16 @@ function EMA:UpdateEMATeamStatusBar( characterName, characterPosition )
 			showBarCount = showBarCount + 1
 			showBeforeBar = parentFrame
 			showXP = true
-		end
-		if EMA.db.showArtifactStatus == true then
-			--EMA:Print("ShowArtifact")
-			showBarCount = showBarCount + 1
-			if EMA.db.showXpStatus == true then
-				showArtBeforeBar = experienceBar
-				setArtPoint = "BOTTOMLEFT"
-				setArtLeft = 0
-				setArtTop = -1			
-			else
-				showArtBeforeBar = parentFrame
-				setArtPoint = "TOPLEFT"
-				setArtLeft = positionLeft
-				setArtTop = positionTop
-			end	
-		end				
-	--[[if EMA.db.showHonorStatus == true then
-			--EMA:Print("ShowHonorXP")
-			showBarCount = showBarCount + 1
-			if EMA.db.showXpStatus == true and EMA.db.showArtifactStatus == false then
-				showHonorBeforeBar = experienceBar
-				setHonorPoint = "BOTTOMLEFT"
-				setHonorLeft = 0
-				setHonorTop = -1				
-			elseif EMA.db.showArtifactStatus == true then
-				showHonorBeforeBar = experienceArtBar
-				setHonorPoint = "BOTTOMLEFT"
-				setHonorLeft = 0
-				setHonorTop = -1				
-			else
-				showHonorBeforeBar = parentFrame
-				setHonorPoint = "TOPLEFT"
-				setHonorLeft = positionLeft
-				setHonorTop = positionTop
-			end	
-		end
-	]]	
+		end		
 		if EMA.db.showRepStatus == true then
 			--EMA:Print("Show Reputation")
 			showBarCount = showBarCount + 1
-			if EMA.db.showXpStatus == true and EMA.db.showArtifactStatus == false then --and EMA.db.showHonorStatus == false then
+			if EMA.db.showXpStatus == true then
 				--EMA:Print("Show Reputation 1")
 				showRepBeforeBar = experienceBar
 				setRepPoint = "BOTTOMLEFT"
 				setRepLeft = 0
 				setRepTop = -1				
-			elseif EMA.db.showArtifactStatus == true then --and EMA.db.showHonorStatus == false then
-				--EMA:Print("Show Reputation 2")
-				showRepBeforeBar = experienceArtBar
-				setRepPoint = "BOTTOMLEFT"
-				setRepLeft = 0
-				setRepTop = -1				
-		--[[	elseif EMA.db.showHonorStatus == true then
-				--EMA:Print("Show Reputation 3")
-				showRepBeforeBar = experienceHonorBar
-				setRepPoint = "BOTTOMLEFT"
-				setRepLeft = 0
-				setRepTop = -1				
-		]]	
 			else
 				--EMA:Print("Show Reputation 4")
 				showRepBeforeBar = parentFrame
@@ -1029,38 +907,8 @@ function EMA:UpdateEMATeamStatusBar( characterName, characterPosition )
 		else
 			experienceBar:Hide()
 			experienceBarClick:Hide()
-		end	
-		--Artifact Bar
-			experienceArtBar.backgroundTexture:SetAllPoints()
-			experienceArtBar:SetWidth( EMA.db.experienceStatusWidth )
-			experienceArtBar:SetHeight( EMA.db.experienceStatusHeight / showBarCount )
-			experienceArtBar:SetPoint( "TOPLEFT", showArtBeforeBar, setArtPoint, setArtLeft , setArtTop )
-			experienceArtBarClick:SetPoint( "TOPLEFT", showArtBeforeBar, setArtPoint, setArtLeft , setArtTop )
-			experienceArtBarClick:SetWidth( EMA.db.experienceStatusWidth )
-			experienceArtBarClick:SetHeight( EMA.db.experienceStatusHeight / showBarCount )		
-		if EMA.db.showArtifactStatus == true then	
-			experienceArtBar:Show()
-			experienceArtBarClick:Show()
-		else
-			experienceArtBar:Hide()
-			experienceArtBarClick:Hide()
-		end	
-	--[[	-- Honor
-			experienceHonorBar.backgroundTexture:SetAllPoints()
-			experienceHonorBar:SetWidth( EMA.db.experienceStatusWidth )
-			experienceHonorBar:SetHeight( EMA.db.experienceStatusHeight / showBarCount )
-			experienceHonorBar:SetPoint( "TOPLEFT", showHonorBeforeBar , setHonorPoint, setHonorLeft, setHonorTop )
-			experienceHonorBarClick:SetPoint( "TOPLEFT", showHonorBeforeBar , setHonorPoint, setHonorLeft, setHonorTop )			
-			experienceHonorBarClick:SetWidth( EMA.db.experienceStatusWidth )
-			experienceHonorBarClick:SetHeight( EMA.db.experienceStatusHeight / showBarCount )
-		if EMA.db.showHonorStatus == true then	
-			experienceHonorBar:Show()
-			experienceHonorBarClick:Show()
-		else
-			experienceHonorBar:Hide()
-			experienceHonorBarClick:Hide()
-		end
-	]]	--rep
+		end		
+		--rep
 			reputationBar.backgroundTexture:SetAllPoints()
 			reputationBar:SetWidth( EMA.db.experienceStatusWidth )
 			reputationBar:SetHeight( EMA.db.experienceStatusHeight / showBarCount )
@@ -1085,10 +933,6 @@ function EMA:UpdateEMATeamStatusBar( characterName, characterPosition )
 	else
 		experienceBar:Hide()
 		experienceBarClick:Hide()
-		experienceArtBar:Hide()
-		experienceArtBarClick:Hide()
-	--	experienceHonorBar:Hide()
-	--	experienceHonorBarClick:Hide()
 	end		
 	-- Display the health bar.
 	local healthBar	= characterStatusBar["healthBar"]
@@ -1481,29 +1325,6 @@ local function SettingsCreateDisplayOptions( top )
 		EMA.SettingsToggleShowXpStatus,
 		L["SHOW_XP_HELP"]
 	)	
---[[
-	EMA.settingsControl.displayOptionsCheckBoxShowArtifactStatus = EMAHelperSettings:CreateCheckBox( 
-		EMA.settingsControl, 
-		thirdWidth, 
-		left2, 
-		movingTop, 
-		L["ARTIFACT_BAR"],
-		EMA.SettingsToggleShowArtifactStatus,
-		L["ARTIFACT_BAR_HELP"]
-	)		
-
-	EMA.settingsControl.displayOptionsCheckBoxShowHonorStatus = EMAHelperSettings:CreateCheckBox( 
-		EMA.settingsControl, 
-		thirdWidth, 
-		left3, 
-		movingTop, 
-		L["HONORXP"],
-		EMA.SettingsToggleShowHonorStatus,
-		L["HONORXP_HELP"]
-	)
-	
-	movingTop = movingTop - checkBoxHeight - verticalSpacing	
-]]	
 	EMA.settingsControl.displayOptionsCheckBoxShowRepStatus = EMAHelperSettings:CreateCheckBox( 
 		EMA.settingsControl, 
 		thirdWidth, 
@@ -1742,8 +1563,6 @@ function EMA:SettingsRefresh()
 	EMA.settingsControl.displayOptionsFollowStatusHeightSlider:SetValue( EMA.db.followStatusHeight )
 	EMA.settingsControl.displayOptionsCheckBoxShowExperienceStatus:SetValue( EMA.db.showExperienceStatus )
 	EMA.settingsControl.displayOptionsCheckBoxShowXpStatus:SetValue( EMA.db.showXpStatus )
---	EMA.settingsControl.displayOptionsCheckBoxShowArtifactStatus:SetValue( EMA.db.showArtifactStatus )
---	EMA.settingsControl.displayOptionsCheckBoxShowHonorStatus:SetValue( EMA.db.showHonorStatus )
 	EMA.settingsControl.displayOptionsCheckBoxShowRepStatus:SetValue( EMA.db.showRepStatus )
 	EMA.settingsControl.displayOptionsCheckBoxShowExperienceStatusValues:SetValue( EMA.db.experienceStatusShowValues )
 	EMA.settingsControl.displayOptionsCheckBoxShowExperienceStatusPercentage:SetValue( EMA.db.experienceStatusShowPercentage )
@@ -1794,8 +1613,6 @@ function EMA:SettingsRefresh()
 		EMA.settingsControl.displayOptionsFollowStatusHeightSlider:SetDisabled( not EMA.db.showTeamList or not EMA.db.showFollowStatus)
 		EMA.settingsControl.displayOptionsCheckBoxShowExperienceStatus:SetDisabled( not EMA.db.showTeamList )
 		EMA.settingsControl.displayOptionsCheckBoxShowXpStatus:SetDisabled( not EMA.db.showTeamList or not EMA.db.showExperienceStatus)
---		EMA.settingsControl.displayOptionsCheckBoxShowArtifactStatus:SetDisabled( not EMA.db.showTeamList or not EMA.db.showExperienceStatus)
---		EMA.settingsControl.displayOptionsCheckBoxShowHonorStatus:SetDisabled( not EMA.db.showTeamList or not EMA.db.showExperienceStatus)
 		EMA.settingsControl.displayOptionsCheckBoxShowRepStatus:SetDisabled( not EMA.db.showTeamList or not EMA.db.showExperienceStatus )
 		EMA.settingsControl.displayOptionsCheckBoxShowExperienceStatusValues:SetDisabled( not EMA.db.showTeamList or not EMA.db.showExperienceStatus )
 		EMA.settingsControl.displayOptionsCheckBoxShowExperienceStatusPercentage:SetDisabled( not EMA.db.showTeamList or not EMA.db.showExperienceStatus )
@@ -1864,7 +1681,6 @@ function EMA:EMAOnSettingsReceived( characterName, settings )
 		EMA.db.followStatusShowName = settings.followStatusShowName
 		EMA.db.showExperienceStatus = settings.showExperienceStatus
 		EMA.db.showXpStatus = settings.showXpStatus
-		EMA.db.showArtifactStatus = settings.showArtifactStatus
 --		EMA.db.showHonorStatus = settings.showHonorStatus
 		EMA.db.showRepStatus = settings.showRepStatus
 		EMA.db.experienceStatusWidth = settings.experienceStatusWidth
@@ -2047,21 +1863,10 @@ function EMA:SettingsToggleShowXpStatus( event, checked )
 	EMA:SettingsRefresh()
 end
 
-function EMA:SettingsToggleShowArtifactStatus( event, checked )
-	EMA.db.showArtifactStatus = checked
-	EMA:SettingsRefresh()
-end
---[[
-function EMA:SettingsToggleShowHonorStatus( event, checked )
-	EMA.db.showHonorStatus = checked
-	EMA:SettingsRefresh()
-end
-]]
 function EMA:SettingsToggleShowRepStatus( event, checked )
 	EMA.db.showRepStatus = checked
 	EMA:SettingsRefresh()
 end
---
 
 function EMA:SettingsToggleShowExperienceStatusValues( event, checked )
 	EMA.db.experienceStatusShowValues = checked
@@ -2429,69 +2234,32 @@ function EMA:SendExperienceStatusUpdateCommand()
 		local playerMaxLevel = GetMaxPlayerLevel()	
 		local playerLevel = UnitLevel("player")
 		local exhaustionStateID, exhaustionStateName, exhaustionStateMultiplier = GetRestState()
-		--Artifact XP	
-		local artifactName = "n/a"
-		local artifactXP = 0
-		local artifactForNextPoint = 100
-		local artifactPointsAvailable = 0
-		local artifactPointsSpent = 0
-	-- TODO REMOVE ALL!	
---[[
-	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem() 
-	if (azeriteItemLocation) and HasArtifactEquipped() == false then 
-		local azeriteXP, azeriteTotalXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation)
-		local azeriteLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
-		local azeriteItem = Item:CreateFromItemLocation(azeriteItemLocation)
-		local azeriteName = azeriteItem:GetItemName()	
-		--EMA:Print("test", azeriteName, azeriteXP, azeriteTotalXP )
-		artifactName = azeriteName
-		artifactXP = azeriteXP
-		artifactForNextPoint = azeriteTotalXP
-		artifactPointsAvailable = 0
-		artifactPointsSpent	= 0	
-	end	
-]]	
---Remove From 8.0
---[[
-		local honorXP = UnitHonor("player")
-		local prestigeLevel = UnitPrestige("Player")	
-		local honorMax = UnitHonorMax("player")
-		-- A DityDityHack if capped --Ebony
-		if honorMax == 0 then
-			honorMax = 10000
-		end
-		local HonorLevel = UnitHonorLevel("player")		
-		local honorExhaustionStateID = GetHonorRestState()		
-		if not (honorexhaustionStateID == 1) then
-			honorExhaustionStateID = 0
-		end	
-]]
+		
 		--	EMA:Print("testSend", honorXP, honorMax, HonorLevel, honorExhaustionStateID)
 		if EMA.db.showTeamListOnMasterOnly == true then
 				--EMA:Print("Testtoteam", characterName, name, xp, xpForNextPoint, numPointsAvailableToSpend)
 				--EMA:Print("TestTOTEAM", characterName, name, xp, xpForNextPoint, numPointsAvailableToSpend)
-				EMA:EMASendCommandToMaster( EMA.COMMAND_EXPERIENCE_STATUS_UPDATE, playerExperience, playerMaxExperience, exhaustionStateID, playerLevel, artifactName, artifactXP, artifactPointsSpent, artifactForNextPoint, artifactPointsAvailable )--, honorXP, honorMax, HonorLevel, prestigeLevel, honorExhaustionStateID )			
+				EMA:EMASendCommandToMaster( EMA.COMMAND_EXPERIENCE_STATUS_UPDATE, playerExperience, playerMaxExperience, exhaustionStateID, playerLevel )			
 			else
 				--EMA:DebugMessage( "SendExperienceStatusUpdateCommand TO TEAM!" )
 				--EMA:Print("TestTOTEAM", characterName, name, xp, xpForNextPoint, numPointsAvailableToSpend)
-				EMA:EMASendCommandToTeam( EMA.COMMAND_EXPERIENCE_STATUS_UPDATE, playerExperience, playerMaxExperience, exhaustionStateID, playerLevel, artifactName, artifactXP, artifactPointsSpent, artifactForNextPoint, artifactPointsAvailable ) --, honorXP, honorMax, HonorLevel, prestigeLevel, honorExhaustionStateID)
+				EMA:EMASendCommandToTeam( EMA.COMMAND_EXPERIENCE_STATUS_UPDATE, playerExperience, playerMaxExperience, exhaustionStateID, playerLevel )
 			end
 	end
 end
 
-function EMA:ProcessUpdateExperienceStatusMessage( characterName, playerExperience, playerMaxExperience, exhaustionStateID, playerLevel, artifactName, artifactXP, artifactForNextPoint, artifactPointsSpent, artifactPointsAvailable ) --, honorXP, honorMax, HonorLevel, prestigeLevel, honorExhaustionStateID)
-	EMA:UpdateExperienceStatus( characterName, playerExperience, playerMaxExperience, exhaustionStateID, playerLevel, artifactName, artifactXP, artifactForNextPoint, artifactPointsSpent, artifactPointsAvailable ) --, honorXP, honorMax, HonorLevel, prestigeLevel, honorExhaustionStateID )
+function EMA:ProcessUpdateExperienceStatusMessage( characterName, playerExperience, playerMaxExperience, exhaustionStateID, playerLevel )
+	EMA:UpdateExperienceStatus( characterName, playerExperience, playerMaxExperience, exhaustionStateID, playerLevel ) 
 end
 
 function EMA:SettingsUpdateExperienceAll()
 	for characterName, characterStatusBar in pairs( EMA.characterStatusBar ) do			
-		EMA:UpdateExperienceStatus( characterName, nil, nil, nil, nil, nil, nil, nil, nil, nil) --, nil, nil, nil, nil, nil )
+		EMA:UpdateExperienceStatus( characterName, nil, nil, nil, nil )
 	end
 end
 
-function EMA:UpdateExperienceStatus( characterName, playerExperience, playerMaxExperience, exhaustionStateID, playerLevel, artifactName, artifactXP, artifactPointsSpent, artifactForNextPoint, artifactPointsAvailable) --, honorXP, honorMax, HonorLevel, prestigeLevel, honorExhaustionStateID )
+function EMA:UpdateExperienceStatus( characterName, playerExperience, playerMaxExperience, exhaustionStateID, playerLevel )
 --	EMA:Print( "UpdateExperienceStatus", characterName, playerExperience, playerMaxExperience, exhaustionStateID, playerLevel)
---	EMA:Print("ArtTest", characterName, "name", artifactName, "xp", artifactXP, "Points", artifactForNextPoint, artifactPointsAvailable)
 --	EMA:Print("honorTest", characterName, honorXP, honorMax, HonorLevel, prestigeLevel, honorExhaustionStateID)
 	if CanDisplayTeamList() == false then
 		return
@@ -2508,24 +2276,6 @@ function EMA:UpdateExperienceStatus( characterName, playerExperience, playerMaxE
 	local experienceBarText = characterStatusBar["experienceBarText"]	
 	local experienceBar = characterStatusBar["experienceBar"]	
 	
-	local experienceArtBarText = characterStatusBar["experienceArtBarText"]	
-	if characterStatusBar["experienceArtBarText"] == nil then
-		return
-	end
-	local experienceArtBar = characterStatusBar["experienceArtBar"]
-	if characterStatusBar["experienceArtBar"] == nil then
-		return
-	end	
---[[
-	local experienceHonorBarText = characterStatusBar["experienceHonorBarText"]
-	if characterStatusBar["experienceHonorBarText"] == nil then
-		return
-	end
-	local experienceHonorBar = characterStatusBar["experienceHonorBar"]
-	if characterStatusBar["experienceHonorBar"] == nil then
-		return
-	end	
-]]	
 	if playerExperience == nil then
 		playerExperience = experienceBarText.playerExperience
 	end
@@ -2538,60 +2288,15 @@ function EMA:UpdateExperienceStatus( characterName, playerExperience, playerMaxE
 	if playerLevel == nil then
 		playerLevel = experienceBarText.playerLevel
 	end	
-	if artifactName == nil then 
-		artifactName = experienceArtBarText.artifactName
-	end
 	
-	if artifactXP == nil then
-		artifactXP = experienceArtBarText.artifactXP
-	end
-	if artifactPointsSpent == nil then
-		artifactPointsSpent = experienceArtBarText.artifactPointsSpent
-	end	
-	if artifactForNextPoint == nil then
-		artifactForNextPoint = experienceArtBarText.artifactForNextPoint
-	end
-	
-	if artifactPointsAvailable == nil then
-		artifactPointsAvailable = experienceArtBarText.artifactPointsAvailable
-	end	
---[[	
-	if honorXP == nil then
-		honorXP = experienceHonorBarText.honorXP
-	end	
-	
-	if honorMax == nil then
-		honorMax = experienceHonorBarText.honorMax
-	end
-	
-	if HonorLevel == nil then
-		honorLevel = experienceHonorBarText.honorLevel
-	end
-	
-	if honorExhaustionStateID == nil then
-		honorExhaustionStateID = experienceHonorBarText.honorExhaustionStateID
-	end
-]]	
+
 	experienceBarText.playerExperience = playerExperience
 	experienceBarText.playerMaxExperience = playerMaxExperience
 	experienceBarText.exhaustionStateID = exhaustionStateID
 	experienceBarText.playerLevel = playerLevel
-	experienceArtBarText.artifactName = artifactName
-	experienceArtBarText.artifactXP = artifactXP
-	experienceArtBarText.artifactPointsSpent = artifactPointsSpent
-	experienceArtBarText.artifactForNextPoint = artifactForNextPoint
-	experienceArtBarText.artifactPointsAvailable = artifactPointsAvailable
---[[
-	experienceHonorBarText.honorXP = honorXP
-	experienceHonorBarText.honorMax = honorMax
-	experienceHonorBarText.honorLevel = honorLevel
-	experienceHonorBarText.honorExhaustionStateID = honorExhaustionStateID
-]]	
 	local min, max = math.min(0, playerExperience), playerMaxExperience
 
 	experienceBar:SetAnimatedValues(playerExperience, min, max , playerLevel)
-	experienceArtBar:SetAnimatedValues(artifactXP, 0, artifactForNextPoint, artifactPointsAvailable + artifactPointsSpent)
---	experienceHonorBar:SetAnimatedValues(honorXP, 0, honorMax, honorLevel)	
 	
 	local text = ""
 	if EMA.db.experienceStatusShowValues == true then
@@ -2612,57 +2317,7 @@ function EMA:UpdateExperienceStatus( characterName, playerExperience, playerMaxE
 		experienceBar:SetStatusBarColor( 0.58, 0.0, 0.55, 1.0 )
 		experienceBar.backgroundTexture:SetColorTexture( 0.58, 0.0, 0.55, 0.15 )
 	end	
-	
---ArtText
-	local artText = ""
-	--EMA:Print("TextTest", artifactXP, artifactForNextPoint)
-	if EMA.db.experienceStatusShowValues == true and EMA.db.experienceStatusShowPercentage == false then
-		artText = artText..tostring( AbbreviateLargeNumbers(artifactXP ) )..L[" / "]..tostring( AbbreviateLargeNumbers(artifactForNextPoint) )..L[" "]
-	end
-	if EMA.db.experienceStatusShowPercentage == true then
-		if EMA.db.experienceStatusShowValues == true then
-			artText = artText..L["("]..tostring( AbbreviateLargeNumbers(artifactXP ) )..L[" "]..tostring( floor( (artifactXP/artifactForNextPoint)*100) )..L["%"]..L[")"]
-		else
-			artText = artText..L["("]..tostring( floor( (artifactXP/artifactForNextPoint)*100) )..L["%"]..L[")"]
-		end
-	end
-	if artifactPointsAvailable > 0 then
-		artText = artText..L[" "].."[+ "..artifactPointsAvailable.."]"		
-	end	
-	--EMA:Print("arttest", artText)
-	experienceArtBarText:SetText( artText )		
-	experienceArtBar:SetStatusBarColor( 0.901, 0.8, 0.601, 1.0 )
-	experienceArtBar.backgroundTexture:SetColorTexture( 0.901, 0.8, 0.601, 0.20 )
-		
---[[		
-	--HonorText	
-	local honorText = ""
-	if EMA.db.showExpInfo == true then
-		if prestigeLevel > 0 then
-			honorText = honorText..prestigeLevel.."-"..honorLevel..L[" "]
-		else
-			honorText = honorText..honorLevel..L[" "]
-		end	
-	end
-	if EMA.db.experienceStatusShowValues == true then
-		honorText = honorText..tostring( AbbreviateLargeNumbers(honorXP) )..L[" / "]..tostring( AbbreviateLargeNumbers(honorMax) )..L[" "]
-	end
-	if EMA.db.experienceStatusShowPercentage == true then
-		if EMA.db.experienceStatusShowValues == true then
-			honorText = honorText..tostring( AbbreviateLargeNumbers(honorXP) )..L[" "]..L["("]..tostring( floor( (honorXP/honorMax)*100) )..L["%"]..L[")"]
-		else
-			honorText = honorText..L["("]..tostring( floor( (honorXP/honorMax)*100) )..L["%"]..L[")"]
-		end
-	end
-	experienceHonorBarText:SetText( honorText )		
-	if honorExhaustionStateID == 1 then
-		experienceHonorBar:SetStatusBarColor( 1.0, 0.71, 0.0, 1.0 )
-		experienceHonorBar.backgroundTexture:SetColorTexture( 1.0, 0.71, 0.0, 0.20 )
-	else
-		experienceHonorBar:SetStatusBarColor( 1.0, 0.24, 0.0, 1.0 )
-		experienceHonorBar.backgroundTexture:SetColorTexture( 1.0, 0.24, 0.0, 0.20 )
-	end	
-]]	
+
 end	
 
 
@@ -2735,9 +2390,6 @@ function EMA:UpdateReputationStatus( characterName, reputationName, reputationSt
 	reputationBarText.reputationBarMin = reputationBarMin
 	reputationBarText.reputationBarMax = reputationBarMax
 	reputationBarText.reputationBarValue = reputationBarValue
-
-	--reputationBar:SetMinMaxValues( tonumber( reputationBarMin ), tonumber( reputationBarMax ) )
-	--reputationBar:SetValue( tonumber( reputationBarValue ) )
 	reputationBar:SetAnimatedValues(reputationBarValue, reputationBarMin, reputationBarMax, 0 )
 
    if reputationName == 0 then
@@ -2745,18 +2397,7 @@ function EMA:UpdateReputationStatus( characterName, reputationName, reputationSt
         reputationBarMax = 100
         reputationBarValue = 100
         reputationStandingID = 1
-    end
---[[
-	if 	UnitInParty(Ambiguate( characterName, "none" ) ) == true then
-		if range == false then
-			reputationBar:SetAlpha( 0.5 )
-		else
-			reputationBar:SetAlpha( 1 )
-		end
-	else
-		reputationBar:SetAlpha( 1 )
-	end
---]]	
+    end	
 	local text = ""
 	if EMA.db.experienceStatusShowValues == true then
 		text = text..tostring( AbbreviateLargeNumbers(reputationBarValue-reputationBarMin) )..L[" / "]..tostring( AbbreviateLargeNumbers(reputationBarMax-reputationBarMin) )..L[" "]
@@ -3053,14 +2694,6 @@ function EMA:UNIT_POWER_FREQUENT( event, Unit, powerType, ... )
 		--EMA:Print("player", Unit, powerType)
 		if( event and powerType == "COMBO_POINTS" ) then
 			EMA:SendComboStatusUpdateCommand()
-		elseif( event and powerType == "SOUL_SHARDS" ) then
-			EMA:SendComboStatusUpdateCommand()
-		elseif( event and powerType == "HOLY_POWER" ) then
-			EMA:SendComboStatusUpdateCommand()
-		elseif( event and powerType == "ARCANE_CHARGES" ) then
-			EMA:SendComboStatusUpdateCommand()	
-		elseif( event and powerType == "MANA" ) then
-			EMA:SendComboStatusUpdateCommand()
 		else
 			return
 		end
@@ -3084,7 +2717,7 @@ function EMA:SendComboStatusUpdateCommand()
 			return
 		end	
 		
-		EMA:Print ("PowerType", PowerType, playerCombo, playerMaxCombo, Class)
+		--EMA:Print ("PowerType", PowerType, playerCombo, playerMaxCombo, Class)
 		if EMA.db.showTeamListOnMasterOnly == true then
 			EMA:DebugMessage( "SendComboStatusUpdateCommand TO Master!" )
 			EMA:EMASendCommandToMaster( EMA.COMMAND_COMBO_STATUS_UPDATE, playerCombo, playerMaxCombo, class )
@@ -3150,34 +2783,7 @@ function EMA:UpdateComboStatus( characterName, playerCombo, playerMaxCombo, clas
 		end
 	end
 	comboBarText:SetText( text )
-	EMA:SetStatusBarColourForCombo( comboBar, class )	
 end
-
-function EMA:SetStatusBarColourForCombo( comboBar, Class )
-	if Class == "WARLOCK" then
-		-- Purple
-		comboBar:SetStatusBarColor( 0.58, 0.51, 0.79, 1 )
-		comboBar.backgroundTexture:SetColorTexture( 0.58, 0.51, 0.79, 0.25) 	
-	elseif  Class == "PALADIN" then
-		--yellow(gold)
-		comboBar:SetStatusBarColor( 0.96, 0.55, 0.73, 1 )
-		comboBar.backgroundTexture:SetColorTexture( 0.96, 0.55, 0.73, 0.25) 	
-	elseif Class =="DEATHKNIGHT" then
-		--Sky Blue?
-		comboBar:SetStatusBarColor( 0.60, 0.80, 1.0, 1 )
-		comboBar.backgroundTexture:SetColorTexture( 0.60, 0.80, 1.0, 0.25)
-	elseif Class =="MAGE" then
-		--Very Blue ice?
-		comboBar:SetStatusBarColor( 0.07, 0.30, 0.92, 1 )
-		comboBar.backgroundTexture:SetColorTexture( 0.07, 0.30, 0.92, 0.25)
-	elseif Class =="MONK" then
-		--Greenish
-		comboBar:SetStatusBarColor( 0.44, 0.79, 0.67, 1 )
-		comboBar.backgroundTexture:SetColorTexture( 0.44, 0.79, 0.67, 0.25)
-	else
-		return
-	end	
-end	
 		
 -------------------------------------------------------------------------------------------------------------
 -- Addon initialization, enabling and disabling.
@@ -3211,21 +2817,13 @@ function EMA:OnEnable()
 	EMA:RegisterEvent( "PLAYER_LEVEL_UP" )		
 	EMA:RegisterEvent( "UNIT_HEALTH" )
 	EMA:RegisterEvent( "UNIT_MAXHEALTH" )
---	EMA:RegisterEvent( "UNIT_HEAL_PREDICTION" )
-
 	EMA:RegisterEvent( "UNIT_POWER_UPDATE", "UNIT_POWER" )
 
 	EMA:RegisterEvent( "UNIT_MAXPOWER", "UNIT_POWER" )
 	EMA:RegisterEvent( "UNIT_DISPLAYPOWER" )
 	EMA:RegisterEvent( "CHAT_MSG_COMBAT_FACTION_CHANGE" )
 	EMA:RegisterEvent( "UNIT_POWER_FREQUENT")
---	EMA:RegisterEvent( "RUNE_POWER_UPDATE" )
---	EMA:RegisterEvent( "PLAYER_TALENT_UPDATE")
-	--EMA:RegisterEvent( "HONOR_XP_UPDATE" )
-	--EMA:RegisterEvent( "HONOR_LEVEL_UPDATE" )
-	--EMA:RegisterEvent( "HONOR_PRESTIGE_UPDATE" )
 	EMA:RegisterEvent( "GROUP_ROSTER_UPDATE" )
---	EMA:RegisterEvent( "ARTIFACT_XP_UPDATE" )
 	EMA:RegisterEvent("UNIT_PORTRAIT_UPDATE")
 	EMA.SharedMedia.RegisterCallback( EMA, "LibSharedMedia_Registered" )
     EMA.SharedMedia.RegisterCallback( EMA, "LibSharedMedia_SetGlobal" )	

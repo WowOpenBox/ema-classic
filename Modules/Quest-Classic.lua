@@ -1661,8 +1661,11 @@ local function EMAApiUnTrackQuests(questID, questText)
 	EMA:EMASendCommandToTeam( EMA.COMMAND_QUEST_TRACK, questID, questText, false )
 end
 
+local function EMAApiTrackAllQuests()
+	EMA:DoTrackAllQuestsFromThisToon()
+	EMA:ScheduleTimer("EMASendCommandToTeam", 1, EMA.COMMAND_TRACK_ALL_QUESTS)
+end	
 
- 
 function EMA:QuestMapQuestOptions_AbandonQuest(questID)                       
 	if EMAApi.GetTeamListMaximumOrderOnline() > 1 then	
 		local lastQuestIndex = GetQuestLogSelection()
@@ -1866,7 +1869,8 @@ function EMA.ShareNextQuest()
 	local title, isHeader, questID = EMA:GetRelevantQuestInfo(EMA.iterateQuests)
 	if GetQuestLogPushable() then
 		if isHeader == false and questID ~= 0 then
-			QuestMapQuestOptions_ShareQuest(questID)
+			EMA:Print("test", questID )
+			QuestLogPushQuest()
 		end
 	end	
 	EMA:IterateQuests("ShareNextQuest", 1)
@@ -2095,3 +2099,4 @@ end
 
 EMAApi.EMAApiAbandonQuest = EMAApiAbandonQuests
 EMAApi.EMAApiUnTrackQuest = EMAApiUnTrackQuests
+EMAApi.EMAApiTrackAllQuests = EMAApiTrackAllQuests
