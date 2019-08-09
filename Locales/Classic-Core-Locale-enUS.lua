@@ -262,6 +262,22 @@ L["ONLINE"] = "Online"
 L["OFFLINE"] = "Offline"
 L["STATICPOPUP_ADD"] = "Enter character to add in name-server format:"
 L["STATICPOPUP_REMOVE"] = "Are you sure you wish to remove %s from the team list?"
+L["PARTY_LOOT_CONTROL"] = "Party Loot Control"
+L["SET_LOOT_METHOD"] = "Automatically Set The Loot Method"
+L["SET_LOOT_METHOD_HELP"] = "Automatically Seta The Loot Method When Characters Are In The Same Group"
+L["TO"] = "to..."
+L["FFA"] = "Free For All"
+L["FFA_HELP"] = "Free For All Everyone Can Loot Anything"
+L["MASTER_LOOTER"] = "Master Looter"
+L["MASTER_LOOTER_HELP"] = "Sets To Master Looter Pick Who Get what items"
+L["LOOT_STRANGER"] = "Override: Set Loot To Group Loot If Stranger"
+L["LOOT_STRANGER_HELP"] = "Sets To Group Loot If There Is A Stranger In The Party/Raid"
+L["IN_GROUP"] = "In Group."
+L["FRIENDS_NOT_STRANGERS"] = "Friends Are Not Strangers"
+L["FRIENDS_NOT_STRANGERS_HELP"] = "Ingame Friends Not Stangers"
+L["OOOL"] = "Slaves Opt Out Of Loot"
+L["OOOL_HELP"] = "SLaves Will Pass On Rare Loot"
+
 
 --------------------------
 -- Message Locale

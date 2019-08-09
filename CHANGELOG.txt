@@ -2,6 +2,21 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.2-Beta-v0.3(1210012)
+Game Version: 1.13.2
+Release Date: 9/8/2019
+
+
+## Team
+	- Set Loot Options Are Back!!
+	
+## Quest-watcher
+	-Should Now Hide Blizzard Tracker (again!)
+	
+
+---------------------------
+
+
 EMA Version: v1.13.2-Beta-v0.2(1210010)
 Game Version: 1.13.2
 Release Date: 7/8/2019

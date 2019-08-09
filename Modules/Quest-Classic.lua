@@ -257,13 +257,13 @@ function EMA:OnEnable()
     EMA:SecureHook( "SelectActiveQuest" )
     EMA:SecureHook( "SelectAvailableQuest" )
     EMA:SecureHook( "AcceptQuest" )
---	EMA:SecureHook( "AcknowledgeAutoAcceptQuest" )
     EMA:SecureHook( "CompleteQuest" )
 	EMA:SecureHook( "GetQuestReward" )
 	EMA:SecureHook( "ToggleFrame" )
 	EMA:SecureHook( "ToggleQuestLog" )
 	EMA:SecureHook( "ShowQuestComplete" )
---	EMA:SecureHook( "QuestMapQuestOptions_AbandonQuest" )
+--	EMA:SecureHookScript (StaticPopup_Show, "ABANDON_QUEST_WITH_ITEMS", AbandonButtonQuest )
+--	EMA:SecureHook( QuestLogFrameAbandonButton_OnClick ) 
 --	EMA:SecureHook( "QuestMapQuestOptions_TrackQuest" )
 --	EMA:SecureHook( "QuestLog" )
 end
@@ -1612,30 +1612,20 @@ function EMA:QUEST_DETAIL()
 		if UnitIsPlayer( "npc" ) then
 			-- Quest is shared from a player.
 			if EMA:CanAutoAcceptSharedQuestFromPlayer() == true then		
-				--TODO: is this even needed??? Can auto quests be shared from other players?? unsure so we add it in anyway.
-				--if ( QuestFrame.autoQuest ) then
-				--	AcknowledgeAutoAcceptQuest()
-				--else
 					EMA.isInternalCommand = true
 					EMA:EMASendMessageToTeam( EMA.db.messageArea, L["AUTOMATICALLY_ACCEPTED_QUEST"]( GetTitleText() ), false )
 					AcceptQuest()
-					EMA.isInternalCommand = false
-				--end	
+					EMA.isInternalCommand = false	
 			end			
 		else
 			-- Quest is from an NPC.
 			if (EMA.db.allAcceptAnyQuest == true) or ((EMA.db.onlyAcceptQuestsFrom == true) and (EMA.db.acceptFromNpc == true)) then		
-				--AutoQuest is Accepted no need to accept it again.
-			--	if ( QuestFrame.autoQuest ) then
-			--		AcknowledgeAutoAcceptQuest()
-			--	else 	
-					EMA.isInternalCommand = true
-					--EMA:DebugMessage( "QUEST_DETAIL - auto accept is: ", QuestGetAutoAccept() )
-					EMA:EMASendMessageToTeam( EMA.db.messageArea, L["AUTOMATICALLY_ACCEPTED_QUEST"]( GetTitleText() ), false )
-					AcceptQuest()
-					HideUIPanel( QuestFrame )
-					EMA.isInternalCommand = false
-			--	end
+				EMA.isInternalCommand = true
+				--EMA:DebugMessage( "QUEST_DETAIL - auto accept is: ", QuestGetAutoAccept() )
+				EMA:EMASendMessageToTeam( EMA.db.messageArea, L["AUTOMATICALLY_ACCEPTED_QUEST"]( GetTitleText() ), false )
+				AcceptQuest()
+				HideUIPanel( QuestFrame )
+				EMA.isInternalCommand = false
 			end
 		end
 	end	
@@ -1666,10 +1656,10 @@ local function EMAApiTrackAllQuests()
 	EMA:ScheduleTimer("EMASendCommandToTeam", 1, EMA.COMMAND_TRACK_ALL_QUESTS)
 end	
 
-function EMA:QuestMapQuestOptions_AbandonQuest(questID)                       
+function EMA:AbandonButtonQuest(questID)                       
 	if EMAApi.GetTeamListMaximumOrderOnline() > 1 then	
 		local lastQuestIndex = GetQuestLogSelection()
-		--EMA:Print("SetAbandonQuest", lastQuestIndex, questID)
+		EMA:Print("SetAbandonQuest", lastQuestIndex, questID)
 		title = GetAbandonQuestName()
 		local data = {}
 		data.questID = questID
@@ -1713,7 +1703,7 @@ function EMA:QuestMapQuestOptions_EMA_DoQuestTrack( sender, questID, title, trac
 			EMA:EMADoQuest_UnTrackQuest( questID, questLogIndex )
 		end
 	else
-		EMA:EMASendMessageToTeam( EMA.db.messageArea, L["QUESTLOG_DO_NOT_HAVE_QUEST"]( title ), false )
+	--	EMA:EMASendMessageToTeam( EMA.db.messageArea, L["QUESTLOG_DO_NOT_HAVE_QUEST"]( title ), false )
 	end		
 end
 

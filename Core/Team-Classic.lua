@@ -57,6 +57,12 @@ EMA.settings = {
 		inviteConvertToRaid = true,
 		inviteSetAllAssistant = false,
 		masterChangeClickToMove = false,
+		lootSetAutomatically = false,
+		lootSetFreeForAll = true,
+		lootSetMasterLooter = false,
+		lootSlavesOptOutOfLoot = false,
+		lootToGroupIfStrangerPresent = true,
+		lootToGroupFriendsAreNotStrangers = false,		
 	},
 }
 
@@ -211,6 +217,11 @@ EMA.MESSAGE_CHARACTER_OFFLINE = "JmbTmChrOf"
 -------------------------------------------------------------------------------------------------------------
 
 EMA.simpleAreaList = {}
+EMA.PARTY_LOOT_FREEFORALL = "freeforall"
+EMA.PARTY_LOOT_GROUP = "group"
+EMA.PARTY_LOOT_MASTER = "master"
+EMA.PARTY_LOOT_NEEDBEFOREGREED = "needbeforegreed"
+EMA.PARTY_LOOT_ROUNDROBIN = "roundrobin"
 
 -------------------------------------------------------------------------------------------------------------
 -- Settings Dialogs.
@@ -460,7 +471,7 @@ local function SettingsCreatePartyInvitationsControl( top )
 	local checkBoxWidth = (headingWidth - horizontalSpacing) / 2
 	local column1Left = left
 	local column2Left = left + checkBoxWidth + horizontalSpacing
-	local bottomOfSection = top - headingHeight - (checkBoxHeight * 3) - (verticalSpacing * 2)
+	local bottomOfSection = top - headingHeight - (checkBoxHeight * 4) - (verticalSpacing * 2)
 	-- Create a heading.
 	EMAHelperSettings:CreateHeading( EMA.settingsControl, L["PARTY_CONTROLS"], top, false )
 	-- Create checkboxes.
@@ -521,6 +532,100 @@ local function SettingsCreatePartyInvitationsControl( top )
 	return bottomOfSection	
 end
 
+local function SettingsCreatePartyLootControl( top )
+	-- Get positions.
+	local checkBoxHeight = EMAHelperSettings:GetCheckBoxHeight()
+	local radioBoxHeight = EMAHelperSettings:GetRadioBoxHeight()
+	local labelContinueHeight = EMAHelperSettings:GetContinueLabelHeight()
+	local left = EMAHelperSettings:LeftOfSettings()
+	local headingHeight = EMAHelperSettings:HeadingHeight()
+	local headingWidth = EMAHelperSettings:HeadingWidth( false )
+	local horizontalSpacing = EMAHelperSettings:GetHorizontalSpacing()
+	local verticalSpacing = EMAHelperSettings:GetVerticalSpacing()
+	local checkBoxWidth = (headingWidth - horizontalSpacing) / 2
+	local indentContinueLabel = horizontalSpacing * 13
+	local column1Left = left
+	local column2Left = left + checkBoxWidth + horizontalSpacing
+	local bottomOfSection = top - headingHeight - checkBoxHeight - radioBoxHeight - verticalSpacing - checkBoxHeight - checkBoxHeight - labelContinueHeight - (verticalSpacing * 4) - labelContinueHeight - checkBoxHeight 
+	
+	-- Create a heading.
+	EMAHelperSettings:CreateHeading( EMA.settingsControl, L["PARTY_LOOT_CONTROL"], top, false )
+	
+	-- Create checkboxes.
+	EMA.settingsControl.partyLootControlCheckBoxSetLootMethod = EMAHelperSettings:CreateCheckBox( 
+		EMA.settingsControl, 
+		headingWidth, 
+		column1Left, 
+		top - headingHeight,
+		L["SET_LOOT_METHOD"],
+		EMA.SettingsSetLootMethodToggle,
+		L["SET_LOOT_METHOD_HELP"]
+	)
+	-- Label continuing check box above.
+	EMA.settingsControl.labelPartyLootControlCheckBoxSetLootMethod = EMAHelperSettings:CreateContinueLabel( 
+		EMA.settingsControl, 
+		headingWidth, 
+		column1Left + indentContinueLabel,
+		top - headingHeight - checkBoxHeight,
+		L["TO"]
+	)	
+	EMA.settingsControl.partyLootControlCheckBoxSetFFA = EMAHelperSettings:CreateCheckBox( 
+		EMA.settingsControl, 
+		checkBoxWidth, 
+		column1Left, 
+		top - headingHeight - checkBoxHeight - labelContinueHeight - verticalSpacing, 
+		L["FFA"],
+		EMA.SettingsSetFFALootToggle,
+		L["FFA_HELP"]
+	)
+	EMA.settingsControl.partyLootControlCheckBoxSetFFA:SetType( "radio" )
+	EMA.settingsControl.partyLootControlCheckBoxSetMasterLooter = EMAHelperSettings:CreateCheckBox( 
+		EMA.settingsControl, 
+		checkBoxWidth, 
+		column2Left, 
+		top - headingHeight - checkBoxHeight - labelContinueHeight - verticalSpacing, 
+		L["MASTER_LOOTER"],
+		EMA.SettingsSetMasterLooterToggle,
+		L["MASTER_LOOTER_HELP"]
+	)	
+	EMA.settingsControl.partyLootControlCheckBoxSetMasterLooter:SetType( "radio" )
+	EMA.settingsControl.partyLootControlCheckBoxStrangerToGroup = EMAHelperSettings:CreateCheckBox( 
+		EMA.settingsControl, 
+		headingWidth, 
+		column1Left, 
+		top - headingHeight - checkBoxHeight - radioBoxHeight - labelContinueHeight,
+		L["LOOT_STRANGER"],
+		EMA.SettingsSetStrangerToGroup,
+		L["LOOT_STRANGER_HELP"]
+	)
+	-- Label continuing check box above.
+	EMA.settingsControl.labelPartyLootControlCheckBoxStrangerToGroup = EMAHelperSettings:CreateContinueLabel( 
+		EMA.settingsControl, 
+		headingWidth, 
+		column1Left + indentContinueLabel,
+		top - headingHeight - checkBoxHeight - radioBoxHeight - labelContinueHeight - (verticalSpacing * 4) - labelContinueHeight,
+		L["IN_GROUP"]
+	)
+	EMA.settingsControl.partyLootControlCheckBoxFriendsNotStrangers = EMAHelperSettings:CreateCheckBox( 
+		EMA.settingsControl, 
+		headingWidth, 
+		column1Left + indentContinueLabel, 
+		top - headingHeight - checkBoxHeight - radioBoxHeight - checkBoxHeight - labelContinueHeight - labelContinueHeight,
+		L["FRIENDS_NOT_STRANGERS"],
+		EMA.SettingsSetFriendsNotStrangers,
+		L["FRIENDS_NOT_STRANGERS_HELP"]
+	)
+	EMA.settingsControl.partyLootControlCheckBoxSetOptOutOfLoot = EMAHelperSettings:CreateCheckBox( 
+		EMA.settingsControl, 
+		headingWidth, 
+		column1Left,
+		top - headingHeight - checkBoxHeight - radioBoxHeight - checkBoxHeight - labelContinueHeight - labelContinueHeight - checkBoxHeight ,
+		L["OOOL"],
+		EMA.SettingsSetSlavesOptOutToggle,
+		L["OOOL_HELP"]
+	)		
+	return bottomOfSection	
+end
 
 local function SettingsCreate()
 	EMA.settingsControl = {}
@@ -539,7 +644,10 @@ local function SettingsCreate()
 	local bottomOfMasterControl = SettingsCreateMasterControl( bottomOfTeamList )
 	-- Create the party invitation controls.
 	local bottomOfPartyInvitationControl = SettingsCreatePartyInvitationsControl( bottomOfMasterControl )
-	EMA.settingsControl.widgetSettings.content:SetHeight( - bottomOfPartyInvitationControl )
+	EMA.settingsControl.widgetSettings.content:SetHeight( - bottomOfMasterControl )
+	-- Create the party loot control controls.
+	local bottomOfPartyLootControl = SettingsCreatePartyLootControl( bottomOfPartyInvitationControl )
+	EMA.settingsControl.widgetSettings.content:SetHeight( -bottomOfPartyLootControl )
 	-- Help
 	local helpTable = {}
 	EMAHelperSettings:CreateHelp( EMA.settingsControl, helpTable, EMA:GetConfiguration() )	
@@ -1348,6 +1456,125 @@ function EMA:AddIsboxerMembers()
 	end	
 end
 
+-- LOOT FOR Classic
+
+local function SetPartyLoot( desiredLootOption )
+	--EMA:Print("test", desiredLootOption )
+	-- Is this character in a party and the party leader?
+	local isLeader = UnitIsGroupLeader("player")
+	if GetNumGroupMembers() > 0 and isLeader == true then
+		-- What is the current loot method?
+		local lootMethod, partyMaster, raidMaster = GetLootMethod()
+		-- Can the loot method be changed?
+		local canChangeLootMethod = false
+		-- Different loot methods?
+		if lootMethod ~= desiredLootOption then
+			-- Yes, can change loot method.
+			canChangeLootMethod = true
+		else
+			-- Same, loot methods, but master looter...		
+			if desiredLootOption == EMA.PARTY_LOOT_MASTER and partyMaster ~= nil then
+				-- And is a different master looter...
+				-- If partyMaster is 0, then this player is the master looter.
+				if partyMaster == 0 and IsCharacterTheMaster( EMA.characterName ) == false then
+					-- Then, yes, can change loot method.
+					canChangeLootMethod = true
+				end
+				-- If partyMaster between 1 and 4 then that player (party1 .. party4) is the master looter.
+				if partyMaster > 0 then
+					if UnitName( "party"..partyMaster ) ~= GetMasterName() then
+						-- Then, yes, can change loot method.
+						canChangeLootMethod = true
+					end
+				end
+			end
+		end
+		-- SetLootMethod fires the PartyLeaderChanged event (need to check that loot is not being set to 
+		-- the same loot method; otherwise an infinite loop occurs).
+		if canChangeLootMethod == true then	
+			if desiredLootOption == EMA.PARTY_LOOT_MASTER then
+				SetLootMethod( desiredLootOption, GetMasterName(), 1 )
+			else
+				SetLootMethod( desiredLootOption )
+			end
+		end
+	end
+end
+
+function EMA:PARTY_LEADER_CHANGED( event, ... )
+	if EMA.db.lootSetAutomatically == true then
+		local isLeader = UnitIsGroupLeader("player")
+		if isLeader == true then
+			-- Is there a stranger in the group?
+			local haveStranger = false
+			if EMA.db.lootToGroupIfStrangerPresent == true then
+				local numberPartyMembers = GetNumGroupMembers()
+				for iteratePartyMembers = numberPartyMembers, 1, -1 do
+					local partyMemberName, partyMemberRealm = UnitName( "party"..iteratePartyMembers )
+					local character = EMAUtilities:AddRealmToNameIfNotNil( partyMemberName, partyMemberRealm )
+					if partyMemberName ~= nil then
+						if IsCharacterInTeam( character ) == false then
+							if EMA.db.lootToGroupFriendsAreNotStrangers == true then
+								local isAFriend = false
+								for friendIndex = 1, GetNumFriends() do
+									local friendName = GetFriendInfo( friendIndex )
+									if partyMemberName == friendName then
+										isAFriend = true
+									end
+								end
+								if isAFriend == false then
+									haveStranger = true
+								end
+							else
+								haveStranger = true
+							end
+						end
+					end	
+				end
+				if haveStranger == true then
+					SetPartyLoot( EMA.PARTY_LOOT_GROUP )
+				end
+			end
+			if haveStranger == false then
+				-- Automatically set the loot to free for all?
+				if EMA.db.lootSetFreeForAll == true then
+					SetPartyLoot( EMA.PARTY_LOOT_FREEFORALL )
+				end
+				-- Automatically set the loot to master loot?
+				if EMA.db.lootSetMasterLooter == true then
+					SetPartyLoot( EMA.PARTY_LOOT_MASTER )
+				end
+			end
+		end
+	end
+	EMA:CheckSlavesOptOutOfLoot()
+end
+
+function EMA:GROUP_ROSTER_UPDATE( event, ... )
+	EMA:CheckSlavesOptOutOfLoot()
+end
+
+function EMA:CheckSlavesOptOutOfLoot()
+	-- Set opt out of loot rolls?
+	if EMA.db.lootSlavesOptOutOfLoot == true then
+		-- Only if not the master.
+		if IsCharacterTheMaster( EMA.characterName ) == false then
+			if GetOptOutOfLoot() == nil then
+				SetOptOutOfLoot( true )
+			end
+		else
+			if GetOptOutOfLoot() == 1 then
+				SetOptOutOfLoot( false )
+			end
+		end
+	else
+		if GetOptOutOfLoot() == 1 then
+			SetOptOutOfLoot( false )
+		end	
+	end
+end
+
+
 
 -------------------------------------------------------------------------------------------------------------
 -- Addon initialization, enabling and disabling.
@@ -1393,12 +1620,11 @@ end
 -- Called when the addon is enabled.
 function EMA:OnEnable()
 	EMA:RegisterEvent( "PARTY_INVITE_REQUEST" )
+	EMA:RegisterEvent( "PARTY_LEADER_CHANGED" )
+	EMA:RegisterEvent( "GROUP_ROSTER_UPDATE" )
 	EMA:RegisterMessage( EMA.MESSAGE_TEAM_MASTER_CHANGED, "OnMasterChange" )
 	-- Kickstart the settings team list scroll frame.
 	EMA:SettingsTeamListScrollRefresh()
-	--EMA.SettingsGroupListScrollRefresh()
-	-- Click the first row in the team list table to populate the tag list table.
-	--EMA:SettingsTeamListRowClick( 1, 1 )
 	EMA:RegisterEvent( "PLAYER_ENTERING_WORLD" )
 	-- Initialise key bindings.
 	EMA.keyBindingFrame = CreateFrame( "Frame", nil, UIParent )
@@ -1447,6 +1673,13 @@ function EMA:SettingsRefresh()
 	EMA.settingsControl.partyInviteControlCheckBoxDeclineStrangers:SetValue( EMA.db.inviteDeclineStrangers )
 	EMA.settingsControl.partyInviteControlCheckBoxConvertToRaid:SetValue( EMA.db.inviteConvertToRaid )
 	EMA.settingsControl.partyInviteControlCheckBoxSetAllAssist:SetValue( EMA.db.inviteSetAllAssistant )
+	-- Party Loot Control.
+	EMA.settingsControl.partyLootControlCheckBoxSetLootMethod:SetValue( EMA.db.lootSetAutomatically )
+	EMA.settingsControl.partyLootControlCheckBoxSetFFA:SetValue( EMA.db.lootSetFreeForAll )
+	EMA.settingsControl.partyLootControlCheckBoxSetMasterLooter:SetValue( EMA.db.lootSetMasterLooter )
+	EMA.settingsControl.partyLootControlCheckBoxStrangerToGroup:SetValue( EMA.db.lootToGroupIfStrangerPresent )
+	EMA.settingsControl.partyLootControlCheckBoxFriendsNotStrangers:SetValue( EMA.db.lootToGroupFriendsAreNotStrangers )
+	EMA.settingsControl.partyLootControlCheckBoxSetOptOutOfLoot:SetValue( EMA.db.lootSlavesOptOutOfLoot )
 	-- Ensure correct state.
 	EMA.settingsControl.partyInviteControlCheckBoxSetAllAssist:SetDisabled (not EMA.db.inviteConvertToRaid )
 	-- Update the settings team list.
@@ -1468,6 +1701,10 @@ function EMA:EMAOnSettingsReceived( characterName, settings )
 		EMA.db.inviteConvertToRaid = settings.inviteConvertToRaid
 		EMA.db.inviteSetAllAssistant = settings.inviteSetAllAssistant
 		EMA.db.masterChangeClickToMove = settings.masterChangeClickToMove
+		EMA.db.lootSetAutomatically = settings.lootSetAutomatically 
+		EMA.db.lootSetFreeForAll = settings.lootSetFreeForAll 
+		EMA.db.lootSetMasterLooter = settings.lootSetMasterLooter 
+		EMA.db.lootSlavesOptOutOfLoot = settings.lootSlavesOptOutOfLoot 
 		EMA.db.master = settings.master
 		SetMaster( settings.master )
 		-- Refresh the settings.
@@ -1791,6 +2028,38 @@ end
 
 function EMA:SettingsinviteSetAllAssistToggle( event, checked )
 	EMA.db.inviteSetAllAssistant = checked
+end
+
+function EMA:SettingsSetLootMethodToggle( event, checked )
+	EMA.db.lootSetAutomatically = checked
+	EMA:SettingsRefresh()
+end
+
+function EMA:SettingsSetFFALootToggle( event, checked )
+	EMA.db.lootSetFreeForAll = checked
+	EMA.db.lootSetMasterLooter = not checked
+	EMA:SettingsRefresh()
+end
+
+function EMA:SettingsSetMasterLooterToggle( event, checked )
+	EMA.db.lootSetMasterLooter = checked
+	EMA.db.lootSetFreeForAll = not checked
+	EMA:SettingsRefresh()
+end
+
+function EMA:SettingsSetStrangerToGroup( event, checked )
+	EMA.db.lootToGroupIfStrangerPresent = checked
+	EMA:SettingsRefresh()
+end
+
+function EMA:SettingsSetFriendsNotStrangers( event, checked )
+	EMA.db.lootToGroupFriendsAreNotStrangers = checked
+	EMA:SettingsRefresh()
+end
+
+function EMA:SettingsSetSlavesOptOutToggle( event, checked )
+	EMA.db.lootSlavesOptOutOfLoot = checked
+	EMA:SettingsRefresh()
 end
 
 -------------------------------------------------------------------------------------------------------------
