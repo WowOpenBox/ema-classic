@@ -2,6 +2,15 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.2-Beta-v0.3(1210013)
+Game Version: 1.13.2
+Release Date: 10/8/2019
+	
+## Item-Use
+	- Should Now Add Useable Quest Items	
+
+---------------------------
+
 EMA Version: v1.13.2-Beta-v0.3(1210012)
 Game Version: 1.13.2
 Release Date: 9/8/2019
