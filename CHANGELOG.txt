@@ -2,6 +2,23 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.2-Release-v0.3(121015)
+Game Version: 1.13.2
+Release Date: 10/8/2019
+
+## Toon 
+	- Set Auto Repair defualt to false.
+	- Removed Guild Repair.
+	- Removed Toy and Mounts.
+	
+	
+## 	Quest-watcher
+	- Should be able to untrack quests
+	-- dev note: But there is no auto tracking in classic intell you track or have a item from the quest to track this is how classic is to work.
+	
+
+---------------------------
+
 EMA Version: v1.13.2-Beta-v0.3(1210013)
 Game Version: 1.13.2
 Release Date: 10/8/2019

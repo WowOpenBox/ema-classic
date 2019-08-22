@@ -73,8 +73,7 @@ EMA.settings = {
 		autoAcceptSummonRequest = false,
 		autoDenyGuildInvites = false,
 		requestArea = EMAApi.DefaultMessageArea(),
-		autoRepair = true,
-		autoRepairUseGuildFunds = true,
+		autoRepair = false,
 		merchantArea = EMAApi.DefaultMessageArea(),
 		autoAcceptRoleCheck = false,
 		enterLFGWithTeam = false,
@@ -175,16 +174,6 @@ local function SettingsCreateMerchant( top )
 		L["AUTO_REPAIR"],
 		EMA.SettingsToggleAutoRepair,
 		L["AUTO_REPAIR_HELP"]
-	)	
-	movingTop = movingTop - checkBoxHeight
-	EMA.settingsControlMerchant.checkBoxAutoRepairUseGuildFunds = EMAHelperSettings:CreateCheckBox( 
-		EMA.settingsControlMerchant, 
-		headingWidth, 
-		left, 
-		movingTop, 
-		L["REPAIR_GUILD_FUNDS"],
-		EMA.SettingsToggleAutoRepairUseGuildFunds,
-		L["REPAIR_GUILD_FUNDS_HELP"]
 	)	
 	movingTop = movingTop - checkBoxHeight
 	EMA.settingsControlMerchant.dropdownMerchantArea = EMAHelperSettings:CreateDropdown( 
@@ -650,7 +639,6 @@ function EMA:SettingsRefresh()
 	EMA.settingsControlToon.checkBoxToggleWarMode:SetValue( EMA.db.toggleWarMode )
 	EMA.settingsControlToon.dropdownRequestArea:SetValue( EMA.db.requestArea )
 	EMA.settingsControlMerchant.checkBoxAutoRepair:SetValue( EMA.db.autoRepair )
-	EMA.settingsControlMerchant.checkBoxAutoRepairUseGuildFunds:SetValue( EMA.db.autoRepairUseGuildFunds )
 	EMA.settingsControlMerchant.dropdownMerchantArea:SetValue( EMA.db.merchantArea )
 	-- Set state.
 	EMA.settingsControlWarnings.editBoxHitFirstTimeMessage:SetDisabled( not EMA.db.warnHitFirstTimeCombat )
@@ -662,7 +650,6 @@ function EMA:SettingsRefresh()
 	EMA.settingsControlWarnings.editBoxWarnManaDropsMessage:SetDisabled( not EMA.db.warnWhenManaDropsBelowX )
 	EMA.settingsControlWarnings.editBoxWarnWhenDurabilityDropsAmount:SetDisabled( not EMA.db.warnWhenDurabilityDropsBelowX )
 	EMA.settingsControlWarnings.editBoxWarnDurabilityDropsMessage:SetDisabled( not EMA.db.warnWhenDurabilityDropsBelowX )		
-	EMA.settingsControlMerchant.checkBoxAutoRepairUseGuildFunds:SetDisabled( not EMA.db.autoRepair )
 	EMA.settingsControlWarnings.editBoxBagsFullMessage:SetDisabled( not EMA.db.warnBagsFull )
 	EMA.settingsControlWarnings.editBoxCCMessage:SetDisabled( not EMA.db.warnCC )
 	EMA.settingsControlToon.checkBoxAutoAcceptResurrectRequestOnlyFromTeam:SetDisabled( not EMA.db.autoAcceptResurrectRequest )
@@ -677,10 +664,6 @@ function EMA:SettingsToggleAutoRepair( event, checked )
 	EMA:SettingsRefresh()
 end
 
-function EMA:SettingsToggleAutoRepairUseGuildFunds( event, checked )
-	EMA.db.autoRepairUseGuildFunds = checked
-	EMA:SettingsRefresh()
-end
 
 function EMA:SettingsToggleAutoDenyDuels( event, checked )
 	EMA.db.autoDenyDuels = checked
@@ -956,7 +939,6 @@ function EMA:EMAOnSettingsReceived( characterName, settings )
 		EMA.db.rollWithTeam = settings.rollWithTeam
 		EMA.db.toggleWarMode = settings.toggleWarMode
 		EMA.db.autoRepair = settings.autoRepair
-		EMA.db.autoRepairUseGuildFunds = settings.autoRepairUseGuildFunds
 		EMA.db.warningArea = settings.warningArea
 		EMA.db.requestArea = settings.requestArea
 		EMA.db.merchantArea = settings.merchantArea
@@ -1386,13 +1368,6 @@ function EMA:MERCHANT_SHOW( event, ... )
 	end
 	-- At least some cost...
 	if repairCost > 0 then
-		-- If allowed to use guild funds, then attempt to repair using guild funds.
-	--[[	if EMA.db.autoRepairUseGuildFunds == true then
-			if IsInGuild() and CanGuildBankRepair() then
-				RepairAllItems( 1 )
-			end
-		end
-	]]	
 		-- After guild funds used, still need to repair?
 		repairCost = GetRepairAllCost()
 		-- At least some cost...

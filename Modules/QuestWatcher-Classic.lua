@@ -1037,7 +1037,6 @@ end
 function EMA:QUEST_WATCH_UPDATE( event, ... )
 	--EMA:Print("test4")
 	if EMA.db.enableQuestWatcher == true then
-		EMAApi.EMAApiTrackAllQuests()
 		EMA:UpdateHideBlizzardWatchFrame()
 		EMA:ScheduleTimer( "UpdateHideBlizzardWatchFrame", 0.3 )
 		-- Wait a bit for the correct information to come through from the server...
