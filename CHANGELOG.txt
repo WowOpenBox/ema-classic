@@ -2,6 +2,18 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.2-Release-v0.4(121016)
+Game Version: 1.13.2
+Release Date: 08/9/2019
+
+#Item_Bar
+	- Fixed a Lag bug i hope when you have quest items added to bar
+
+
+
+
+---------------------------
+
 EMA Version: v1.13.2-Release-v0.3(121015)
 Game Version: 1.13.2
 Release Date: 10/8/2019

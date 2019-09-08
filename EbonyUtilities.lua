@@ -262,7 +262,7 @@ function EbonyUtilities:TooltipScaner(item)
 				text = tooltipText 
 				text2 = tooltipTextTwo	
 			--print("test9", text, text2)
-			tooltipScanner:Hide()
+			tooltipScanner:ClearLines()
 		end		
 	return text, text2
 end

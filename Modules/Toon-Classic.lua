@@ -884,7 +884,6 @@ function EMA:OnEnable()
 	EMA:RegisterEvent( "CONFIRM_SUMMON")
 	EMA:RegisterEvent( "DUEL_REQUESTED" )
 	EMA:RegisterEvent( "GUILD_INVITE_REQUEST" )
---	EMA:RegisterEvent( "LFG_ROLE_CHECK_SHOW" )
 	EMA:RegisterEvent( "READY_CHECK" )
 	EMA:RegisterEvent("LOSS_OF_CONTROL_ADDED")
 	EMA:RegisterEvent( "UI_ERROR_MESSAGE", "BAGS_FULL" )
@@ -893,9 +892,11 @@ function EMA:OnEnable()
 	EMA:RegisterMessage( EMAApi.MESSAGE_MESSAGE_AREAS_CHANGED, "OnMessageAreasChanged" )
 	EMA:RegisterMessage( EMAApi.MESSAGE_CHARACTER_ONLINE, "OnCharactersChanged" )
 	EMA:RegisterMessage( EMAApi.MESSAGE_CHARACTER_OFFLINE, "OnCharactersChanged" )
+	
 	-- Ace Hooks
+--	EMA:SecureHook( GameTooltip , nil, "MainMenuBarBackpackButton_OnEnter" )
+--	self:Hook( "BackpackButton_OnClick", AddTooltipInfo, true)
 	EMA:SecureHook( "ConfirmReadyCheck" )
---	EMA:SecureHook( "LFGTeleport" )
 	EMA:SecureHook( "RollOnLoot" )
 end
 
@@ -1546,6 +1547,18 @@ function EMA:LOSS_OF_CONTROL_ADDED( event, ... )
 		end
 	end
 end
+
+-- bag space on backpack
+
+function EMA:AddTooltipInfo( toolTip )
+	EMA:Print("test")
+	
+end	
+
+function EMA:BackpackButton_OnEnter( self )
+ EMA:Print("test")
+
+end	
 
 -- A EMA command has been received.
 function EMA:EMAOnCommandReceived( characterName, commandName, ... )
