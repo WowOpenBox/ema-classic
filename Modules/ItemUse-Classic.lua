@@ -484,9 +484,10 @@ function EMA:CheckForQuestItemAndAddToBar()
 		for slot = 1, GetContainerNumSlots(bag) do
 			local itemLink = GetContainerItemLink(bag, slot)
 			if itemLink and itemLink:match("item:%d") then
-				local tooltipText = EMAUtilities:TooltipScaner(itemLink)
-				if tooltipText and tooltipText:match(ITEM_BIND_QUEST) then
-					local spellName, spellID = GetItemSpell( itemLink )
+				local name, itemLink,_,_,_,itemType,questItem = GetItemInfo( itemLink )
+				--EMA:Print("test", itemType,questItem )
+				if itemType ~= nil and itemType == "Quest" then
+				local spellName, spellID = GetItemSpell( itemLink )
 					if spellName then
 						--EMA:Print("test", itemLink, tooltipText )
 						EMA:AddAnItemToTheBarIfNotExists( itemLink, false )
