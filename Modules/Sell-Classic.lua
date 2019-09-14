@@ -792,6 +792,22 @@ function EMA:ContainerFrameItemButton_OnModifiedClick( self, event, ... )
 		local texture, count, locked, quality, readable, lootable, link = GetContainerItemInfo( bag, slot )
 		EMA:EMASendCommandToTeam( EMA.COMMAND_SELL_ITEM, link )
 	end
+	local isConfigOpen = EMAPrivate.SettingsFrame.Widget:IsVisible()
+	if isConfigOpen == true and IsShiftKeyDown() == true then
+		local GUIPanel = EMAPrivate.SettingsFrame.TreeGroupStatus.selected
+		local currentModule = string.find(GUIPanel, EMA.moduleDisplayName) 
+		--EMA:Print("test2", GUIPanel, "vs", currentModule )
+		if currentModule ~= nil then
+			local itemID, itemLink = GameTooltip:GetItem()
+			--EMA:Print("test1", itemID, itemLink )
+			if itemLink ~= nil then
+				EMA.settingsControl.listEditBoxOtherItem:SetText( "" )
+				EMA.settingsControl.listEditBoxOtherItem:SetText( itemLink )
+				EMA.autoSellOtherItemLink = itemLink
+				return
+			end
+		end	
+	end	
 	return EMA.hooks["ContainerFrameItemButton_OnModifiedClick"]( self, event, ... )
 end
 
@@ -901,8 +917,6 @@ function EMA:DoMerchantSellItems()
 					local iLvl = C_Item.GetCurrentItemLevel( location )
 					local _, itemCount = GetContainerItemInfo( bagID, slotID )
 					local itemName, _, _, _, _, _, _, _, _, _, itemSellPrice = GetItemInfo( itemLink )
-				--	local hasToy = PlayerHasToy(bagItemID)
-					--EMA:Print("ItemTest", bagItemID, itemLink, itemRarity, itemType, isBop, itemRarity, iLvl, itemSellPrice)
 					local canSell = false
 					local canDestroy = false
 					if EMA.db.autoSellPoor == true then

@@ -162,6 +162,7 @@ function EMA:OnEnable()
 	EMA:RegisterEvent( "MAIL_SHOW" )
 	EMA:RegisterEvent( "MAIL_CLOSED" )
 	EMA:RegisterEvent( "MAIL_SEND_SUCCESS")
+	EMA:RawHook( "ContainerFrameItemButton_OnModifiedClick", true)
 	EMA:RegisterMessage( EMAApi.MESSAGE_MESSAGE_AREAS_CHANGED, "OnMessageAreasChanged" )
 	EMA:RegisterMessage( EMAApi.GROUP_LIST_CHANGED , "OnGroupAreasChanged" )
 end
@@ -512,6 +513,7 @@ function EMA:SettingsMailItemsAddClick( event )
 	if EMA.autoMailItemLink ~= nil and EMA.autoMailToonName ~= nil and EMA.db.MailTagName ~= nil then
 		EMA:AddItem( EMA.autoMailItemLink, EMA.autoMailToonName, EMA.db.MailTagName, EMA.db.blackListItem )
 		EMA.autoMailItemLink = nil
+		EMA.settingsControl.MailItemsEditBoxMailItem:SetText( "" )
 		EMA:SettingsRefresh()
 	end
 end
@@ -757,6 +759,28 @@ end
 -- Mail functionality.
 -------------------------------------------------------------------------------------------------------------
 
+function EMA:ContainerFrameItemButton_OnModifiedClick( self, event, ... )
+	local isConfigOpen = EMAPrivate.SettingsFrame.Widget:IsVisible()
+	if isConfigOpen == true and IsShiftKeyDown() == true then
+		local GUIPanel = EMAPrivate.SettingsFrame.TreeGroupStatus.selected
+		local currentModule = string.find(GUIPanel, EMA.moduleDisplayName) 
+		--EMA:Print("test2", GUIPanel, "vs", currentModule )
+		if currentModule ~= nil then
+			local itemID, itemLink = GameTooltip:GetItem()
+			--EMA:Print("test1", itemID, itemLink )
+			if itemLink ~= nil then
+				EMA.settingsControl.MailItemsEditBoxMailItem:SetText( "" )
+				EMA.settingsControl.MailItemsEditBoxMailItem:SetText( itemLink )
+				EMA.autoMailItemLink = itemLink	
+				return
+			end
+		end	
+	end	
+	return EMA.hooks["ContainerFrameItemButton_OnModifiedClick"]( self, event, ... )
+end
+
+
+
 function EMA:GetMailItemsMaxPosition()
 	if EMA.db.globalMailList == true then
 		return #EMA.db.global.autoMailItemsListGlobal
@@ -790,19 +814,19 @@ function EMA:AddItem( itemLink, GBTab, itemTag, blackList )
 		else	
 			table.insert( EMA.db.autoMailItemsList, itemInformation )
 		end	
-		EMA:SettingsRefresh()			
+		EMA:SettingsRefresh()	
 		EMA:SettingsMailItemsRowClick( 1, 1 )
 	end	
 end
 
 function EMA:RemoveItem()
 	if EMA.db.globalMailList == true then
-		table.remove( EMA.db.global.autoMailItemsListGlobal, EMA.settingsControl.listHighlightRow )
+		table.remove( EMA.db.global.autoMailItemsListGlobal, EMA.settingsControl.MailItemsHighlightRow )
 	else
 		table.remove( EMA.db.autoMailItemsList, EMA.settingsControl.MailItemsHighlightRow )
 	end
-	EMA:SettingsRefresh()
-	EMA:SettingsMailItemsRowClick( EMA.settingsControl.MailItemsHighlightRow  - 1, 1 )		
+	EMA:SettingsRefresh()	
+	EMA:SettingsMailItemsRowClick( EMA.settingsControl.MailItemsHighlightRow  - 1, 1 )	
 end
 
 
@@ -914,7 +938,7 @@ function EMA:MAIL_SEND_SUCCESS( event, ... )
 	--EMA:Print("try sendMail Again")
 	if EMA.db.showEMAMailWindow == true then	
 		if EMA.ShiftkeyDown == false and EMA.Count < 1 then
-			EMA:ScheduleTimer( "AddAllToMailBox", 1, nil )
+			EMA:ScheduleTimer( "AddAllToMailBox", 1.55, nil )
 		end
 	end	
 	if EMA.db.adjustMoneyWithMail == true and EMA.db.showEMAMailWindow == true then
@@ -927,7 +951,6 @@ function EMA:DoSendMail( gold )
 	for iterateMailSlots = 1, ATTACHMENTS_MAX_SEND do
 		if HasSendMailItem( iterateMailSlots ) == true or gold == true then
 			--EMA:Print("canSend")
-			--SendMailFrame_SendMail()
 			SendMailMailButton:Click() 
 			EMA.Count = 0		
 			break
@@ -970,7 +993,7 @@ function EMA:AddGoldToMailBox()
 				end
 			end	
 		else
-			EMA:Print("[PH] Can Only Mail From BlizzardUI Mail Frame!")
+			EMA:Print("[PH] Can Only Send Mail From BlizzardUI Mail Frame!")
 		end
 	end	
 end
