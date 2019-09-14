@@ -152,24 +152,17 @@ local function InitializePopupDialogs()
    -- Asks If you like to Abandon on all toons
    StaticPopupDialogs["EMAQUEST_ABANDON_ALL_TOONS"] = {
         text = L["ABANDON_QUESTS_TEAM"],
-        button1 = L["JUST_ME"],
-        button2 = L["ALL_TEAM"],
-        button3 = NO,
+        button1 = YES,
+        button2 = NO,
         timeout = 0,
 		whileDead = 1,
 		hideOnEscape = 1,
-        OnAccept = function( self )
-			--EMA:Print("Button1")
-			AbandonQuest()
-		end,
-		OnAlt = function ( self )
-			--EMA:Print("Button3")
-			
-		end,
-		OnCancel = function( self, data )
-			--EMA:Print("Button2")
+        OnAccept = function( self, data )
+		--	EMA:Print("button1", data.questID, data.title )
 			EMA:EMASendCommandToTeam( EMA.COMMAND_ABANDON_QUEST, data.questID, data.title)
-		end,		
+		end,
+		OnCancel = function( self )
+		end,	
     }
    -- Asks If you like to Track on all toons
    StaticPopupDialogs["EMA_QUEST_TRACK_ALL_TOONS"] = {
@@ -262,8 +255,8 @@ function EMA:OnEnable()
 	EMA:SecureHook( "ToggleFrame" )
 	EMA:SecureHook( "ToggleQuestLog" )
 	EMA:SecureHook( "ShowQuestComplete" )
---	EMA:SecureHookScript (StaticPopup_Show, "ABANDON_QUEST_WITH_ITEMS", AbandonButtonQuest )
---	EMA:SecureHook( QuestLogFrameAbandonButton_OnClick ) 
+	EMA:SecureHook( "AbandonQuest" )
+--	EMA:SecureHook( "QuestWatch_Update" )
 --	EMA:SecureHook( "QuestMapQuestOptions_TrackQuest" )
 --	EMA:SecureHook( "QuestLog" )
 end
@@ -1635,6 +1628,19 @@ end
 -- EMA QUEST CONTEXT MENU
 -------------------------------------------------------------------------------------------------------------
 
+function EMA:QuestWatch_Update()
+	local lastQuestIndex = GetQuestLogSelection()
+	local title, _, _, _, _, _, _, questID = GetQuestLogTitle(lastQuestIndex)
+	EMA:Print("test", questID )
+	if ( IsQuestWatched(lastQuestIndex) ) then
+		--EMA:Print("TrackingQuest")
+		EMA:EMASendCommandToTeam( EMA.COMMAND_QUEST_TRACK, questID, title, true )	
+	else
+		--EMA:Print("UnTrackQuest")
+		EMA:EMASendCommandToTeam( EMA.COMMAND_QUEST_TRACK, questID, title, false )	
+	end
+end
+
 local function EMAApiAbandonQuests(questID, questText)
 	--EMA:Print(questID, questText)
 	title = questText
@@ -1656,18 +1662,19 @@ local function EMAApiTrackAllQuests()
 	EMA:ScheduleTimer("EMASendCommandToTeam", 1, EMA.COMMAND_TRACK_ALL_QUESTS)
 end	
 
-function EMA:AbandonButtonQuest(questID)                       
+
+function EMA:AbandonQuest ()                      
 	if EMAApi.GetTeamListMaximumOrderOnline() > 1 then	
 		local lastQuestIndex = GetQuestLogSelection()
-		EMA:Print("SetAbandonQuest", lastQuestIndex, questID)
+		local _, _, _, _, _, _, _, questID = GetQuestLogTitle(lastQuestIndex)
+		--EMA:Print("SetAbandonQuest", lastQuestIndex, questID)
 		title = GetAbandonQuestName()
 		local data = {}
 		data.questID = questID
 		data.title = title
-		StaticPopup_Hide( "ABANDON_QUEST" )
-		StaticPopup_Hide( "ABANDON_QUEST_WITH_ITEMS" )	
 		StaticPopup_Show( "EMAQUEST_ABANDON_ALL_TOONS", title, nil, data )
 	end	
+	
 end
 
 function EMA:QuestObjectiveTracker_UntrackQuest(dropDownButton, questID)
@@ -1698,8 +1705,10 @@ function EMA:QuestMapQuestOptions_EMA_DoQuestTrack( sender, questID, title, trac
 	local questLogIndex = GetQuestLogIndexByID( questID )
 	if questLogIndex ~= 0 then
 		if track then
+			isInternalCommand = true
 			EMA:EMADoQuest_TrackQuest( questID, questLogIndex )
 		else
+			isInternalCommand = true
 			EMA:EMADoQuest_UnTrackQuest( questID, questLogIndex )
 		end
 	else
@@ -1709,13 +1718,15 @@ end
 
 function EMA:EMADoQuest_TrackQuest(questID, questLogIndex)
 	--EMA:Print("test", questID, questLogIndex )
-	if ( not IsQuestWatched(questID) ) then
-		AddQuestWatch(questLogIndex, true)
-		AutoQuestWatch_Insert(questLogIndex, QUEST_WATCH_NO_EXPIRE)
-		QuestWatch_Update()
-	end
-	QuestLog_SetSelection(questLogIndex)
-	QuestLog_Update()
+	if EMA.isInternalCommand == false then
+		if ( not IsQuestWatched(questID) ) then
+			AddQuestWatch(questLogIndex, true)
+			AutoQuestWatch_Insert(questLogIndex, QUEST_WATCH_NO_EXPIRE)
+			QuestWatch_Update()
+		end
+		QuestLog_SetSelection(questLogIndex)
+		QuestLog_Update()
+	end	
 end
 
 
@@ -1732,12 +1743,14 @@ end
 function EMA:QuestMapQuestOptions_EMA_DoAbandonQuest( sender, questID, title )
 	local questLogIndex = GetQuestLogIndexByID( questID )
 	if questLogIndex ~= 0 then
+		EMA:Unhook( "AbandonQuest" )
 		local lastQuestIndex = GetQuestLogSelection();
 		SelectQuestLogEntry(GetQuestLogIndexByID(questID));
 		SetAbandonQuest();
 		AbandonQuest();
 		SelectQuestLogEntry(lastQuestIndex);	
 		EMA:EMASendMessageToTeam( EMA.db.messageArea, L["QUESTLOG_HAVE_ABANDONED_QUEST"]( title ), false )
+		EMA:SecureHook( "AbandonQuest" )
 	end		
 end
 
@@ -1748,14 +1761,18 @@ function EMA:CreateEMAMiniQuestLogFrame()
     EMAMiniQuestLogFrame = CreateFrame( "Frame", "EMAMiniQuestLogFrame", QuestLogFrame )
     local frame = EMAMiniQuestLogFrame
 	frame:SetWidth( 270 )
-	frame:SetHeight( 60 )
+	frame:SetHeight( 80 )
 	frame:SetFrameStrata( "HIGH" )
 	frame:SetToplevel( true )
 	frame:SetClampedToScreen( true )
 	frame:EnableMouse( true )
 	frame:SetMovable( true )	
 	frame:ClearAllPoints()
-	frame:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 40, -10)
+	if IsAddOnLoaded("ElvUI" ) == true then  
+		frame:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 40, -80)
+	else
+		frame:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 40, -30)
+	end	
 		frame:SetBackdrop( {
 		bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background", 
 		edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border", 
@@ -1763,10 +1780,30 @@ function EMA:CreateEMAMiniQuestLogFrame()
 		insets = { left = 5, right = 5, top = 5, bottom = 5 }
 	} )
 	table.insert( UISpecialFrames, "EMAQuestLogWindowFrame" )
+	-- Single Track Button
+	local singleTrackButton = CreateFrame( "Button", "singleTrackButton", frame, "UIPanelButtonTemplate" )
+	singleTrackButton:SetScript( "OnClick", function() local lastQuestIndex = GetQuestLogSelection() local title, _, _, _, _, _, _, questID = GetQuestLogTitle(lastQuestIndex) EMA:EMASendCommandToTeam( EMA.COMMAND_QUEST_TRACK, questID, title, true )  end )
+	singleTrackButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 30 , -10)
+	singleTrackButton:SetHeight( 20 )
+	singleTrackButton:SetWidth( 100 )
+	singleTrackButton:SetText( L["TRACK_SINGLE_QUEST"] )	
+	singleTrackButton:SetScript("OnEnter", function(self) EMA:ShowTooltip(trackButton, true, L["TRACK_SINGLE_QUEST_TOOLTIP"]) end)
+	singleTrackButton:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
+	singleTrackQuestLogWindowAbandonFrameButton = singleTrackButton
+	-- Single unTrack Button
+	local singleUnTrackButton = CreateFrame( "Button", "singleUnTrackButton", frame, "UIPanelButtonTemplate" )
+	singleUnTrackButton:SetScript( "OnClick", function() local lastQuestIndex = GetQuestLogSelection() local title, _, _, _, _, _, _, questID = GetQuestLogTitle(lastQuestIndex) EMA:EMASendCommandToTeam( EMA.COMMAND_QUEST_TRACK, questID, title, false )  end )
+	singleUnTrackButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 140 , -10)
+	singleUnTrackButton:SetHeight( 20 )
+	singleUnTrackButton:SetWidth( 120 )
+	singleUnTrackButton:SetText( L["UNTRACK_SINGLE_QUEST"] )	
+	singleUnTrackButton:SetScript("OnEnter", function(self) EMA:ShowTooltip(trackButton, true, L["UNTRACK_SINGLE_QUEST_TOOLTIP"]) end)
+	singleUnTrackButton:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
+	singleUnTrackQuestLogWindowAbandonFrameButton = singleUnTrackButton
 	-- abandon ALL button
 	local abandonButton = CreateFrame( "Button", "abandonButton", frame, "UIPanelButtonTemplate" )
 	abandonButton:SetScript( "OnClick", function()  StaticPopup_Show("EMA_ABANDON_ALL_TOON_QUEST") end )
-	abandonButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 10 , -10)
+	abandonButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 10 , -30)
 	abandonButton:SetHeight( 20 )
 	abandonButton:SetWidth( 150 )
 	abandonButton:SetText( L["ABANDON_ALL"] )	
@@ -1776,7 +1813,7 @@ function EMA:CreateEMAMiniQuestLogFrame()
 	-- Share All Button
 	local shareButton = CreateFrame( "Button", "shareButton", frame, "UIPanelButtonTemplate" )
 	shareButton:SetScript( "OnClick", function()  EMA:DoShareAllQuestsFromAllToons() end )
-	shareButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 160, -10)
+	shareButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 160, -30)
 	shareButton:SetHeight( 20 )
 	shareButton:SetWidth( 100 )
 	shareButton:SetText( L["SHARE_ALL"] )	
@@ -1786,7 +1823,7 @@ function EMA:CreateEMAMiniQuestLogFrame()
 	--Track All Button
 	local trackButton = CreateFrame( "Button", "trackButton", frame, "UIPanelButtonTemplate" )
 	trackButton:SetScript( "OnClick", function()  EMA:DoTrackAllQuestsFromAllToons() end )
-	trackButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 35, -30)
+	trackButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 35, -50)
 	trackButton:SetHeight( 20 )
 	trackButton:SetWidth( 100 )
 	trackButton:SetText( L["TRACK_ALL"] )	
@@ -1796,7 +1833,7 @@ function EMA:CreateEMAMiniQuestLogFrame()
 	-- Untrack All
 	local unTrackButton = CreateFrame( "Button", "unTrackButton", frame, "UIPanelButtonTemplate" )
 	unTrackButton:SetScript( "OnClick", function()  EMA:DoUnTrackAllQuestsFromAllToons() end )
-	unTrackButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 160, -30)
+	unTrackButton:SetPoint( "TOPLEFT", frame, "TOPLEFT", 160, -50)
 	unTrackButton:SetHeight( 20 )
 	unTrackButton:SetWidth( 100 )
 	unTrackButton:SetText( L["UNTRACK_ALL"] )	

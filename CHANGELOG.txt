@@ -2,6 +2,18 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.2-Release-v0.5(121019)
+Game Version: 1.13.2
+Release Date: 14/9/2019
+
+## Quest
+	- Can Now Use Blizzard Ui Abandon Button And After It Ask If You Like To Do This On All Toons.
+	- Added Track And Untrack Quest Buttons For Single Quests For All Of Team.	
+	- Fixed a bug where it was not showing at the bottom of the EvlUI frame.
+	
+
+---------------------------
+
 EMA Version: v1.13.2-Release-v0.5(121018)
 Game Version: 1.13.2
 Release Date: 14/9/2019
