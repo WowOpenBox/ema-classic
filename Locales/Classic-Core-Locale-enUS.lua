@@ -108,7 +108,7 @@ L["DISPLAY"] = "Display"
 L["ITEM_USE"] = "Item Use"
 L["VENDER_LIST_MODULE"] = "Sell List"
 L["INTERACTION"] = "Interaction"
-L["CURRENCY"] = "Currency"
+L["CURRENCY"] = "Information"
 L["TOON"] = "Toon"
 L["FOLLOW"] = "Follow"
 L["PURCHASE"] = "Purchase"
@@ -458,27 +458,32 @@ L["I_AM_UNABLE_TO_FLY_TO_A"] = function( nodename )
 	return string.format( "I Am Unable To Fly To %s.", nodename )
 end
 --------------------------
--- Currency Locale
-L["EMA_CURRENCY"] = "Currency"
-L["SHOW_CURRENCY"] = "Show Currency"
-L["SHOW_CURRENCY_HELP"] = "Show The Currency Frame Window."
-L["HIDE_CURRENCY"] = "Hide Currency"
-L["HIDE_CURRENCY_HELP"] = "Hide The Currency Values For All Members In The Team."
-L["CURRENCY_HEADER"] = "Currency Selection To Show On Frame"
+-- Information Locale
+L["EMA_CURRENCY"] = "Information"
+L["SHOW_CURRENCY"] = "Show Information"
+L["SHOW_CURRENCY_HELP"] = "Show The Information Frame Window."
+L["HIDE_CURRENCY"] = "Hide Information"
+L["HIDE_CURRENCY_HELP"] = "Hide The Information Values For All Members In The Team."
+L["CURRENCY_HEADER"] = "Information Selection To Show On Frame"
 L["GOLD"] = "Gold"
 L["GOLD_HELP"] = "Shows The Minion's Gold"
 L["GOLD_GB"] = "Include Gold In Guild Bank"
 L["GOLD_GB_HELP"] = "Show Gold In Guild Bank\n(This Does Not Update Unless You Visit The Guildbank)"
-L["CURR_STARTUP"] = "Open Currency List On Start Up"
-L["CURR_STARTUP_HELP"] = "Open Currency List On Start Up.\nThe Master Only)"
-L["LOCK_CURR_LIST"] = "Lock The Currency List Frame"
-L["LOCK_CURR_LIST_HELP"] = "Locks The Currency List Frame And Enables Mouse Click-Through"
+L["CURR_STARTUP"] = "Open Information List On Start Up"
+L["CURR_STARTUP_HELP"] = "Open Information List On Start Up.\nThe Master Only)"
+L["LOCK_CURR_LIST"] = "Lock The Information List Frame"
+L["LOCK_CURR_LIST_HELP"] = "Locks The Information List Frame And Enables Mouse Click-Through"
 L["SPACE_FOR_NAME"] = "Space For Name"
 L["SPACE_FOR_GOLD"] =  "Space For Gold"
-L["SPACE_FOR_POINTS"] = "Space For Points"
+L["BAG_SPACE_HELP"] = "Shows The Characters Current Bag Space"
+L["DURR"] = "Durability"
+L["DURR_HELP"] = "Shows The Character Durability "
+
+
+L["SPACE_FOR_POINTS"] = "Space For Other"
 L["SPACE_BETWEEN_VALUES"] = "Space Between Values"
 L["TOTAL"] = "Total"
-L["CURR"] = "Curr"
+L["CURR"] = "Info"
 
 
 --------------------------

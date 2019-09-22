@@ -26,7 +26,7 @@
 	<Script file="QuestWatcher-Classic.lua" /> 
 	
 	<Script file="DisplayTeam-Classic.lua" />
-<!--	<Script file="Information-Classic.lua" /> -->
+	<Script file="Information-Classic.lua" />
 	<Script file="ItemUse-Classic.lua" />
 	<Script file="ISBoxer-Classic.lua" />
 	<Script file="LDBBar.lua" />

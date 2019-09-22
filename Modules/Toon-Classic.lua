@@ -76,11 +76,8 @@ EMA.settings = {
 		autoRepair = false,
 		merchantArea = EMAApi.DefaultMessageArea(),
 		autoAcceptRoleCheck = false,
-		enterLFGWithTeam = false,
 		acceptReadyCheck = false,
-		teleportLFGWithTeam = false,
 		rollWithTeam = false,
-		toggleWarMode = false,
 		--Debug Suff
 		testAlwaysOff = true
 	},
@@ -279,30 +276,9 @@ local function SettingsCreateToon( top )
 		EMA.SettingsToggleAutoAcceptSummonRequest,
 		L["SUMMON_REQUEST_HELP"]
 	)
-	movingTop = movingTop - checkBoxHeight
-	EMA.settingsControlToon.checkBoxToggleWarMode = EMAHelperSettings:CreateCheckBox( 
-		EMA.settingsControlToon, 
-		halfWidth, 
-		left, 
-		movingTop, 
-		L["WAR_MODE"],
-		EMA.SettingsToggleWarMode,
-		L["WAR_MODE_HELP"]
-	)	
-	
 	movingTop = movingTop - checkBoxHeight			
 	EMAHelperSettings:CreateHeading( EMA.settingsControlToon, L["GROUPTOOLS_HEADING"], movingTop, false )
 	movingTop = movingTop - headingHeight
-	EMA.settingsControlToon.checkBoxAutoRoleCheck = EMAHelperSettings:CreateCheckBox( 
-		EMA.settingsControlToon, 
-		halfWidth, 
-		left, 
-		movingTop, 
-		L["ROLE_CHECKS"],
-		EMA.SettingsToggleAutoRoleCheck,
-		L["ROLE_CHECKS_HELP"]
-	)		
-	movingTop = movingTop - checkBoxHeight
 	EMA.settingsControlToon.checkBoxAcceptReadyCheck = EMAHelperSettings:CreateCheckBox( 
 		EMA.settingsControlToon, 
 		halfWidth, 
@@ -311,16 +287,6 @@ local function SettingsCreateToon( top )
 		L["READY_CHECKS"],
 		EMA.SettingsToggleAcceptReadyCheck,
 		L["READY_CHECKS_HELP"]
-	)
- 	movingTop = movingTop - checkBoxHeight
- 	EMA.settingsControlToon.checkBoxLFGTeleport = EMAHelperSettings:CreateCheckBox( 
-		EMA.settingsControlToon, 
-		halfWidth, 
-		left, 
-		movingTop,
-		L["LFG_Teleport"],
-		EMA.SettingsToggleLFGTeleport,
-		L["LFG_Teleport_HELP"]
 	)
  	movingTop = movingTop - checkBoxHeight
  	EMA.settingsControlToon.checkBoxLootWithTeam = EMAHelperSettings:CreateCheckBox( 
@@ -632,11 +598,8 @@ function EMA:SettingsRefresh()
 	EMA.settingsControlToon.checkBoxAutoDenyDuels:SetValue( EMA.db.autoDenyDuels )
 	EMA.settingsControlToon.checkBoxAutoAcceptSummonRequest:SetValue( EMA.db.autoAcceptSummonRequest )
 	EMA.settingsControlToon.checkBoxAutoDenyGuildInvites:SetValue( EMA.db.autoDenyGuildInvites )
-	EMA.settingsControlToon.checkBoxAutoRoleCheck:SetValue( EMA.db.autoAcceptRoleCheck )
 	EMA.settingsControlToon.checkBoxAcceptReadyCheck:SetValue( EMA.db.acceptReadyCheck )
-	EMA.settingsControlToon.checkBoxLFGTeleport:SetValue( EMA.db.teleportLFGWithTeam )
 	EMA.settingsControlToon.checkBoxLootWithTeam:SetValue( EMA.db.rollWithTeam )
-	EMA.settingsControlToon.checkBoxToggleWarMode:SetValue( EMA.db.toggleWarMode )
 	EMA.settingsControlToon.dropdownRequestArea:SetValue( EMA.db.requestArea )
 	EMA.settingsControlMerchant.checkBoxAutoRepair:SetValue( EMA.db.autoRepair )
 	EMA.settingsControlMerchant.dropdownMerchantArea:SetValue( EMA.db.merchantArea )
@@ -696,30 +659,18 @@ function EMA:SettingsToggleAcceptDeathRequests( event, checked )
 	EMA:SettingsRefresh()
 end
 
-function EMA:SettingsToggleAutoRoleCheck( event, checked )
-	EMA.db.autoAcceptRoleCheck = checked
-	EMA:SettingsRefresh()
-end
 
 function EMA:SettingsToggleAcceptReadyCheck( event, checked )
 	EMA.db.acceptReadyCheck = checked 	
 	EMA:SettingsRefresh()
 end
 
-function EMA:SettingsToggleLFGTeleport( event, checked )
-	EMA.db.teleportLFGWithTeam = checked
-	EMA:SettingsRefresh()
-end
 
 function EMA:SettingsToggleLootWithTeam( event, checked )
 	EMA.db.rollWithTeam = checked
 	EMA:SettingsRefresh()
 end
 
-function EMA:SettingsToggleWarMode(event, checked )
-	EMA.db.toggleWarMode = checked
-	EMA:SettingsRefresh()
-end	
 
 -- Warnings Toggles
 
@@ -888,7 +839,6 @@ function EMA:OnEnable()
 	EMA:RegisterEvent("LOSS_OF_CONTROL_ADDED")
 	EMA:RegisterEvent( "UI_ERROR_MESSAGE", "BAGS_FULL" )
 	EMA:RegisterEvent( "BAG_UPDATE_DELAYED" )
-	EMA:RegisterEvent( "PLAYER_FLAGS_CHANGED", "WARMODE" )
 	EMA:RegisterMessage( EMAApi.MESSAGE_MESSAGE_AREAS_CHANGED, "OnMessageAreasChanged" )
 	EMA:RegisterMessage( EMAApi.MESSAGE_CHARACTER_ONLINE, "OnCharactersChanged" )
 	EMA:RegisterMessage( EMAApi.MESSAGE_CHARACTER_OFFLINE, "OnCharactersChanged" )
@@ -933,12 +883,8 @@ function EMA:EMAOnSettingsReceived( characterName, settings )
 		EMA.db.autoDenyDuels = settings.autoDenyDuels
 		EMA.db.autoAcceptSummonRequest = settings.autoAcceptSummonRequest
 		EMA.db.autoDenyGuildInvites = settings.autoDenyGuildInvites
-		EMA.db.autoAcceptRoleCheck = settings.autoAcceptRoleCheck
-		EMA.db.enterLFGWithTeam = settings.enterLFGWithTeam
 		EMA.db.acceptReadyCheck = settings.acceptReadyCheck
-		EMA.db.teleportLFGWithTeam = settings.teleportLFGWithTeam
 		EMA.db.rollWithTeam = settings.rollWithTeam
-		EMA.db.toggleWarMode = settings.toggleWarMode
 		EMA.db.autoRepair = settings.autoRepair
 		EMA.db.warningArea = settings.warningArea
 		EMA.db.requestArea = settings.requestArea
@@ -968,9 +914,10 @@ end
 function EMA:GUILD_INVITE_REQUEST( event, inviter, guild, ... )
 	if EMA.db.autoDenyGuildInvites == true then
 		DeclineGuild()
-		GuildInviteFrame:Hide()
+		StaticPopup_Hide( "GUILD_INVITE" )
 		EMA:EMASendMessageToTeam( EMA.db.requestArea, L["REFUSED_GUILD_INVITE"]( guild, inviter ), false )
 	end
+	
 end
 
 function EMA:DUEL_REQUESTED( event, challenger, ... )
@@ -1260,40 +1207,6 @@ function EMA:AmReadyCheck( ready )
 	EMA.isInternalCommand = false
 end
 
-function EMA:LFGTeleport( event, arg1, ... )
-	--EMA:Print("LFGtest")
-	if EMA.db.teleportLFGWithTeam == true then
-		if IsShiftKeyDown() == false then
-			if EMA.isInternalCommand == false then
-				if IsInLFGDungeon() == true then
-					EMA:EMASendCommandToTeam( EMA.COMMAND_TELE_PORT, true )
-				else
-					EMA:EMASendCommandToTeam( EMA.COMMAND_TELE_PORT, false )	
-				end	
-			end	
-		end	
-	end		
-end
-
-function EMA:DoLFGTeleport(port)
-	--EMA:Print("TeleCommand", port)
-	EMA.isInternalCommand = true
-	if IsShiftKeyDown() == false then
-		if port == true then
-			LFGTeleport(1)
-		else
-			LFGTeleport()
-		end
-	end		
-	EMA.isInternalCommand = false
-end
-
-function EMA:LFG_ROLE_CHECK_SHOW( event, ... )
-	if EMA.db.autoAcceptRoleCheck == true then	
-		--EMA:Print("testPopup?")
-		CompleteLFGRoleCheck("ture")
-	end	
-end
 
 function EMA:RollOnLoot(id, rollType, ...)
 	--EMA:Print("lootTest", id, rollType)
@@ -1328,30 +1241,6 @@ function EMA:CONFIRM_SUMMON( event, sender, location, ... )
 	end
 end
 
-function EMA:WARMODE(event, ...)
-	if EMA.db.toggleWarMode == false then
-		return
-	end
-	if C_PvP.IsWarModeFeatureEnabled() == true then
-		local isWarMode = C_PvP.IsWarModeDesired()
-		if C_PvP.CanToggleWarMode(isWarMode) == true then
-			--EMA:Print("Send", isWarMode, EMA.isInternalCommand )
-			if EMA.isInternalCommand == false then	
-				EMA:EMASendCommandToTeam( EMA.COMMAND_WAR_MODE, isWarMode )
-				EMA.isInternalCommand = true
-			end	
-		end	
-	end
-end
-
-function EMA:DoWarMode( isWarMode )
-	--EMA:Print("testwarmode", isWarMode )
-	EMA.isInternalCommand = true
-	if C_PvP.CanToggleWarMode( isWarMode ) == true and isWarMode ~= nil then
-		C_PvP.SetWarModeDesired( isWarMode )
-	end
-	EMA.isInternalCommand = false
-end	
 
 function EMA:MERCHANT_SHOW( event, ... )	
 	-- Does the user want to auto repair?
@@ -1535,7 +1424,6 @@ function EMA:ResetBagFull()
 	EMA:CancelAllTimers()
 end	
 
---Ebony CCed
 function EMA:LOSS_OF_CONTROL_ADDED( event, ... )
 	if EMA.db.warnCC == true then
 		local eventIndex = C_LossOfControl.GetNumEvents()
@@ -1586,13 +1474,6 @@ function EMA:EMAOnCommandReceived( characterName, commandName, ... )
 	if commandName == EMA.COMMAND_LOOT_ROLL then
 		if characterName ~= self.characterName then
 			EMA.DoLootRoll( characterName, ... )
-		end	
-	end
-	if commandName == EMA.COMMAND_WAR_MODE then
-		if characterName == self.characterName then
-			EMA.isInternalCommand = false
-		else	
-			EMA.DoWarMode( characterName, ... )
 		end	
 	end
 end

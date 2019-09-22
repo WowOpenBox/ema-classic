@@ -631,7 +631,6 @@ function EMA:CreateEMATeamStatusBar( characterName, parentFrame )
 	healthBarText:SetAllPoints()
 	healthBarText.playerHealth = 100
 	healthBarText.playerMaxHealth = 100
-	healthBarText.inComingHeal = 0
 	characterStatusBar["healthBarText"] = healthBarText
 	EMA:UpdateHealthStatus( characterName, nil, nil )
 	
@@ -2449,42 +2448,40 @@ function EMA:SendHealthStatusUpdateCommand(unit)
 				--EMA:Print("itsme", unit)
 				local playerHealth = UnitHealth( unit )
 				local playerMaxHealth = UnitHealthMax( unit )
-			--	local inComingHeal = UnitGetIncomingHeals( unit )
 				local _, class = UnitClass ("player")
 				
 				if EMA.db.showTeamListOnMasterOnly == true then
 					--EMA:Print( "SendHealthStatusUpdateCommand TO Master!" )
-					EMA:EMASendCommandToMaster( EMA.COMMAND_HEALTH_STATUS_UPDATE, playerHealth, playerMaxHealth, inComingHeal, class )
+					EMA:EMASendCommandToMaster( EMA.COMMAND_HEALTH_STATUS_UPDATE, playerHealth, playerMaxHealth, class )
 				else
 					--EMA:Print( "SendHealthStatusUpdateCommand TO Team!" )
-					EMA:EMASendCommandToTeam( EMA.COMMAND_HEALTH_STATUS_UPDATE, playerHealth, playerMaxHealth, inComingHeal, class )
+					EMA:EMASendCommandToTeam( EMA.COMMAND_HEALTH_STATUS_UPDATE, playerHealth, playerMaxHealth, class )
 				end	
 			end
 		else
 			local playerHealth = UnitHealth( unit )
 			local playerMaxHealth = UnitHealthMax( unit )
-		--	local inComingHeal = UnitGetIncomingHeals( unit )
 			local characterName, characterRealm = UnitName( unit )
 			local _, class = UnitClass ( unit )
 			local character = EMAUtilities:AddRealmToNameIfNotNil( characterName, characterRealm )
 			--EMA:Print("HeathStats", character, playerHealth, playerMaxHealth)
-			EMA:UpdateHealthStatus( character, playerHealth, playerMaxHealth, inComingHeal, class)
+			EMA:UpdateHealthStatus( character, playerHealth, playerMaxHealth, class)
 		end
 	end
 end
 
-function EMA:ProcessUpdateHealthStatusMessage( characterName, playerHealth, playerMaxHealth, inComingHeal, class )
-	EMA:UpdateHealthStatus( characterName, playerHealth, playerMaxHealth, inComingHeal, class)
+function EMA:ProcessUpdateHealthStatusMessage( characterName, playerHealth, playerMaxHealth, class )
+	EMA:UpdateHealthStatus( characterName, playerHealth, playerMaxHealth, class)
 end
 
 function EMA:SettingsUpdateHealthAll()
 	for characterName, characterStatusBar in pairs( EMA.characterStatusBar ) do			
-		EMA:UpdateHealthStatus( characterName, nil, nil, nil, nil )
+		EMA:UpdateHealthStatus( characterName, nil, nil, nil )
 	end
 end
 
-function EMA:UpdateHealthStatus( characterName, playerHealth, playerMaxHealth, inComingHeal, class )
-	--EMA:Print("testUpdate", characterName, playerHealth, playerMaxHealth, inComingHeal, class ) 
+function EMA:UpdateHealthStatus( characterName, playerHealth, playerMaxHealth, class )
+	--EMA:Print("testUpdate", characterName, playerHealth, playerMaxHealth, class ) 
 		if characterName == nil then
 		return
 	end
@@ -2511,24 +2508,15 @@ function EMA:UpdateHealthStatus( characterName, playerHealth, playerMaxHealth, i
 	end
 	if playerMaxHealth == nil then
 		playerMaxHealth = healthBarText.playerMaxHealth
-	end	
-	if inComingHeal == nil then
-		inComingHeal = healthBarText.inComingHeal
 	end		
 	healthBarText.playerHealth = playerHealth
 	healthBarText.playerMaxHealth = playerMaxHealth
-	healthBarText.inComingHeal = inComingHeal
 	-- Set statusBar
 	healthBar:SetMinMaxValues( 0, tonumber( playerMaxHealth ) )
 	healthBar:SetValue( tonumber( playerHealth ) )
 	healthIncomingBar:SetMinMaxValues( 0, tonumber( playerMaxHealth ) )
 	healthIncomingBar:SetValue( tonumber( playerHealth ) )	
 	
-	if inComingHeal > 0 then
---	EMA:Print("incomingHeal", inComingHeal)
-		healthIncomingBar:SetValue( tonumber( playerHealth + inComingHeal ) )
-		healthIncomingBar:SetStatusBarColor( 0, 1, 0, 1 )
-	end
 	local text = ""
 	if UnitIsDeadOrGhost(Ambiguate( characterName, "none" ) ) == true then
 		--EMA:Print("dead", characterName)

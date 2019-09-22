@@ -580,8 +580,10 @@ function EMA:DoMerchantAutoBuy()
 			-- Does the merchant have the item in stock?
 			local itemIndexMerchant = EMA:DoesMerchantHaveItemInStock( itemLink )
 			if itemIndexMerchant ~= nil then
+				--EMA:Print("inStock", itemIndexMerchant)
 				-- Yes, item is in stock, how many does the character need?
 				local amountNeeded = EMA:GetAmountNeededForItemTopUp( itemLink, maxItemAmount )
+				--EMA:Print("test", amountNeeded )
 				-- Need more than 0 items, buy them.
 				if amountNeeded > 0 then
 					-- Attempt to buy the items.
@@ -627,6 +629,7 @@ function EMA:DoesMerchantHaveItemInStock( itemLink )
 			-- Yes, get the item name.
 			local itemNameMerchant = GetItemInfo( merchantItemLink )
 			if itemNameMerchant == itemNameToFind then
+				--EMA:Print("test", itemNameMerchant, itemLink, itemNameToFind )
 				indexOfItemToFind = merchantIndex
 				break
 			end
@@ -696,12 +699,15 @@ function EMA:BuyItemFromMerchant( itemIndexMerchant, amountToBuy )
 		costToBuy = actualAmountToBuy * price
 		moneyAvailable = GetMoney()
 		if moneyAvailable < costToBuy then			
+			--EMA:Print("NO MONEY", moneyAvailable , costToBuy )
 			notEnoughMoney = true
 		end
 		-- Is there enough free space for this item in the characters bags?				
 		--TODO - need to find items family type and compare to each container.
-		local numFreeSlots, numTotalSlots = LibBagUtils:CountSlots("BAGS", 0)
-        if numFreeSlots == 0 then
+		--local numFreeSlots, numTotalSlots = LibBagUtils:CountSlots("BAGS", 0)
+        local numFreeSlots = CalculateTotalNumberOfFreeBagSlots()
+		--EMA:Print("testbagspace", numFreeSlots  )
+		if numFreeSlots == 0 then
             noFreeBagSpace = true
         end
 		-- Buy from the merchant, if there is a valid amount to buy and the character has enough money.

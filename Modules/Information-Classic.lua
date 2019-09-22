@@ -41,61 +41,11 @@ EMA.globalCurrencyFramePrefix = "EMAToonCurrencyListFrame"
 EMA.currTypes = {}
 EMA.simpleCurrList = {}
 
--- Currency Identifiers. To add you own just add a new line at the bottom of this part
--- http://www.wowhead.com/currencies
--- Old Stuff
---EMA.currTypes.DalaranJewelcraftingToken = 61
-EMA.currTypes.ChampionsSeal = 241
---EMA.currTypes.IllustriousJewelcraftersToken = 361
-EMA.currTypes.TolBaradCommendation = 391
-EMA.currTypes.LesserCharmOfGoodFortune = 738
-EMA.currTypes.ElderCharmOfGoodFortune = 697
-EMA.currTypes.MoguRuneOfFate = 752
-EMA.currTypes.WarforgedSeal = 776
-EMA.currTypes.BloodyCoin = 789
-EMA.currTypes.TimelessCoin = 777
---WoD Currency
-EMA.currTypes.GarrisonResources = 824
-EMA.currTypes.TemperedFate = 994
-EMA.currTypes.ApexisCrystal = 823
-EMA.currTypes.Darkmoon = 515
-EMA.currTypes.Oil = 1101
-EMA.currTypes.InevitableFate = 1129
-EMA.currTypes.TimeWalker = 1166
-EMA.currTypes.Valor = 1191
---Legion Currency
-EMA.currTypes.OrderResources = 1220
-EMA.currTypes.AncientMana = 1155
-EMA.currTypes.NetherShard = 1226
-EMA.currTypes.SealofBrokenFate = 1273
-EMA.currTypes.ShadowyCoins = 1154
-EMA.currTypes.SightlessEye = 1149
-EMA.currTypes.TimeWornArtifact = 1268
-EMA.currTypes.CuriousCoin = 1275
---7.2
-EMA.currTypes.LegionfallWarSupplies = 1342
---7.2.5
-EMA.currTypes.CoinsOfAir = 1416
---7.3
-EMA.currTypes.WakeningEssence = 1533
-EMA.currTypes.VeiledArgunite = 1508
---8.0
-EMA.currTypes.WarResources = 1560
-EMA.currTypes.RichAzeriteFragment = 1565
-EMA.currTypes.SeafarersDubloon = 1710
-EMA.currTypes.SealofWartornFate = 1580
-EMA.currTypes.WarSupplies = 1587
---8.1
-EMA.currTypes.SeventhLegionService = 1717
-EMA.currTypes.HonorboundService = 1716
-EMA.currTypes.TitanResiduum = 1718
-
-
 -------------------------------------- End of edit --------------------------------------------------------------
 
 function EMA:CurrencyIconAndName( id )
-	local fullName, amount, icon, earnedThisWeek, weeklyMax, totalMax, isDiscovered, quality = GetCurrencyInfo(id)
-	local currName = strconcat(" |T"..icon..":20|t", L[" "]..fullName)
+--	local fullName, amount, icon, earnedThisWeek, weeklyMax, totalMax, isDiscovered, quality = GetCurrencyInfo(id)
+--	local currName = strconcat(" |T"..icon..":20|t", L[" "]..fullName)
 	return currName
 end	
 	
@@ -104,20 +54,9 @@ end
 EMA.settings = {
 	profile = {
 		currGold = true,
-		currGoldInGuildBank = false,
-		-- Currency default's
-		CcurrTypeOne = EMA.currTypes.OrderResources,
-		CcurrTypeOneName = EMA:CurrencyIconAndName(EMA.currTypes.WarResources),
-		CcurrTypeTwo = EMA.currTypes.AncientMana,
-		CcurrTypeTwoName = EMA:CurrencyIconAndName(EMA.currTypes.WarSupplies),
-		CcurrTypeThree = EMA.currTypes.TimeWalker,
-		CcurrTypeThreeName = EMA:CurrencyIconAndName(EMA.currTypes.TimeWalker),
-		CcurrTypeFour = EMA.currTypes.SightlessEye,
-		CcurrTypeFourName = EMA:CurrencyIconAndName(EMA.currTypes.SealofWartornFate),
-		CcurrTypeFive = 1,
-		CcurrTypeFiveName = "",
-		CcurrTypeSix = 1,
-		CcurrTypeSixName = "",	
+		bagSpace = true,
+		charDurr = true,	
+		
 		currencyFrameAlpha = 1.0,
 		currencyFramePoint = "CENTER",
 		currencyFrameRelativePoint = "CENTER",
@@ -273,77 +212,28 @@ function EMA:SettingsCreateCurrency( top )
 		L["GOLD_HELP"]
 	)	
 	movingTop = movingTop - checkBoxHeight
-	EMA.settingsControl.checkBoxCurrencyGoldInGuildBank = EMAHelperSettings:CreateCheckBox( 
+		EMA.settingsControl.checkBoxCurrencyBagSpace = EMAHelperSettings:CreateCheckBox( 
 		EMA.settingsControl, 
 		headingWidth, 
 		left, 
 		movingTop, 
-		L["GOLD_GB"],
-		EMA.SettingsToggleCurrencyGoldInGuildBank,
-		L["GOLD_GB_HELP"]
-	)
-	--Currency One & Two	
+		L["BAG_SPACE"],
+		EMA.SettingsToggleCurrencyBagSpace,
+		L["BAG_SPACE_HELP"]
+	)	
 	movingTop = movingTop - checkBoxHeight
-	EMA.settingsControl.editBoxCurrencyTypeOneID = EMAHelperSettings:CreateDropdown( 
-		EMA.settingsControl,
-		halfWidth,
-		left + indent,
-		movingTop,
-		L["CURRENCY"]..L[" "]..L["1"]
+		EMA.settingsControl.checkBoxCurrencyCharDurr = EMAHelperSettings:CreateCheckBox( 
+		EMA.settingsControl, 
+		headingWidth, 
+		left, 
+		movingTop, 
+		L["DURR"],
+		EMA.SettingsToggleCurrencyCharDurr,
+		L["DURR_HELP"]
 	)	
-	EMA.settingsControl.editBoxCurrencyTypeOneID:SetList( EMA.CurrDropDownBox() )
-	EMA.settingsControl.editBoxCurrencyTypeOneID:SetCallback( "OnValueChanged",  EMA.EditBoxChangedCurrencyTypeOneID)
-	EMA.settingsControl.editBoxCurrencyTypeTwoID = EMAHelperSettings:CreateDropdown( 
-		EMA.settingsControl,
-		halfWidth,
-		right + indent,
-		movingTop,
-		L["CURRENCY"]..L[" "]..L["2"]
-	)	
-	EMA.settingsControl.editBoxCurrencyTypeTwoID:SetList( EMA.CurrDropDownBox() )
-	EMA.settingsControl.editBoxCurrencyTypeTwoID:SetCallback( "OnValueChanged",  EMA.EditBoxChangedCurrencyTypeTwoID)	
-	--Currency Three & Four
-	movingTop = movingTop - dropdownHeight	
-	EMA.settingsControl.editBoxCurrencyTypeThreeID = EMAHelperSettings:CreateDropdown( 
-		EMA.settingsControl,
-		halfWidth,
-		left + indent,
-		movingTop,
-		L["CURRENCY"]..L[" "]..L["3"]
-	)	
-	EMA.settingsControl.editBoxCurrencyTypeThreeID:SetList( EMA.CurrDropDownBox() )
-	EMA.settingsControl.editBoxCurrencyTypeThreeID:SetCallback( "OnValueChanged",  EMA.EditBoxChangedCurrencyTypeThreeID)	
-	EMA.settingsControl.editBoxCurrencyTypeFourID = EMAHelperSettings:CreateDropdown( 
-		EMA.settingsControl,
-		halfWidth,
-		right + indent,
-		movingTop,
-		L["CURRENCY"]..L[" "]..L["4"]
-	)	
-	EMA.settingsControl.editBoxCurrencyTypeFourID:SetList( EMA.CurrDropDownBox() )
-	EMA.settingsControl.editBoxCurrencyTypeFourID:SetCallback( "OnValueChanged",  EMA.EditBoxChangedCurrencyTypeFourID)
-	--Currency Five & Six
-	movingTop = movingTop - dropdownHeight 
-	EMA.settingsControl.editBoxCurrencyTypeFiveID = EMAHelperSettings:CreateDropdown( 
-		EMA.settingsControl,
-		halfWidth,
-		left + indent,
-		movingTop,
-		L["CURRENCY"]..L[" "]..L["5"]
-	)	
-	EMA.settingsControl.editBoxCurrencyTypeFiveID:SetList( EMA.CurrDropDownBox() )
-	EMA.settingsControl.editBoxCurrencyTypeFiveID:SetCallback( "OnValueChanged",  EMA.EditBoxChangedCurrencyTypeFiveID)	
-	EMA.settingsControl.editBoxCurrencyTypeSixID = EMAHelperSettings:CreateDropdown( 
-		EMA.settingsControl,
-		halfWidth,
-		right + indent,
-		movingTop,
-		L["CURRENCY"]..L[" "]..L["6"]
-	)	
-	EMA.settingsControl.editBoxCurrencyTypeSixID:SetList( EMA.CurrDropDownBox() )
-	EMA.settingsControl.editBoxCurrencyTypeSixID:SetCallback( "OnValueChanged",  EMA.EditBoxChangedCurrencyTypeSixID)
+	movingTop = movingTop - checkBoxHeight	
+
 	-- Other Stuff	
-	movingTop = movingTop - dropdownHeight
 	EMA.settingsControl.currencyButtonShowList = EMAHelperSettings:CreateButton( 
 		EMA.settingsControl, 
 		headingWidth, 
@@ -511,14 +401,9 @@ end
 
 function EMA:SettingsRefresh()
 	EMA.settingsControl.checkBoxCurrencyGold:SetValue( EMA.db.currGold )
-	EMA.settingsControl.checkBoxCurrencyGoldInGuildBank:SetValue( EMA.db.currGoldInGuildBank )
-	EMA.settingsControl.checkBoxCurrencyGoldInGuildBank:SetDisabled( not EMA.db.currGold )
-	EMA.settingsControl.editBoxCurrencyTypeOneID:SetValue( EMA.db.CcurrTypeOne )
-	EMA.settingsControl.editBoxCurrencyTypeTwoID:SetValue ( EMA.db.CcurrTypeTwo )	
-	EMA.settingsControl.editBoxCurrencyTypeThreeID:SetValue ( EMA.db.CcurrTypeThree )
-	EMA.settingsControl.editBoxCurrencyTypeFourID:SetValue ( EMA.db.CcurrTypeFour )
-	EMA.settingsControl.editBoxCurrencyTypeFiveID:SetValue ( EMA.db.CcurrTypeFive )	
-	EMA.settingsControl.editBoxCurrencyTypeSixID:SetValue ( EMA.db.CcurrTypeSix )
+	EMA.settingsControl.checkBoxCurrencyBagSpace:SetValue ( EMA.db.bagSpace )
+	EMA.settingsControl.checkBoxCurrencyCharDurr:SetValue ( EMA.db.charDurr )
+	
 	--state
 	EMA.settingsControl.checkBoxCurrencyOpenStartUpMaster:SetValue( EMA.db.currOpenStartUpMaster )
 	EMA.settingsControl.currencyTransparencySlider:SetValue( EMA.db.currencyFrameAlpha )
@@ -540,7 +425,7 @@ function EMA:SettingsRefresh()
 		EMA:SettingsUpdateFontStyle()
 		EMA:CurrencyUpdateWindowLock()
 		EMAToonCurrencyListFrame:SetScale( EMA.db.currencyScale )
-		EMA:UpdateHendingText()
+---????		EMA:UpdateHendingText()
 		EMA:CurrencyListSetHeight()
 	end
 end
@@ -554,60 +439,15 @@ function EMA:SettingsToggleCurrencyGold( event, checked )
 	EMA:SettingsRefresh()
 end
 
-function EMA:SettingsToggleCurrencyGoldInGuildBank( event, checked )
-	EMA.db.currGoldInGuildBank = checked
+function EMA:SettingsToggleCurrencyBagSpace( event, checked )
+	EMA.db.bagSpace = checked
 	EMA:SettingsRefresh()
-end
+end	
 
-function EMA:EditBoxChangedCurrencyTypeOneID( event, value )
-	local currName, id = EMA:MatchCurrValue(value)
-	EMA.db.CcurrTypeOne = id
-	EMA.db.CcurrTypeOneName = currName
-	EMA:EMAToonRequestCurrency()
+function EMA:SettingsToggleCurrencyCharDurr( event, checked )
+	EMA.db.charDurr = checked
 	EMA:SettingsRefresh()
-end
-
-function EMA:EditBoxChangedCurrencyTypeTwoID( event, value )
-	local currName, id = EMA:MatchCurrValue(value)
-	EMA.db.CcurrTypeTwo = id
-	EMA.db.CcurrTypeTwoName = currName
-	EMA:EMAToonRequestCurrency()
-	EMA:SettingsRefresh()
-end
-
-function EMA:EditBoxChangedCurrencyTypeThreeID( event, value )
-	local currName, id = EMA:MatchCurrValue(value)
-	EMA.db.CcurrTypeThree = id
-	EMA.db.CcurrTypeThreeName = currName
-	EMA:EMAToonRequestCurrency()
-	EMA:SettingsRefresh()
-end
-
-function EMA:EditBoxChangedCurrencyTypeFourID( event, value )
-	local currName, id = EMA:MatchCurrValue(value)
-	EMA.db.CcurrTypeFour = id
-	EMA.db.CcurrTypeFourName = currName
-	EMA:EMAToonRequestCurrency()
-	EMA:SettingsRefresh()
-end
-
-function EMA:EditBoxChangedCurrencyTypeFiveID( event, value )
-	local currName, id = EMA:MatchCurrValue(value)
-	
-	EMA.db.CcurrTypeFive = id
-	EMA.db.CcurrTypeFiveName = currName
-	EMA:EMAToonRequestCurrency()
-	EMA:SettingsRefresh()
-end
-
-function EMA:EditBoxChangedCurrencyTypeSixID( event, value )
-	--EMA:Print("test", value)
-	local currName, id = EMA:MatchCurrValue(value)
-	EMA.db.CcurrTypeSix = id
-	EMA.db.CcurrTypeSixName = currName
-	EMA:EMAToonRequestCurrency()
-	EMA:SettingsRefresh()
-end
+end	
 
 function EMA:SettingsToggleCurrencyOpenStartUpMaster( event, checked )
 	EMA.db.currOpenStartUpMaster = checked
@@ -712,7 +552,7 @@ function EMA:OnEnable()
 	--EMA:RegisterMessage( EMAApi.MESSAGE_MESSAGE_AREAS_CHANGED, "OnMessageAreasChanged" )
 	if EMA.db.currOpenStartUpMaster == true then
 		if EMAApi.IsCharacterTheMaster( self.characterName ) == true then
-			EMA:ScheduleTimer( "EMAToonRequestCurrency", 20 )
+			EMA:ScheduleTimer( "EMAToonRequestCurrency", 5 )
 		end
 	end
 end
@@ -726,19 +566,9 @@ function EMA:EMAOnSettingsReceived( characterName, settings )
 	if characterName ~= EMA.characterName then
 		-- Update the settings.
 		EMA.db.currGold = settings.currGold
-		EMA.db.currGoldInGuildBank = settings.currGoldInGuildBank
-		EMA.db.CcurrTypeOne = settings.CcurrTypeOne
-		EMA.db.CcurrTypeOneName = settings.CcurrTypeOneName
-		EMA.db.CcurrTypeTwo = settings.CcurrTypeTwo
-		EMA.db.CcurrTypeTwoName = settings.CcurrTypeTwoName
-		EMA.db.CcurrTypeThree = settings.CcurrTypeThree
-		EMA.db.CcurrTypeThreeName = settings.CcurrTypeThreeName
-		EMA.db.CcurrTypeFour = settings.CcurrTypeFour
-		EMA.db.CcurrTypeFourName = settings.CcurrTypeFourName
-		EMA.db.CcurrTypeFive = settings.CcurrTypeFive
-		EMA.db.CcurrTypeFiveName = settings.CcurrTypeFiveName
-		EMA.db.CcurrTypeSix = settings.CcurrTypeSix
-		EMA.db.CcurrTypeSixName = settings.CcurrTypeSixName
+		EMA.db.bagSpace = settings.bagSpace
+		EMA.db.charDurr = settings.charDurr
+	
 		EMA.db.currOpenStartUpMaster = settings.currOpenStartUpMaster
 		EMA.db.currencyScale = settings.currencyScale
 		EMA.db.currencyFrameAlpha = settings.currencyFrameAlpha
@@ -769,45 +599,6 @@ function EMA:EMAOnSettingsReceived( characterName, settings )
 		EMA:Print( L["SETTINGS_RECEIVED_FROM_A"]( characterName ) )
 	end
 end
-
-function pairsByKeys (t, f)
-    local a = {}
-    for n in pairs(t) do table.insert(a, n) end
-    table.sort(a, f)
-    local i = 0      -- iterator variable
-    local iter = function ()   -- iterator function
-        i = i + 1
-        if a[i] == nil then return nil
-        else return a[i], t[a[i]]
-        end
-     end
-     return iter
-end
-
-function EMA:CurrDropDownBox()
-	for name, id in pairs( EMA.currTypes ) do
-		--EMA:Print("test", name, id)
-		local currName = EMA:CurrencyIconAndName( id )
-		EMA.simpleCurrList[id] = currName		
-	end
-	EMA.simpleCurrList[0] = ""
-	table.sort(EMA.simpleCurrList, function(a,b) return a<b end)
-	table.concat(EMA.simpleCurrList, ", ")
-	return EMA.simpleCurrList
-end	
-
-
-function EMA:MatchCurrValue(value)
-	if value == 0 then	
-		return "", 0
-	end
-	for name, id in pairs( EMA.currTypes ) do
-		local currName = EMA:CurrencyIconAndName( id )
-		if value == id then
-			return currName, id
-		end	
-	end
-end 
 
 function EMA:CreateEMAToonCurrencyListFrame()
 	-- The frame.
@@ -885,66 +676,27 @@ function EMA:CreateEMAToonCurrencyListFrame()
 	frameGoldText:SetJustifyH( "CENTER" )
 	frame.GoldText = frameGoldText
 	left = left + spacing	
-	-- Set the TypeOne font string.
-	local frameTypeOne = EMA.globalCurrencyFramePrefix.."TitleTypeOne"
-	local frameTypeOneText = parentFrame:CreateFontString( frameTypeOne.."Text", "OVERLAY", "GameFontNormal" )
-	frameTypeOneText:SetText( L["CURR"]..L["1"] )
-	frameTypeOneText:SetTextColor( r, g, b, a )
-	frameTypeOneText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTypeOneText:SetWidth( width )
-	frameTypeOneText:SetJustifyH( "CENTER" )
-	frame.TypeOneText = frameTypeOneText
+	-- Set the BagSpace font string.
+	local frameBagSpace = EMA.globalCurrencyFramePrefix.."TitleBagSpace"
+	local frameBagSpaceText = parentFrame:CreateFontString( frameBagSpace.."Text", "OVERLAY", "GameFontNormal" )
+	frameBagSpaceText:SetText( L["BAG_SPACE"] )
+	frameBagSpaceText:SetTextColor( r, g, b, a )
+	frameBagSpaceText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
+	frameBagSpaceText:SetWidth( width )
+	frameBagSpaceText:SetJustifyH( "CENTER" )
+	frame.BagSpaceText = frameBagSpaceText
 	left = left + spacing
-	-- Set the TypeTwo font string.
-	local frameTypeTwo = EMA.globalCurrencyFramePrefix.."TitleTypeTwo"
-	local frameTypeTwoText = parentFrame:CreateFontString( frameTypeTwo.."Text", "OVERLAY", "GameFontNormal" )
-	frameTypeTwoText:SetText( L["CURR"]..L["2"] )
-	frameTypeTwoText:SetTextColor( r, g, b, a )
-	frameTypeTwoText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTypeTwoText:SetWidth( width )
-	frameTypeTwoText:SetJustifyH( "CENTER" )
-	frame.TypeTwoText = frameTypeTwoText
+	-- Set the BagSpace font string.
+	local frameCharDurr = EMA.globalCurrencyFramePrefix.."TitleBagSpace"
+	local frameCharDurrText = parentFrame:CreateFontString( frameCharDurr.."Text", "OVERLAY", "GameFontNormal" )
+	frameCharDurrText:SetText( L["DURR"] )
+	frameCharDurrText:SetTextColor( r, g, b, a )
+	frameCharDurrText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
+	frameCharDurrText:SetWidth( width )
+	frameCharDurrText:SetJustifyH( "CENTER" )
+	frame.CharDurrText = frameCharDurrText
 	left = left + spacing
-	-- Set the TypeThree font string.
-	local frameTypeThree = EMA.globalCurrencyFramePrefix.."TitleTypeThree"
-	local frameTypeThreeText = parentFrame:CreateFontString( frameTypeThree.."Text", "OVERLAY", "GameFontNormal" )
-	frameTypeThreeText:SetText( L["CURR"]..L["3"] )
-	frameTypeThreeText:SetTextColor( r, g, b, a )
-	frameTypeThreeText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTypeThreeText:SetWidth( width )
-	frameTypeThreeText:SetJustifyH( "CENTER" )
-	frame.TypeThreeText = frameTypeThreeText
-	left = left + spacing	
-	-- Set the TypeFour font string.
-	local frameTypeFour = EMA.globalCurrencyFramePrefix.."TitleTypeFour"
-	local frameTypeFourText = parentFrame:CreateFontString( frameTypeFour.."Text", "OVERLAY", "GameFontNormal" )
-	frameTypeFourText:SetText( L["CURR"]..L["4"] )
-	frameTypeFourText:SetTextColor( r, g, b, a )
-	frameTypeFourText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTypeFourText:SetWidth( width )
-	frameTypeFourText:SetJustifyH( "CENTER" )
-	frame.TypeFourText = frameTypeFourText
-	left = left + spacing
-	-- Set the TypeFive font string.
-	local frameTypeFive = EMA.globalCurrencyFramePrefix.."TitleTypeFive"
-	local frameTypeFiveText = parentFrame:CreateFontString( frameTypeFive.."Text", "OVERLAY", "GameFontNormal" )
-	frameTypeFiveText:SetText( L["CURR"]..L["5"] )
-	frameTypeFiveText:SetTextColor( r, g, b, a )
-	frameTypeFiveText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTypeFiveText:SetWidth( width )
-	frameTypeFiveText:SetJustifyH( "CENTER" )
-	frame.TypeFiveText = frameTypeFiveText
-	left = left + spacing
-	-- Set the TypeSix font string.
-	local frameTypeSix = EMA.globalCurrencyFramePrefix.."TitleTypeSix"
-	local frameTypeSixText = parentFrame:CreateFontString( frameTypeSix.."Text", "OVERLAY", "GameFontNormal" )
-	frameTypeSixText:SetText( L["CURR"]..L["6"] )
-	frameTypeSixText:SetTextColor( r, g, b, a )
-	frameTypeSixText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTypeSixText:SetWidth( width )
-	frameTypeSixText:SetJustifyH( "CENTER" )
-	frame.TypeSixText = frameTypeSixText
-	left = left + spacing
+	
 	-- Set the Total Gold font string.
 	left = 10
 	top = -50
@@ -957,15 +709,6 @@ function EMA:CreateEMAToonCurrencyListFrame()
 	frameTotalGoldTitleText:SetJustifyH( "LEFT" )
 	frame.TotalGoldTitleText = frameTotalGoldTitleText
 
-	local frameTotalGoldGuildTitle = EMA.globalCurrencyFramePrefix.."TitleTotalGoldGuild"
-	local frameTotalGoldGuildTitleText = parentFrame:CreateFontString( frameTotalGoldGuildTitle.."Text", "OVERLAY", "GameFontNormal" )
-	frameTotalGoldGuildTitleText:SetText( L["GUILD"] )
-	frameTotalGoldGuildTitleText:SetTextColor( r, g, b, a )
-	frameTotalGoldGuildTitleText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTotalGoldGuildTitleText:SetWidth( width )
-	frameTotalGoldGuildTitleText:SetJustifyH( "LEFT" )
-	frame.TotalGoldGuildTitleText = frameTotalGoldGuildTitleText
-	
 	local frameTotalGold = EMA.globalCurrencyFramePrefix.."TotalGold"
 	local frameTotalGoldText = parentFrame:CreateFontString( frameTotalGold.."Text", "OVERLAY", "GameFontNormal" )
 	frameTotalGoldText:SetText( "0" )
@@ -974,15 +717,6 @@ function EMA:CreateEMAToonCurrencyListFrame()
 	frameTotalGoldText:SetWidth( width )
 	frameTotalGoldText:SetJustifyH( "RIGHT" )
 	frame.TotalGoldText = frameTotalGoldText
-
-	local frameTotalGoldGuild = EMA.globalCurrencyFramePrefix.."TotalGoldGuild"
-	local frameTotalGoldGuildText = parentFrame:CreateFontString( frameTotalGoldGuild.."Text", "OVERLAY", "GameFontNormal" )
-	frameTotalGoldGuildText:SetText( "0" )
-	frameTotalGoldGuildText:SetTextColor( r, g, b, a )
-	frameTotalGoldGuildText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTotalGoldGuildText:SetWidth( width )
-	frameTotalGoldGuildText:SetJustifyH( "RIGHT" )
-	frame.TotalGoldGuildText = frameTotalGoldGuildText
 	
 	-- Set frame width.
 	frame:SetWidth( left + 10 )
@@ -1017,48 +751,8 @@ function EMA:CreateEMAToonCurrencyListFrame()
 	EMA:SettingsUpdateFontStyle()
 	EMAToonCurrencyListFrame:Hide()
 	EMA.currencyListFrameCreated = true
-	EMA:UpdateHendingText()
-	EMA:CurrencyListSetHeight()
-end
 
-function EMA:UpdateHendingText()
-	local parentFrame = EMAToonCurrencyListFrame
-	-- Type One
-	local name, amount, icon, earnedThisWeek, weeklyMax, totalMax, isDiscovered = GetCurrencyInfo( EMA.db.CcurrTypeOne )
-	if icon ~= nil then
-		local iconTextureString = strconcat(" |T"..icon..":20|t")
-			parentFrame.TypeOneText:SetText( iconTextureString )
-	end		
-	-- Type Two
-	local name, amount, icon, earnedThisWeek, weeklyMax, totalMax, isDiscovered = GetCurrencyInfo( EMA.db.CcurrTypeTwo )
-	if icon ~= nil then	
-		local iconTextureString = strconcat(" |T"..icon..":20|t")
-			parentFrame.TypeTwoText:SetText( iconTextureString )
-	end
-	-- Type Three
-	local name, amount, icon, earnedThisWeek, weeklyMax, totalMax, isDiscovered = GetCurrencyInfo( EMA.db.CcurrTypeThree )
-	if icon ~= nil then
-		local iconTextureString = strconcat(" |T"..icon..":20|t")
-			parentFrame.TypeThreeText:SetText( iconTextureString )	
-	end
-	-- Type Four
-	local name, amount, icon, earnedThisWeek, weeklyMax, totalMax, isDiscovered = GetCurrencyInfo( EMA.db.CcurrTypeFour )
-	if icon ~= nil then	
-		local iconTextureString = strconcat(" |T"..icon..":20|t")
-			parentFrame.TypeFourText:SetText( iconTextureString )
-	end
-	-- Type Five
-	local name, amount, icon, earnedThisWeek, weeklyMax, totalMax, isDiscovered = GetCurrencyInfo( EMA.db.CcurrTypeFive )
-	if icon ~= nil then	
-		local iconTextureString = strconcat(" |T"..icon..":20|t")
-			parentFrame.TypeFiveText:SetText( iconTextureString )
-	end
-	-- Type six
-	local name, amount, icon, earnedThisWeek, weeklyMax, totalMax, isDiscovered = GetCurrencyInfo( EMA.db.CcurrTypeSix )
-	if icon ~= nil then	
-		local iconTextureString = strconcat(" |T"..icon..":20|t")
-			parentFrame.TypeSixText:SetText( iconTextureString )
-	end
+	EMA:CurrencyListSetHeight()
 end
 
 function EMA:CurrencyUpdateWindowLock()
@@ -1081,7 +775,7 @@ function EMA:SettingsUpdateBorderStyle()
 	} )
 	frame:SetBackdropColor( EMA.db.currencyFrameBackgroundColourR, EMA.db.currencyFrameBackgroundColourG, EMA.db.currencyFrameBackgroundColourB, EMA.db.currencyFrameBackgroundColourA )
 	frame:SetBackdropBorderColor( EMA.db.currencyFrameBorderColourR, EMA.db.currencyFrameBorderColourG, EMA.db.currencyFrameBorderColourB, EMA.db.currencyFrameBorderColourA )
-	--frame:ClearAllPoints()
+	frame:ClearAllPoints()
 	frame:SetAlpha( EMA.db.currencyFrameAlpha )
 	frame:SetPoint( EMA.db.currencyFramePoint, UIParent, EMA.db.currencyFrameRelativePoint, EMA.db.currencyFrameXOffset, EMA.db.currencyFrameYOffset )
 end
@@ -1093,21 +787,14 @@ function EMA:SettingsUpdateFontStyle()
 	frame.titleName:SetFont( textFont , textSize , "OUTLINE")
 	frame.characterNameText:SetFont( textFont , textSize , "OUTLINE")
 	frame.GoldText:SetFont( textFont , textSize , "OUTLINE")
-	frame.TotalGoldGuildTitleText:SetFont( textFont , textSize , "OUTLINE")
-	frame.TotalGoldGuildText:SetFont( textFont , textSize , "OUTLINE")
-	frame.TotalGoldText:SetFont( textFont , textSize , "OUTLINE")
-	frame.TotalGoldTitleText:SetFont( textFont , textSize , "OUTLINE")
+	frame.BagSpaceText:SetFont( textFont , textSize , "OUTLINE")
+	frame.CharDurrText:SetFont( textFont , textSize , "OUTLINE")
 	for characterName, currencyFrameCharacterInfo in pairs( EMA.currencyFrameCharacterInfo ) do
 		--EMA:Print("test", characterName)
-		--currencyFrameCharacterInfo.characterNameText:SetFont( textFont , textSize , "OUTLINE")
 		currencyFrameCharacterInfo.characterNameText:SetFont( textFont , textSize , "OUTLINE")
 		currencyFrameCharacterInfo.GoldText:SetFont( textFont , textSize , "OUTLINE")
-		currencyFrameCharacterInfo.TypeOneText:SetFont( textFont , textSize , "OUTLINE")
-		currencyFrameCharacterInfo.TypeTwoText:SetFont( textFont , textSize , "OUTLINE")
-		currencyFrameCharacterInfo.TypeThreeText:SetFont( textFont , textSize , "OUTLINE")
-		currencyFrameCharacterInfo.TypeFourText:SetFont( textFont , textSize , "OUTLINE")
-		currencyFrameCharacterInfo.TypeFiveText:SetFont( textFont , textSize , "OUTLINE")
-		currencyFrameCharacterInfo.TypeSixText:SetFont( textFont , textSize , "OUTLINE")
+		currencyFrameCharacterInfo.BagSpaceText:SetFont( textFont , textSize , "OUTLINE")
+		currencyFrameCharacterInfo.CharDurrText:SetFont( textFont , textSize , "OUTLINE")
 	end
 end
 
@@ -1116,13 +803,8 @@ function EMA:CurrencyListSetHeight()
 	local additionalLines = 0
 	local addHeight = 0
 	if EMA.db.currGold == true then
-		if EMA.db.currGoldInGuildBank == true then
-			additionalLines = 2
-			addHeight = 7
-		else
-			additionalLines = 1
-			addHeight = 5
-		end
+		additionalLines = 1
+		addHeight = 5
 	end
 	EMAToonCurrencyListFrame:SetHeight( 56 + (( EMAApi.GetTeamListMaximumOrderOnline() + additionalLines) * 15) + addHeight )
 end
@@ -1152,60 +834,24 @@ function EMA:CurrencyListSetColumnWidth()
 		parentFrame.GoldText:Hide()
 		haveGold = 0
 	end
-	if EMA.db.CcurrTypeOneName == "" then
-		parentFrame.TypeOneText:Hide()
-	else	
-		parentFrame.TypeOneText:SetWidth( pointsWidth )
-		parentFrame.TypeOneText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, headingRowTopPoint )
+ 	if EMA.db.bagSpace == true then
+		parentFrame.BagSpaceText:SetWidth( goldWidth )
+		parentFrame.BagSpaceText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, headingRowTopPoint )
 		left = left + pointsWidth + spacingWidth
 		numberOfPointsColumns = numberOfPointsColumns + 1
-		parentFrame.TypeOneText:Show()
-	end
-	if EMA.db.CcurrTypeTwoName == "" then
-		parentFrame.TypeTwoText:Hide()
-	else	
-		parentFrame.TypeTwoText:SetWidth( pointsWidth )
-		parentFrame.TypeTwoText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, headingRowTopPoint )
-		left = left + pointsWidth + spacingWidth
-		numberOfPointsColumns = numberOfPointsColumns + 1
-		parentFrame.TypeTwoText:Show()
-	end
-	if EMA.db.CcurrTypeThreeName == "" then
-		parentFrame.TypeThreeText:Hide()
-	else	
-		parentFrame.TypeThreeText:SetWidth( pointsWidth )
-		parentFrame.TypeThreeText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, headingRowTopPoint )
-		left = left + pointsWidth + spacingWidth
-		numberOfPointsColumns = numberOfPointsColumns + 1
-		parentFrame.TypeThreeText:Show()
-	end	
-	if EMA.db.CcurrTypeFourName == "" then
-		parentFrame.TypeFourText:Hide()
-	else	
-		parentFrame.TypeFourText:SetWidth( pointsWidth )
-		parentFrame.TypeFourText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, headingRowTopPoint )
-		left = left + pointsWidth + spacingWidth
-		numberOfPointsColumns = numberOfPointsColumns + 1
-		parentFrame.TypeFourText:Show()
-	end
-	if EMA.db.CcurrTypeFiveName == "" then
-		parentFrame.TypeFiveText:Hide()
-	else	
-		parentFrame.TypeFiveText:SetWidth( pointsWidth )
-		parentFrame.TypeFiveText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, headingRowTopPoint )
-		left = left + pointsWidth + spacingWidth
-		numberOfPointsColumns = numberOfPointsColumns + 1
-		parentFrame.TypeFiveText:Show()
-	end
-	if EMA.db.CcurrTypeSixName == "" then
-		parentFrame.TypeSixText:Hide()
+		parentFrame.BagSpaceText:Show()
 	else
-		parentFrame.TypeSixText:SetWidth( pointsWidth )
-		parentFrame.TypeSixText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, headingRowTopPoint )
+		parentFrame.BagSpaceText:Hide()
+	end	
+ 	if EMA.db.charDurr == true then
+		parentFrame.CharDurrText:SetWidth( goldWidth )
+		parentFrame.CharDurrText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, headingRowTopPoint )
 		left = left + pointsWidth + spacingWidth
 		numberOfPointsColumns = numberOfPointsColumns + 1
-		parentFrame.TypeSixText:Show()
-	end
+		parentFrame.CharDurrText:Show()
+	else
+		parentFrame.CharDurrText:Hide()
+	end	
 	-- Character rows.
 	for characterName, currencyFrameCharacterInfo in pairs( EMA.currencyFrameCharacterInfo ) do
 		if EMAPrivate.Team.GetCharacterOnlineStatus (characterName) == true then
@@ -1222,55 +868,22 @@ function EMA:CurrencyListSetColumnWidth()
 			else
 				currencyFrameCharacterInfo.GoldText:Hide()
 			end
-			if EMA.db.CcurrTypeOneName == "" then
-				currencyFrameCharacterInfo.TypeOneText:Hide()
-			else
-				currencyFrameCharacterInfo.TypeOneText:SetWidth( pointsWidth )
-				currencyFrameCharacterInfo.TypeOneText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, characterRowTopPoint )
+			if EMA.db.bagSpace == true then
+				currencyFrameCharacterInfo.BagSpaceText:SetWidth( pointsWidth )
+				currencyFrameCharacterInfo.BagSpaceText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, characterRowTopPoint )
 				left = left + pointsWidth + spacingWidth
-				currencyFrameCharacterInfo.TypeOneText:Show()
-			end
-			if EMA.db.CcurrTypeTwoName == "" then
-				currencyFrameCharacterInfo.TypeTwoText:Hide()
-			else
-				currencyFrameCharacterInfo.TypeTwoText:SetWidth( pointsWidth )
-				currencyFrameCharacterInfo.TypeTwoText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, characterRowTopPoint )
-				left = left + pointsWidth + spacingWidth
-				currencyFrameCharacterInfo.TypeTwoText:Show()
-			end
-			if EMA.db.CcurrTypeThreeName == "" then
-				currencyFrameCharacterInfo.TypeThreeText:Hide()
+				currencyFrameCharacterInfo.BagSpaceText:Show()
 			else	
-				currencyFrameCharacterInfo.TypeThreeText:SetWidth( pointsWidth )
-				currencyFrameCharacterInfo.TypeThreeText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, characterRowTopPoint )
-				left = left + pointsWidth + spacingWidth
-				currencyFrameCharacterInfo.TypeThreeText:Show()
-			end		
-			if EMA.db.CcurrTypeFourName == "" then
-				currencyFrameCharacterInfo.TypeFourText:Hide()
-			else
-				currencyFrameCharacterInfo.TypeFourText:SetWidth( pointsWidth )
-				currencyFrameCharacterInfo.TypeFourText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, characterRowTopPoint )
-				left = left + pointsWidth + spacingWidth
-				currencyFrameCharacterInfo.TypeFourText:Show()
+				currencyFrameCharacterInfo.BagSpaceText:Hide()
 			end
-			if EMA.db.CcurrTypeFiveName == "" then
-				currencyFrameCharacterInfo.TypeFiveText:Hide()
+			if EMA.db.charDurr == true then
+				currencyFrameCharacterInfo.CharDurrText:SetWidth( pointsWidth )
+				currencyFrameCharacterInfo.CharDurrText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, characterRowTopPoint )
+				left = left + pointsWidth + spacingWidth
+				currencyFrameCharacterInfo.CharDurrText:Show()
 			else	
-				currencyFrameCharacterInfo.TypeFiveText:SetWidth( pointsWidth )
-				currencyFrameCharacterInfo.TypeFiveText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, characterRowTopPoint )
-				left = left + pointsWidth + spacingWidth
-				currencyFrameCharacterInfo.TypeFiveText:Show()
-	
+				currencyFrameCharacterInfo.CharDurrText:Hide()
 			end
-			if EMA.db.CcurrTypeSixName == "" then
-				currencyFrameCharacterInfo.TypeSixText:Hide()
-			else
-				currencyFrameCharacterInfo.TypeSixText:SetWidth( pointsWidth )
-				currencyFrameCharacterInfo.TypeSixText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, characterRowTopPoint )
-				left = left + pointsWidth + spacingWidth
-				currencyFrameCharacterInfo.TypeSixText:Show()
-			end		
 		end
 	end	
 	-- Parent frame width and title.
@@ -1305,24 +918,9 @@ function EMA:CurrencyListSetColumnWidth()
 	-- Total Gold.
 	local nameLeft = frameHorizontalSpacing
 	local goldLeft = frameHorizontalSpacing + nameWidth + spacingWidth
-	--local guildTop = -35 - ((EMAApi.GetTeamListMaximumOrder() + 1) * 15) - 5
-	--local goldTop = -35 - ((EMAApi.GetTeamListMaximumOrder() + 1) * 15) - 7	
 	local guildTop = -35 - ((EMAApi.GetTeamListMaximumOrderOnline() + 1) * 15) - 5
 	local goldTop = -35 - ((EMAApi.GetTeamListMaximumOrderOnline() + 1) * 15) - 7	
 	if EMA.db.currGold == true then
-		if EMA.db.currGoldInGuildBank == true then
-			parentFrame.TotalGoldGuildTitleText:SetWidth( nameWidth )
-			parentFrame.TotalGoldGuildTitleText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", nameLeft, guildTop )
-			parentFrame.TotalGoldGuildTitleText:Show()
-			parentFrame.TotalGoldGuildText:SetWidth( goldWidth )
-			parentFrame.TotalGoldGuildText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", goldLeft, guildTop )
-			parentFrame.TotalGoldGuildText:Show()
-			--goldTop = -35 - ((EMAApi.GetTeamListMaximumOrder() + 2) * 15) - 5
-			goldTop = -35 - ((EMAApi.GetTeamListMaximumOrderOnline() + 2) * 15) - 5
-		else
-			parentFrame.TotalGoldGuildTitleText:Hide()
-			parentFrame.TotalGoldGuildText:Hide()			
-		end
 		parentFrame.TotalGoldTitleText:SetWidth( nameWidth )
 		parentFrame.TotalGoldTitleText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", nameLeft, goldTop )
 		parentFrame.TotalGoldTitleText:Show()
@@ -1332,8 +930,6 @@ function EMA:CurrencyListSetColumnWidth()
 	else
 		parentFrame.TotalGoldTitleText:Hide()
 		parentFrame.TotalGoldText:Hide()
-		parentFrame.TotalGoldGuildTitleText:Hide()
-		parentFrame.TotalGoldGuildText:Hide()	
 	end
 end
 
@@ -1384,67 +980,27 @@ function EMA:CreateEMACurrencyFrameInfo( characterName, parentFrame )
 	frameGoldText:SetWidth( width )
 	frameGoldText:SetJustifyH( "RIGHT" )
 	currencyFrameCharacterInfo.GoldText = frameGoldText
+	left = left + spacing
+	-- Set the BagSpace font string.
+	local frameBagSpace = EMA.globalCurrencyFramePrefix.."BagSpace"
+	local frameBagSpaceText = parentFrame:CreateFontString( frameBagSpace.."Text", "OVERLAY", "GameFontNormal" )
+	frameBagSpaceText:SetText( "0/0" )
+	frameBagSpaceText:SetTextColor( 1.00, 1.00, 1.00, 1.00 )
+	frameBagSpaceText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
+	frameBagSpaceText:SetWidth( width )
+	frameBagSpaceText:SetJustifyH( "RIGHT" )
+	currencyFrameCharacterInfo.BagSpaceText = frameBagSpaceText
+	left = left + spacing
+	-- Set the Durability font string.
+	local frameCharDurr = EMA.globalCurrencyFramePrefix.."CharDurr"
+	local frameCharDurrText = parentFrame:CreateFontString( frameCharDurr.."Text", "OVERLAY", "GameFontNormal" )
+	frameCharDurrText:SetText( "0"..L["%"] )
+	frameCharDurrText:SetTextColor( 1.00, 1.00, 1.00, 1.00 )
+	frameCharDurrText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
+	frameCharDurrText:SetWidth( width )
+	frameCharDurrText:SetJustifyH( "RIGHT" )
+	currencyFrameCharacterInfo.CharDurrText = frameCharDurrText
 	left = left + spacing	
-	-- Set the TypeOne font string.
-	local frameTypeOne = EMA.globalCurrencyFramePrefix.."TypeOne"
-	local frameTypeOneText = parentFrame:CreateFontString( frameTypeOne.."Text", "OVERLAY", "GameFontNormal" )
-	frameTypeOneText:SetText( "0" )
-	frameTypeOneText:SetTextColor( 1.00, 1.00, 1.00, 1.00 )
-	frameTypeOneText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTypeOneText:SetWidth( width )
-	frameTypeOneText:SetJustifyH( "CENTER" )
-	currencyFrameCharacterInfo.TypeOneText = frameTypeOneText
-	left = left + spacing
-	-- Set the TypeTwo font string.
-	local frameTypeTwo = EMA.globalCurrencyFramePrefix.."TypeTwo"
-	local frameTypeTwoText = parentFrame:CreateFontString( frameTypeTwo.."Text", "OVERLAY", "GameFontNormal" )
-	frameTypeTwoText:SetText( "0" )
-	frameTypeTwoText:SetTextColor( 1.00, 1.00, 1.00, 1.00 )
-	frameTypeTwoText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTypeTwoText:SetWidth( width )
-	frameTypeTwoText:SetJustifyH( "CENTER" )
-	currencyFrameCharacterInfo.TypeTwoText = frameTypeTwoText
-	left = left + spacing
-		-- Set the TypeThree font string.
-	local frameTypeThree = EMA.globalCurrencyFramePrefix.."TypeThree"
-	local frameTypeThreeText = parentFrame:CreateFontString( frameTypeThree.."Text", "OVERLAY", "GameFontNormal" )
-	frameTypeThreeText:SetText( "0" )
-	frameTypeThreeText:SetTextColor( 1.00, 1.00, 1.00, 1.00 )
-	frameTypeThreeText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTypeThreeText:SetWidth( width )
-	frameTypeThreeText:SetJustifyH( "CENTER" )
-	currencyFrameCharacterInfo.TypeThreeText = frameTypeThreeText
-	left = left + spacing
-	-- Set the TypeFour font string.
-	local frameTypeFour = EMA.globalCurrencyFramePrefix.."TypeFour"
-	local frameTypeFourText = parentFrame:CreateFontString( frameTypeFour.."Text", "OVERLAY", "GameFontNormal" )
-	frameTypeFourText:SetText( "0" )
-	frameTypeFourText:SetTextColor( 1.00, 1.00, 1.00, 1.00 )
-	frameTypeFourText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTypeFourText:SetWidth( width )
-	frameTypeFourText:SetJustifyH( "CENTER" )
-	currencyFrameCharacterInfo.TypeFourText = frameTypeFourText
-	left = left + spacing
-	-- Set the TypeFive font string.
-	local frameTypeFive = EMA.globalCurrencyFramePrefix.."TypeFive"
-	local frameTypeFiveText = parentFrame:CreateFontString( frameTypeFive.."Text", "OVERLAY", "GameFontNormal" )
-	frameTypeFiveText:SetText( "0" )
-	frameTypeFiveText:SetTextColor( 1.00, 1.00, 1.00, 1.00 )
-	frameTypeFiveText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTypeFiveText:SetWidth( width )
-	frameTypeFiveText:SetJustifyH( "CENTER" )
-	currencyFrameCharacterInfo.TypeFiveText = frameTypeFiveText
-	left = left + spacing
-	-- Set the TypeSix font string.
-	local frameTypeSix = EMA.globalCurrencyFramePrefix.."TypeSix"
-	local frameTypeSixText = parentFrame:CreateFontString( frameTypeSix.."Text", "OVERLAY", "GameFontNormal" )
-	frameTypeSixText:SetText( "0" )
-	frameTypeSixText:SetTextColor( 1.00, 1.00, 1.00, 1.00 )
-	frameTypeSixText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, top )
-	frameTypeSixText:SetWidth( width )
-	frameTypeSixText:SetJustifyH( "CENTER" )
-	currencyFrameCharacterInfo.TypeSixText = frameTypeSixText
-	left = left + spacing
 	
 	EMA:SettingsUpdateFontStyle()
 end
@@ -1474,30 +1030,17 @@ function EMA:EMAToonRequestCurrency()
 			--EMA.Print("offlineRemove", characterName )
 			currencyFrameCharacterInfo.characterNameText:Hide()
 			currencyFrameCharacterInfo.GoldText:Hide()
-			currencyFrameCharacterInfo.TypeOneText:Hide()
-			currencyFrameCharacterInfo.TypeTwoText:Hide()
-			currencyFrameCharacterInfo.TypeThreeText:Hide()
-			currencyFrameCharacterInfo.TypeFourText:Hide()
-			currencyFrameCharacterInfo.TypeFiveText:Hide()
-			currencyFrameCharacterInfo.TypeSixText:Hide()
+			currencyFrameCharacterInfo.BagSpaceText:Hide()
+			currencyFrameCharacterInfo.CharDurrText:Hide()
 		else
 			currencyFrameCharacterInfo.characterNameText:Show()
-			currencyFrameCharacterInfo.GoldText:SetTextColor( r, g, b, a )
 			currencyFrameCharacterInfo.characterNameText:SetTextColor( r, g, b, a )
-			currencyFrameCharacterInfo.TypeOneText:SetTextColor( r, g, b, a )
-			currencyFrameCharacterInfo.TypeTwoText:SetTextColor( r, g, b, a )
-			currencyFrameCharacterInfo.TypeThreeText:SetTextColor( r, g, b, a )
-			currencyFrameCharacterInfo.TypeFourText:SetTextColor( r, g, b, a )
-			currencyFrameCharacterInfo.TypeFiveText:SetTextColor( r, g, b, a )
-			currencyFrameCharacterInfo.TypeSixText:SetTextColor( r, g, b, a )
+			currencyFrameCharacterInfo.GoldText:SetTextColor( r, g, b, a )
+			currencyFrameCharacterInfo.BagSpaceText:SetTextColor( r, g, b, a )
+			currencyFrameCharacterInfo.CharDurrText:SetTextColor( r, g, b, a )
 		end
 	end
 	EMA.currencyTotalGold = 0
-	if EMA.db.currGoldInGuildBank == true then
-		if IsInGuild() then
-			EMA.currencyTotalGold = GetGuildBankMoney()
-		end
-	end
 	EMA:EMASendCommandToTeam( EMA.COMMAND_REQUEST_CURRENCY, "" )
 	EMA.SettingsRefresh()
 	
@@ -1508,20 +1051,26 @@ function EMA:DoSendCurrency( characterName, dummyValue )
 	if EMAApi.GetCharacterOnlineStatus ( characterName ) == true then
 	table.wipe( EMA.currentCurrencyValues )
 	EMA.currentCurrencyValues.currGold = GetMoney()
-	-- CurrencyValues
-	EMA.currentCurrencyValues.currTypeOne = select( 2, GetCurrencyInfo( EMA.db.CcurrTypeOne ) )
-	EMA.currentCurrencyValues.currTypeTwo = select( 2, GetCurrencyInfo( EMA.db.CcurrTypeTwo ) )
-	EMA.currentCurrencyValues.currTypeThree = select( 2, GetCurrencyInfo( EMA.db.CcurrTypeThree ) )	
-	EMA.currentCurrencyValues.currTypeFour	= select( 2, GetCurrencyInfo( EMA.db.CcurrTypeFour ) )
-	EMA.currentCurrencyValues.currTypeFive = select( 2, GetCurrencyInfo( EMA.db.CcurrTypeFive ) )
-	EMA.currentCurrencyValues.currTypeSix = select( 2, GetCurrencyInfo( EMA.db.CcurrTypeSix ) )
-	-- Max CurrencyValues
-	EMA.currentCurrencyValues.currMaxTypeOne = select( 6, GetCurrencyInfo( EMA.db.CcurrTypeOne ) )
-	EMA.currentCurrencyValues.currMaxTypeTwo = select( 6, GetCurrencyInfo( EMA.db.CcurrTypeTwo ) )
-	EMA.currentCurrencyValues.currMaxTypeThree = select( 6, GetCurrencyInfo( EMA.db.CcurrTypeThree ) )	
-	EMA.currentCurrencyValues.currMaxTypeFour	= select( 6, GetCurrencyInfo( EMA.db.CcurrTypeFour ) )
-	EMA.currentCurrencyValues.currMaxTypeFive = select( 6, GetCurrencyInfo( EMA.db.CcurrTypeFive ) )
-	EMA.currentCurrencyValues.currMaxTypeSix = select( 6, GetCurrencyInfo( EMA.db.CcurrTypeSix ) )
+	-- BagSpace Maths
+	local numFreeSlots, numTotalSlots = LibBagUtils:CountSlots("BAGS", 0)
+	EMA.currentCurrencyValues.bagSpace = numFreeSlots
+	EMA.currentCurrencyValues.bagSpaceMax = numTotalSlots
+	-- Durability Maths
+	local curTotal, maxTotal, broken = 0, 0, 0
+	for i = 1, 18 do
+		local curItemDurability, maxItemDurability = GetInventoryItemDurability(i)
+		if curItemDurability and maxItemDurability then
+			curTotal = curTotal + curItemDurability
+			maxTotal = maxTotal + maxItemDurability
+			if maxItemDurability > 0 and curItemDurability == 0 then
+				broken = broken + 1
+			end
+		end
+	end
+	local durability = (curTotal / maxTotal) * 100
+	local durabilityText = tostring(gsub( durability, "%.[^|]+", "") )	
+	EMA.currentCurrencyValues.durability = durabilityText
+
 	EMA:EMASendCommandToToon( characterName, EMA.COMMAND_HERE_IS_CURRENCY, EMA.currentCurrencyValues )
 	else
 		return
@@ -1529,7 +1078,7 @@ function EMA:DoSendCurrency( characterName, dummyValue )
 end
 
 function EMA:DoShowToonsCurrency( characterName, currencyValues )
-	--EMA.Print("DoShowCurrency", characterName, currencyValues.currTypeOne, currencyValues.currMaxTypeOne )
+	--EMA.Print("DoShowCurrency", characterName, EMA.currentCurrencyValues.currGold )
 	local parentFrame = EMAToonCurrencyListFrame
 	-- Get (or create and get) the character information.
 	local currencyFrameCharacterInfo = EMA.currencyFrameCharacterInfo[characterName]
@@ -1548,58 +1097,28 @@ function EMA:DoShowToonsCurrency( characterName, currencyValues )
 	currencyFrameCharacterInfo.GoldText:SetTextColor( r, g, b, a )
 	currencyFrameCharacterInfo.characterNameText:SetTextColor( r, g, b, a )
 	currencyFrameCharacterInfo.GoldText:SetTextColor( r, g, b, a )
-	if currencyValues.currTypeOne == currencyValues.currMaxTypeOne and currencyValues.currTypeOne > 0 then 
+	
+	if currencyValues.bagSpace == 0 then 
 		--EMA:Print("SetRed")
-		currencyFrameCharacterInfo.TypeOneText:SetTextColor( r, v, v, a )
+		currencyFrameCharacterInfo.BagSpaceText:SetTextColor( r, v, v, a )
 	else
 		--EMA:Print("SetWhite")
-		currencyFrameCharacterInfo.TypeOneText:SetTextColor( r, g, b, a )
+		currencyFrameCharacterInfo.BagSpaceText:SetTextColor( r, g, b, a )
+	end	
+	if currencyValues.durability == "0" then
+		currencyFrameCharacterInfo.CharDurrText:SetTextColor( r, v, v, a )
+	else
+		--EMA:Print("SetWhite")
+		currencyFrameCharacterInfo.CharDurrText:SetTextColor( r, g, b, a )
 	end	
 	
-	if currencyValues.currTypeTwo == currencyValues.currMaxTypeTwo and currencyValues.currTypeTwo > 0 then 
-		currencyFrameCharacterInfo.TypeTwoText:SetTextColor( r, v, v, a )
-	else
-		currencyFrameCharacterInfo.TypeTwoText:SetTextColor( r, g, b, a )
-	end
-	if currencyValues.currTypeThree == currencyValues.currMaxTypeThree and currencyValues.currTypeThree > 0 then 
-		currencyFrameCharacterInfo.TypeThreeText:SetTextColor( r, v, v, a )
-	else
-		currencyFrameCharacterInfo.TypeThreeText:SetTextColor( r, g, b, a )
-	end
-	
-	if currencyValues.currTypeFour == currencyValues.currMaxTypeFour and currencyValues.currTypeFour > 0 then 
-		currencyFrameCharacterInfo.TypeFourText:SetTextColor( r, v, v, a )
-	else
-		currencyFrameCharacterInfo.TypeFourText:SetTextColor( r, g, b, a )
-	end
-	
-	if currencyValues.currTypeFive == currencyValues.currMaxTypeFive and currencyValues.currTypeFive > 0 then 
-		currencyFrameCharacterInfo.TypeFiveText:SetTextColor( r, v, v, a )
-	else
-		currencyFrameCharacterInfo.TypeFiveText:SetTextColor( r, g, b, a )
-	end
-	
-	if currencyValues.currTypeSix == currencyValues.currMaxTypeSix and currencyValues.currTypeSix > 0 then 
-		currencyFrameCharacterInfo.TypeSixText:SetTextColor( r, v, v, a )
-	else
-		currencyFrameCharacterInfo.TypeSixText:SetTextColor( r, g, b, a )
-	end
 	currencyFrameCharacterInfo.GoldText:SetText( EMAUtilities:FormatMoneyString( currencyValues.currGold ) )
-	--currencyFrameCharacterInfo.GoldText:SetText( GetCoinTextureString( currencyValues.currGold ) )
-	currencyFrameCharacterInfo.TypeOneText:SetText( currencyValues.currTypeOne )
-	currencyFrameCharacterInfo.TypeTwoText:SetText( currencyValues.currTypeTwo )
-	currencyFrameCharacterInfo.TypeThreeText:SetText( currencyValues.currTypeThree )	
-	currencyFrameCharacterInfo.TypeFourText:SetText( currencyValues.currTypeFour )
-	currencyFrameCharacterInfo.TypeFiveText:SetText( currencyValues.currTypeFive )
-	currencyFrameCharacterInfo.TypeSixText:SetText( currencyValues.currTypeSix )
+	currencyFrameCharacterInfo.BagSpaceText:SetText( currencyValues.bagSpace..L["/"]..currencyValues.bagSpaceMax )
+	currencyFrameCharacterInfo.CharDurrText:SetText ( currencyValues.durability..L["%"] )
+	
 	-- Total gold.
 	EMA.currencyTotalGold = EMA.currencyTotalGold + currencyValues.currGold
 	parentFrame.TotalGoldText:SetText( EMAUtilities:FormatMoneyString( EMA.currencyTotalGold ) )
-	--parentFrame.TotalGoldText:SetText( GetCoinTextureString( EMA.currencyTotalGold ) )
-	if IsInGuild() then
-		parentFrame.TotalGoldGuildText:SetText( EMAUtilities:FormatMoneyString( GetGuildBankMoney() ) )
-		--parentFrame.TotalGoldGuildText:SetText( GetCoinTextureString( GetGuildBankMoney() ) )
-	end
 	-- Update width of currency list.
 	EMA:CurrencyListSetColumnWidth()
 	EMAToonCurrencyListFrame:Show()
