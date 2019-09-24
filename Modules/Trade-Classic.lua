@@ -53,9 +53,11 @@ EMA.settings = {
 		blackListItem = false,
 		tradeBoEItems = false,
 		tradeCRItems = false,
+		tradeGrayItems = false,
 		autoSellOtherItemTag = EMAApi.MasterGroup(),
 		autoBoEItemTag = EMAApi.MasterGroup(),
 		autoCRItemTag = EMAApi.MasterGroup(),
+		autoGrayItemsTag = EMAApi.MasterGroup(),
 		autoTradeItemsList = {},
 		adjustMoneyWithMasterOnTrade = false,
 		goldAmountToKeepOnToonTrade = 200,
@@ -307,6 +309,26 @@ function EMA:SettingsCreateTrade( top )
 	movingTop = movingTop -	buttonHeight		
 	EMAHelperSettings:CreateHeading( EMA.settingsControl, L["TRADE_OPTIONS"], movingTop, false )
 	movingTop = movingTop - headingHeight
+	EMA.settingsControl.checkBoxTradeGrayItems = EMAHelperSettings:CreateCheckBox( 
+	EMA.settingsControl, 
+		halfWidth, 
+		left, 
+		movingTop + movingTopEdit, 
+		L["TRADE_GRAY_ITEMS"],
+		EMA.SettingsToggleTradeGrayItems,
+		L["TRADE_GRAY_ITEMS_HELP"]
+	)
+	EMA.settingsControl.tradeTradeGrayItemsTag = EMAHelperSettings:CreateDropdown(
+		EMA.settingsControl, 
+		dropBoxWidth,	
+		left3,
+		movingTop, 
+		L["GROUP_LIST"]
+	)
+	EMA.settingsControl.tradeTradeGrayItemsTag:SetList( EMAApi.GroupList() )
+	EMA.settingsControl.tradeTradeGrayItemsTag:SetCallback( "OnValueChanged",  EMA.TradeGroupListItemsGrayDropDown )
+	
+	movingTop = movingTop - editBoxHeight - 3
 	EMA.settingsControl.checkBoxTradeBoEItems = EMAHelperSettings:CreateCheckBox( 
 	EMA.settingsControl, 
 		halfWidth, 
@@ -324,7 +346,8 @@ function EMA:SettingsCreateTrade( top )
 		L["GROUP_LIST"]
 	)
 	EMA.settingsControl.tradeTradeBoEItemsTag:SetList( EMAApi.GroupList() )
-	EMA.settingsControl.tradeTradeBoEItemsTag:SetCallback( "OnValueChanged",  EMA.TradeGroupListItemsBoEDropDown )
+	EMA.settingsControl.tradeTradeBoEItemsTag:SetCallback( "OnValueChanged",  EMA.TradeGroupListItemsBoEDropDown )	
+	
 	movingTop = movingTop - editBoxHeight - 3
 	EMA.settingsControl.checkBoxTradeCRItems = EMAHelperSettings:CreateCheckBox( 
 	EMA.settingsControl, 
@@ -344,7 +367,6 @@ function EMA:SettingsCreateTrade( top )
 	)
 	EMA.settingsControl.tradeTradeCRItemsTag:SetList( EMAApi.GroupList() )
 	EMA.settingsControl.tradeTradeCRItemsTag:SetCallback( "OnValueChanged",  EMA.TradeGroupListItemsCRDropDown )
-	-- Trade Gold! Keep
 	movingTop = movingTop - editBoxHeight
 	EMA.settingsControl.checkBoxAdjustMoneyWithMasterOnTrade = EMAHelperSettings:CreateCheckBox( 
 		EMA.settingsControl, 
@@ -490,6 +512,24 @@ function EMA:SettingsToggleShowEMATradeWindow( event, checked )
 	EMA:SettingsRefresh()
 end
 
+function EMA:SettingsToggleTradeGrayItems(event, checked )
+	EMA.db.tradeGrayItems = checked
+	EMA:SettingsRefresh()
+end
+
+function EMA:TradeGroupListItemsGrayDropDown(event, value )
+	if value == " " or value == nil then 
+		return 
+	end
+	for index, groupName in ipairs( EMAApi.GroupList() ) do
+		if index == value then
+			EMA.db.autoGrayItemsTag = groupName
+			break
+		end
+	end
+	EMA:SettingsRefresh()
+end
+
 function EMA:SettingsToggleTradeBoEItems(event, checked )
 	EMA.db.tradeBoEItems = checked
 	EMA:SettingsRefresh()
@@ -527,11 +567,6 @@ function EMA:TradeGroupListItemsCRDropDown(event, value )
 end
 
 
-function EMA:SettingsToggleAdjustMoneyOnToonViaGuildBank( event, checked )
-	EMA.db.adjustMoneyWithGuildBank = checked
-	EMA:SettingsRefresh()
-end
-
 function EMA:SettingsToggleAdjustMoneyWithMasterOnTrade( event, checked )
 	EMA.db.adjustMoneyWithMasterOnTrade = checked
 	EMA:SettingsRefresh()
@@ -568,8 +603,12 @@ function EMA:EMAOnSettingsReceived( characterName, settings )
 		EMA.db.globalTradeList = settings.globalTradeList
 		EMA.db.autoSellOtherItemTag = settings.autoSellOtherItemTag
 		EMA.db.blackListItem = settings.blackListItem
+		EMA.db.tradeGrayItems = settings.tradeGrayItems
 		EMA.db.tradeBoEItems = settings.tradeBoEItems
 		EMA.db.tradeCRItems = settings.tradeCRItems
+		EMA.db.autoBoEItemTag = settings.autoBoEItemTag
+		EMA.db.autoCRItemTag = settings.autoCRItemTag
+		EMA.db.autoGrayItemsTag = settings.autoGrayItemsTag
 		EMA.db.autoTradeItemsList = EMAUtilities:CopyTable( settings.autoTradeItemsList )
 		EMA.db.global.autoTradeItemsListGlobal = EMAUtilities:CopyTable( settings.global.autoTradeItemsListGlobal )
 		EMA.db.adjustMoneyWithGuildBank = settings.adjustMoneyWithGuildBank
@@ -596,10 +635,12 @@ function EMA:SettingsRefresh()
 	EMA.settingsControl.checkBoxGlobalTradeList:SetValue( EMA.db.globalTradeList )
 	EMA.settingsControl.checkBoxGlobalTradeList:SetDisabled( not EMA.db.showEMATradeWindow )
 	EMA.settingsControl.listCheckBoxBoxOtherBlackListItem:SetValue( EMA.db.blackListItem )
+	EMA.settingsControl.checkBoxTradeGrayItems:SetValue( EMA.db.tradeGrayItems )
 	EMA.settingsControl.checkBoxTradeBoEItems:SetValue( EMA.db.tradeBoEItems)
 	EMA.settingsControl.checkBoxTradeCRItems:SetValue( EMA.db.tradeCRItems)
 	EMA.settingsControl.dropdownMessageArea:SetValue( EMA.db.messageArea )
 	EMA.settingsControl.tradeItemsEditBoxToonTag:SetText( EMA.db.autoSellOtherItemTag )
+	EMA.settingsControl.tradeTradeGrayItemsTag:SetText( EMA.db.autoGrayItemsTag )
 	EMA.settingsControl.tradeTradeBoEItemsTag:SetText( EMA.db.autoBoEItemTag )
 	EMA.settingsControl.tradeTradeCRItemsTag:SetText( EMA.db.autoCRItemTag )
 	EMA.settingsControl.checkBoxAdjustMoneyWithMasterOnTrade:SetValue( EMA.db.adjustMoneyWithMasterOnTrade )
@@ -610,6 +651,8 @@ function EMA:SettingsRefresh()
 	EMA.settingsControl.tradeItemsButtonRemove:SetDisabled( not EMA.db.showEMATradeWindow )
 	EMA.settingsControl.tradeItemsButtonAdd:SetDisabled( not EMA.db.showEMATradeWindow )	
 	EMA.settingsControl.listCheckBoxBoxOtherBlackListItem:SetDisabled( not EMA.db.showEMATradeWindow )
+	EMA.settingsControl.checkBoxTradeGrayItems:SetDisabled( not EMA.db.showEMATradeWindow )
+	EMA.settingsControl.tradeTradeGrayItemsTag:SetDisabled( not EMA.db.showEMATradeWindow )
 	EMA.settingsControl.checkBoxTradeBoEItems:SetDisabled( not EMA.db.showEMATradeWindow )
 	EMA.settingsControl.tradeTradeBoEItemsTag:SetDisabled( not EMA.db.showEMATradeWindow )
 	EMA.settingsControl.checkBoxTradeCRItems:SetDisabled( not EMA.db.showEMATradeWindow )
@@ -752,6 +795,13 @@ function EMA:TradeAllItems()
 					local itemRarity =  C_Item.GetItemQuality( location )
 					local _,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,isCraftingReagent = GetItemInfo( bagItemLink )
 					local canTrade = false
+					if EMA.db.tradeGrayItems == true then
+						if EMAApi.IsCharacterInGroup( characterName, EMA.db.autoBoEItemTag ) == true then
+							if itemRarity == 0 then
+								canTrade = true	
+							end
+						end
+					end				
 					if EMA.db.tradeBoEItems == true then
 						if itemType ~= 0 then
 							if EMAApi.IsCharacterInGroup( characterName, EMA.db.autoBoEItemTag ) == true then

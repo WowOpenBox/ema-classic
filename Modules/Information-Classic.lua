@@ -43,11 +43,6 @@ EMA.simpleCurrList = {}
 
 -------------------------------------- End of edit --------------------------------------------------------------
 
-function EMA:CurrencyIconAndName( id )
---	local fullName, amount, icon, earnedThisWeek, weeklyMax, totalMax, isDiscovered, quality = GetCurrencyInfo(id)
---	local currName = strconcat(" |T"..icon..":20|t", L[" "]..fullName)
-	return currName
-end	
 	
 	
 -- Settings - the values to store and their defaults for the settings database.
@@ -686,7 +681,7 @@ function EMA:CreateEMAToonCurrencyListFrame()
 	frameBagSpaceText:SetJustifyH( "CENTER" )
 	frame.BagSpaceText = frameBagSpaceText
 	left = left + spacing
-	-- Set the BagSpace font string.
+	-- Set the CharDurr font string.
 	local frameCharDurr = EMA.globalCurrencyFramePrefix.."TitleBagSpace"
 	local frameCharDurrText = parentFrame:CreateFontString( frameCharDurr.."Text", "OVERLAY", "GameFontNormal" )
 	frameCharDurrText:SetText( L["DURR"] )
@@ -835,7 +830,7 @@ function EMA:CurrencyListSetColumnWidth()
 		haveGold = 0
 	end
  	if EMA.db.bagSpace == true then
-		parentFrame.BagSpaceText:SetWidth( goldWidth )
+		parentFrame.BagSpaceText:SetWidth( pointsWidth )
 		parentFrame.BagSpaceText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, headingRowTopPoint )
 		left = left + pointsWidth + spacingWidth
 		numberOfPointsColumns = numberOfPointsColumns + 1
@@ -844,7 +839,7 @@ function EMA:CurrencyListSetColumnWidth()
 		parentFrame.BagSpaceText:Hide()
 	end	
  	if EMA.db.charDurr == true then
-		parentFrame.CharDurrText:SetWidth( goldWidth )
+		parentFrame.CharDurrText:SetWidth( pointsWidth )
 		parentFrame.CharDurrText:SetPoint( "TOPLEFT", parentFrame, "TOPLEFT", left, headingRowTopPoint )
 		left = left + pointsWidth + spacingWidth
 		numberOfPointsColumns = numberOfPointsColumns + 1

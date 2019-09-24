@@ -961,10 +961,12 @@ function EMA:UpdateHideBlizzardWatchFrame()
 	end
 	if EMA.db.hideBlizzardWatchFrame == true then
 		if QuestWatchFrame:IsVisible() then
+			--QuestLogFrame:Hide()
+			QuestWatchFrame:HookScript("OnShow", function(self) self:Hide() end)
 			QuestWatchFrame:Hide()
 		end
-	--else
-	--	QuestWatchFrame:Show()
+	else
+		QuestWatchFrame:Show()
 	end
 end
 

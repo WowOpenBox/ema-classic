@@ -2,6 +2,19 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.2-Release-v0.6(121021)
+Game Version: 1.13.2
+Release Date: 24/9/2019
+
+## Information
+	-- Fixed Issue #23
+
+## Trade
+	-- Fixed A Bug Where The Groups On Boe And Crafting Reagents Was Not Getting Send To Other Team Members
+	-- Added Gray Item Support ( So You Can Have A Trash Character )
+
+---------------------------
+
 EMA Version: v1.13.2-Release-v0.6(121020)
 Game Version: 1.13.2
 Release Date: 22/9/2019
