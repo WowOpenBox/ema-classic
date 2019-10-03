@@ -611,9 +611,17 @@ L["PURCHASE_MSG"] = "Purchase Messages"
 L["ITEM_ERROR"] = "Item Tags Must Only Be Made Up Of Letters And Numbers."
 L["NUM_ERROR"] = "Amount To Buy Must Be A Number."
 L["BUY_POPUP_ACCEPT"] = "Are You Sure You Wish To Remove The Selected Item From The Auto Buy Items List?"
-L["ERROR_BAGS_FULL"] =  "I Do Not Have Enough Space In My Bags To Complete My Purchases."
-L["ERROR_GOLD"] = "I Do Not Have Enough Money To Complete My Purchases." 
-L["ERROR_CURR"] = "I Do Not Have Enough Other Currency To Complete My Purchases."
+
+L["ERROR_BAGS_FULL"] = function( name )
+	return string.format( "I Do Not Have Enough Space In My Bags To Complete My Purchase of %s", name )
+end
+L["ERROR_GOLD"] = function( name )
+	return string.format( "I Do Not Have Enough Money To Purchase %s", name )
+end
+L["ERROR_CURR"]  = function( name )
+	return string.format( "I Do Not Have Enough Currency To Complete My Purchase Of %s", name )
+end
+
 
 --------------------------
 -- Trade Locale

@@ -2,6 +2,20 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.2-Release-v0.6(121022)
+Game Version: 1.13.2
+Release Date: 3/10/2019
+
+## Purchase
+	-- Should No Longer Multiple The Count Cost Of Stacked Items.
+		-- Issue #26
+		
+## Team
+	-- Fixed Issue #20 Again!
+		- Dev Note: Fixed The Lua Error But Did Not Fix The Friend System. ( Is a MixInTable Now)
+
+---------------------------
+
 EMA Version: v1.13.2-Release-v0.6(121021)
 Game Version: 1.13.2
 Release Date: 24/9/2019

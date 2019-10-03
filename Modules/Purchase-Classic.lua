@@ -564,6 +564,7 @@ function EMA:DoMerchantAutoBuy()
 	local outOfBagSpace = false
 	local outOfMoney = false
 	local outOfOtherCurrency = false
+	local name = nil
 	-- Iterate all the wanted items...
 	if EMA.db.globalBuyList == true then
 		itemTable = EMA.db.global.autoBuyItemsListGlobal
@@ -580,6 +581,8 @@ function EMA:DoMerchantAutoBuy()
 			-- Does the merchant have the item in stock?
 			local itemIndexMerchant = EMA:DoesMerchantHaveItemInStock( itemLink )
 			if itemIndexMerchant ~= nil then
+				local itemName = GetMerchantItemInfo( itemIndexMerchant )
+				name = itemName
 				--EMA:Print("inStock", itemIndexMerchant)
 				-- Yes, item is in stock, how many does the character need?
 				local amountNeeded = EMA:GetAmountNeededForItemTopUp( itemLink, maxItemAmount )
@@ -589,6 +592,7 @@ function EMA:DoMerchantAutoBuy()
 					-- Attempt to buy the items.
 					local noFreeBagSpace, notEnoughMoney, notEnoughOtherCurrency = EMA:BuyItemFromMerchant( itemIndexMerchant, amountNeeded )
 					-- Set flags if problems occurred.
+					--EMA:Print("failed", noFreeBagSpace, notEnoughMoney, notEnoughOtherCurrency )
 					if noFreeBagSpace then
 						outOfBagSpace = true		
 					end
@@ -598,19 +602,25 @@ function EMA:DoMerchantAutoBuy()
 					if notEnoughOtherCurrency then 
 						outOfOtherCurrency = true
 					end
+					local name = GetMerchantItemInfo( itemIndexMerchant )
+					itemIndexMerchant = itemIndexMerchant
 				end
 			end
 		end
 	end
-	-- If there was a problem, tell the master.
-	if outOfBagSpace then
-		EMA:EMASendMessageToTeam( EMA.db.messageArea, L["ERROR_BAGS_FULL"], false )			
-	end
-	if outOfMoney then
-		EMA:EMASendMessageToTeam( EMA.db.messageArea, L["ERROR_GOLD"], false )
-	end
-	if outOfOtherCurrency then
-		EMA:EMASendMessageToTeam( EMA.db.messageArea, L["ERROR_CURR"], false )
+	--EMA:Print("fail", name )
+	if name ~= nil then
+		-- If there was a problem, tell the master.
+		--EMA:Print("fail", name )
+		if outOfBagSpace then
+			EMA:EMASendMessageToTeam( EMA.db.messageArea, L["ERROR_BAGS_FULL"]( name ), false )			
+		end
+		if outOfMoney then
+			EMA:EMASendMessageToTeam( EMA.db.messageArea, L["ERROR_GOLD"]( name ), false )
+		end
+		if outOfOtherCurrency then
+			EMA:EMASendMessageToTeam( EMA.db.messageArea, L["ERROR_CURR"]( name ), false )
+		end
 	end	
 end
 
@@ -655,6 +665,7 @@ end
 
 function EMA:BuyItemFromMerchant( itemIndexMerchant, amountToBuy )
 	-- Flags will be set if the character does not have enough bag space or money.
+	--EMA:Print("item", itemIndexMerchant, amountToBuy)
 	local noFreeBagSpace = false
 	local notEnoughMoney = false
 	local notEnoughOtherCurrency = false
@@ -665,8 +676,14 @@ function EMA:BuyItemFromMerchant( itemIndexMerchant, amountToBuy )
 	local costToBuy = 0
 	local moneyAvailable = 0
 	-- Get information about the item from the merchant.
-	local name, texture, price, itemsPerStack, numberAvailable, isUsable, extendedCost = GetMerchantItemInfo( itemIndexMerchant )	
+	local name, texture, price, itemsPerStack, numberAvailable, isPurchasable, isUsable, extendedCost = GetMerchantItemInfo(itemIndexMerchant)
 	local maximumCanBuyAtATime = GetMerchantItemMaxStack( itemIndexMerchant )
+	-- Crazy Cat Maths On stack of items
+	if itemsPerStack > 1 then
+		price = price / itemsPerStack
+	else
+		price = price
+	end
 	-- Loop buying stacks from the merchant until the required number has been purchased.
 	repeat
 		-- Still need to buy more than the maximum?
@@ -680,7 +697,7 @@ function EMA:BuyItemFromMerchant( itemIndexMerchant, amountToBuy )
 		-- Attempt to buy this amount from the merchant; although actual amount bought may differ,
 		-- depending on merchant stock and over buy flag.
 		-- How many does the merchant have left?
-		numberAvailable = select( 5, GetMerchantItemInfo( itemIndexMerchant ) )
+		--numberAvailable = select( 5, GetMerchantItemInfo( itemIndexMerchant ) )
 		-- Calculate how many to buy depending on the stacksize and whether over buying is allowed.
 		actualAmountToBuy = buyThisAmount
 		if EMA.db.autoBuyOverflow == true then
@@ -688,6 +705,7 @@ function EMA:BuyItemFromMerchant( itemIndexMerchant, amountToBuy )
 		else
 			actualAmountToBuy = floor(actualAmountToBuy)
 		end
+		--EMA:Print("test1221", actualAmountToBuy, "a", actualAmountToBuy ) 
 		-- If requesting more than the number available, then just buy as much as possible.
 		-- If numberAvailable is -1 then there is unlimited stock available.
 		if numberAvailable ~= -1 then
@@ -698,8 +716,9 @@ function EMA:BuyItemFromMerchant( itemIndexMerchant, amountToBuy )
 		-- Does the character have enough money?
 		costToBuy = actualAmountToBuy * price
 		moneyAvailable = GetMoney()
+		--EMA:Print("NO MONEY", moneyAvailable , costToBuy, actualAmountToBuy )
 		if moneyAvailable < costToBuy then			
-			--EMA:Print("NO MONEY", moneyAvailable , costToBuy )
+			
 			notEnoughMoney = true
 		end
 		-- Is there enough free space for this item in the characters bags?				

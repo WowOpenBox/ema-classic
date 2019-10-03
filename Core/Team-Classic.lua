@@ -1350,9 +1350,10 @@ function EMA:PARTY_INVITE_REQUEST( event, inviter, ... )
 		if EMA.db.inviteAcceptFriends == true then
 			-- Iterate each friend; searching for the inviter in the friends list.
 			for friendIndex = 1, C_FriendList.GetNumOnlineFriends() do
-				local _, _, _, _, friendName = C_FriendList.GetFriendInfoByIndex( friendIndex )
+				local f = C_FriendList.GetFriendInfoByIndex( friendIndex )
 				-- Inviter found in friends list, allow the invite to be accepted.
-				if inviter == friendName then
+				--EMA:Print("test", inviter, f.name )
+				if inviter == f.name then
 					acceptInvite = true
 					break
 				end
