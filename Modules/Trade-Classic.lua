@@ -796,7 +796,7 @@ function EMA:TradeAllItems()
 					local _,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,isCraftingReagent = GetItemInfo( bagItemLink )
 					local canTrade = false
 					if EMA.db.tradeGrayItems == true then
-						if EMAApi.IsCharacterInGroup( characterName, EMA.db.autoBoEItemTag ) == true then
+						if EMAApi.IsCharacterInGroup( characterName, EMA.db.autoGrayItemsTag ) == true then
 							if itemRarity == 0 then
 								canTrade = true	
 							end
