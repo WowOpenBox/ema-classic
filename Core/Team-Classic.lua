@@ -1517,9 +1517,9 @@ function EMA:PARTY_LEADER_CHANGED( event, ... )
 						if IsCharacterInTeam( character ) == false then
 							if EMA.db.lootToGroupFriendsAreNotStrangers == true then
 								local isAFriend = false
-								for friendIndex = 1, GetNumFriends() do
-									local friendName = GetFriendInfo( friendIndex )
-									if partyMemberName == friendName then
+								for friendIndex = 1, C_FriendList.GetNumOnlineFriends() do
+								local f = C_FriendList.GetFriendInfoByIndex( friendIndex )
+									if inviter == f.name then	
 										isAFriend = true
 									end
 								end

@@ -2,15 +2,23 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.2-Release-v0.6(121024)
+Game Version: 1.13.2
+Release Date: 3/11/2019
+---------------------------
+
+##Team
+	Fixed Issue #38
+	
+	
+---------------------------
+
 EMA Version: v1.13.2-Release-v0.6(121023)
 Game Version: 1.13.2
 Release Date: 28/10/2019
 
 ## Trade
 	fixed Issue #37
-	
-
-
 ---------------------------
 
 EMA Version: v1.13.2-Release-v0.6(121022)
