@@ -1,7 +1,7 @@
 <!--
 				EMA - ( Ebony's MultiBoxing Assistant )      
 				Current Author: Jennifer Cally (Ebony)				
-				License: All Rights Reserved 2018-2019 Jennifer Cally
+				License: All Rights Reserved 2018-2020 Jennifer Cally
 				
 				Some Code Used from 'Jamba' that is 
 				Released under 	the MIT License
@@ -9,6 +9,7 @@
 -->
 
 <Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.blizzard.com/wow/ui/..\FrameXML\UI.xsd" xmlns="http://www.blizzard.com/wow/ui/">
+	
 	<Script file="Sell-Classic.lua" />
 	<Script file="Purchase-Classic.lua" />
 
@@ -17,10 +18,13 @@
 	
 	<Script file="Follow-Classic.lua" />
 	
-	<Script file="Interaction-Classic.lua" />	
+	<Script file="Interaction-Classic.lua" />
+	
 	<Script file="Trade-Classic.lua" />
 
 	<Script file="Mail-Classic.lua" />
+	
+	<Script file="Bank-Classic.lua" />
 	
 	<Script file="Quest-Classic.lua" /> 
 	<Script file="QuestWatcher-Classic.lua" /> 

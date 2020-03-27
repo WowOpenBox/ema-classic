@@ -2,6 +2,22 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.2-Release-v0.6(121025)
+Game Version: 1.13.4
+Release Date: 27/03/2020
+
+## Updated Toc to new ver of game
+	- New year new dates
+	
+## Bank
+	- Added Bank
+	- Automaticity Deposit Items Into You Bank!
+	
+
+
+
+---------------------------
+
 EMA Version: v1.13.2-Release-v0.6(121024)
 Game Version: 1.13.2
 Release Date: 3/11/2019

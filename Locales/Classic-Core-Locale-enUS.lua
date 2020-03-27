@@ -2,7 +2,7 @@
 --				EMA - ( Ebony's MultiBoxing Assistant )    							--
 --				Current Author: Jennifer Cally (Ebony)								--
 --																					--
---				License: All Rights Reserved 2018-2019 Jennifer Cally					--
+--				License: All Rights Reserved 2018-2020 Jennifer Cally					--
 --																					--
 --				Some Code Used from "Jamba" that is 								--
 --				Released under the MIT License 										--
@@ -172,7 +172,7 @@ L["ISB"] = ""
 L["TEMP_WEBSITE1"] = ""
 L["TEMP_WEBSITE2"] = ""
 L["TEMP_WEBSITE3"] = ""
-L["COPYRIGHT"] = "Copyright (c) 2015-2019  Jennifer Cally"
+L["COPYRIGHT"] = "Copyright (c) 2018-2020  Jennifer Cally"
 L["COPYRIGHTTWO"] = "Released Under License: All Rights Reserved unless otherwise explicitly stated"
 L["FRAME_RESET"] = "Frame Reset"
 -- Msg 8000
@@ -964,14 +964,18 @@ L["SENT_AUTO_MAILER_GOLD"] = function( gold )
 	return string.format("EMA Auto Gold Mailer: %s", gold )
 end
 
-
 -----------------------
 -- Bank Locale
 L["BANK"] = "Bank"
-L["REMOVE_BANK_LIST"] = "Remove Item From Bank List"
-
-
-
+L["REMOVE_BANK_LIST"] = "Are You Sure You Wish To Remove The Selected Item From The Bank Items List?"
+L["BANK_LIST_HEADER"] = "Bank Items List" 
+L["BANK_LIST"] = "Put The Items In The Bank"
+L["BANK_LIST_HELP"] = "Automatically Put Listed Items Below In The Bank"
+L["BANK_BOE_ITEMS"] = "Places All BoE Items In The Bank" 
+L["BANK_BOE_ITEMS_HELP"] = "Places All Binds When Equipped Items In The Bank"
+L["BANK_REAGENTS"] = "Places All Reagents In Bank"
+L["BANK_REAGENTS_HELP"] = "Places All Crafting Reagents Items In The Bank"
+L["BANK_OPTIONS"] = "Extra Bank Options"
 
 -----------------------
 -- LDBBar Locale
