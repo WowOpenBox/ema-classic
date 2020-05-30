@@ -1706,6 +1706,7 @@ function EMA:EMAOnSettingsReceived( characterName, settings )
 		EMA.db.lootSetFreeForAll = settings.lootSetFreeForAll 
 		EMA.db.lootSetMasterLooter = settings.lootSetMasterLooter 
 		EMA.db.lootSlavesOptOutOfLoot = settings.lootSlavesOptOutOfLoot 
+		EMA.db.lootToGroupFriendsAreNotStrangers = settings.lootToGroupFriendsAreNotStrangers
 		EMA.db.master = settings.master
 		SetMaster( settings.master )
 		-- Refresh the settings.

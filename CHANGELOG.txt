@@ -2,6 +2,16 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.4-Release-v0.7(121026)
+Game Version: 1.13.4
+Release Date: 30/05/2020
+
+## Toon
+	- Updated Summon API - Issue#44
+	- Durability Warning will not warn ( "(ind)%" ) Issue#45 
+	
+---------------------------
+
 EMA Version: v1.13.2-Release-v0.6(121025)
 Game Version: 1.13.4
 Release Date: 27/03/2020

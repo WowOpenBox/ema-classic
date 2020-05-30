@@ -1231,10 +1231,10 @@ function EMA:DoLootRoll( id, rollType, name )
 end
 
 function EMA:CONFIRM_SUMMON( event, sender, location, ... )
-	local sender, location = GetSummonConfirmSummoner(), GetSummonConfirmAreaName()
+	local sender, location = C_SummonInfo.GetSummonConfirmSummoner(), C_SummonInfo.GetSummonConfirmAreaName()
 	if EMA.db.autoAcceptSummonRequest == true then
-		if GetSummonConfirmTimeLeft() > 0 then
-		ConfirmSummon()
+		if C_SummonInfo.GetSummonConfirmTimeLeft() > 0 then
+		C_SummonInfo.ConfirmSummon()
 		StaticPopup_Hide("CONFIRM_SUMMON")
 		EMA:EMASendMessageToTeam( EMA.db.requestArea, L["SUMMON_FROM_X_TO_Y"]( sender, location ), false )
 		end
@@ -1340,20 +1340,21 @@ function EMA:UPDATE_INVENTORY_DURABILITY(event, agr1)
 			end
 		end
 	end
-	local durability = (curTotal / maxTotal) * 100
-	local durabilityText = tostring(gsub( durability, "%.[^|]+", "") )
+	
+	local durabilityPercent = ( EMAUtilities:GetStatusPercent(curTotal, maxTotal) * 100 )	
+	local durabilityText = tostring(gsub( durabilityPercent, "%.[^|]+", "") )
 	--EMA:Print("Test Durability", durabilityText,"%")
 	if EMA.toldMasterAboutDurability == true then
-		if durability >= tonumber( EMA.db.warnWhenDurabilityDropsAmount ) then
+		if durabilityPercent >= tonumber( EMA.db.warnWhenDurabilityDropsAmount ) then
 			EMA.toldMasterAboutDurability = false
 			EMA:ScheduleTimer("ResetDurability", 15, nil )
 		end
 	else
-		if durability < tonumber( EMA.db.warnWhenDurabilityDropsAmount ) then
+		if durabilityPercent < tonumber( EMA.db.warnWhenDurabilityDropsAmount ) then
 			EMA.toldMasterAboutDurability = true
 			EMA:EMASendMessageToTeam( EMA.db.warningArea, EMA.db.warnDurabilityDropsMessage..L[" "]..durabilityText..L["%"], false )
 		end
-	end
+	end	
 end
 
 function EMA:ResetDurability()
