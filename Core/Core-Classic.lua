@@ -78,6 +78,9 @@ function EMA:OnEnable()
 	end
 	if EMA.db.global.showStartupMessageClassic then
 		StaticPopup_Show( "Welcome_To_Classic" )
+	end
+	if EMA.db.global.showStartupMessageCommsChanges then
+		StaticPopup_Show( "COMM_CHANGES_0.9" )
 	end	
 end
 
@@ -134,6 +137,18 @@ local function InitializePopupDialogs()
 		hideOnEscape = 0,
 		whileDead = 1,	
 	}
+	StaticPopupDialogs["COMM_CHANGES_0.9"] = {
+		text = L["COMM_CHANGES_0.9"],
+		button1 = OKAY,
+		OnAccept = function()
+			EMA.db.global.showStartupMessageCommsChanges = false
+		end,
+		showAlert = 1,
+		timeout = 0,
+		exclusive = 1,
+		hideOnEscape = 0,
+		whileDead = 1,	
+	}	
 end
 
 local function EMASettingsTreeSort( a, b )
@@ -247,8 +262,9 @@ EMA.settings = {
 	global = {
 		['**'] = {
 			showStartupMessage8000 = false,
-			showStartupMessage2000 = true,
-			showStartupMessageClassic = true,
+			showStartupMessage2000 = false,
+			showStartupMessageClassic = false,
+			showStartupMessageCommsChanges = true, 
 		},
 	 },	
 	profile = {

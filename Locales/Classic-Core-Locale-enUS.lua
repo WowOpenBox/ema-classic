@@ -150,7 +150,7 @@ L["RESETTING_PROFILE"] = "Resetting profile: "
 L["PROFILE_DELETED"] = "Profile deleted - iterating all modules."
 L["DELETING_PROFILE"] = "Deleting profile: "
 L["Failed_LOAD_MODULE"] =  "Failed to load EMA Module: "
-L["TEXT1"] = "Ebony's MultiBoxing Assistant v0.0 For 1.13.2 Classic World Of Warcraft" 
+L["TEXT1"] = "Ebony's MultiBoxing Assistant v0.9 For 1.13.2 Classic World Of Warcraft" 
 L["TEXT2"] = ""
 L["TEXT3"] = "Welcome To EMA ClassicAlpha"
 L["TEXT4"] = ""
@@ -181,6 +181,7 @@ L["CAN_NOT_RUN_JAMBA_AND_EMA"] = "|cFFFF0000 You Can Not Run \"Jamba\" With EMA 
 -- BETA CHANGE ME!!!
 L["v2_NEWS"] = "|cFFFFFF00Thank You For Upgrading EMA \nYou Are Now On Beta v2.0 \n\n|cFFFFFFFFRead Changelog For More Information"
 L["CLASSIC_NEWS"] = "|cFFFFFF00 Welcome To The EMA Classic Alpha Test \n\n|cFFFFFFFF https://bitbucket.org/blossom_ebony/ema-classic/"
+L["COMM_CHANGES_0.9"] = "|cFFFF0000Dev note BIG CHANGE PLEASE READ: \n\n\n|cFFFFFF00Due to unforeseen circumstances on the classic build of WoW the party and raid channels have been removed this is to fix the the Issue many players are getting for now i would advise you to use the Guild Communications \n\nThank you for your patience in this matter \n\n\n Ebony"
 
 
 --------------------------

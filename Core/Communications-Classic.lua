@@ -181,6 +181,7 @@ local function CommandAll( moduleName, commandName, ... )
 		return
 	end	
 	-- toon has to be in a group		
+--[[	
 	if UnitInBattleground( "player" ) then
 		EMA:DebugMessage( "PvP_INSTANCE")
 		channel = "INSTANCE_CHAT"
@@ -208,6 +209,7 @@ local function CommandAll( moduleName, commandName, ... )
 	end	
 	--EMA:Print( "CHANNEL", channel)
 	if channel then
+	
 	EMA:DebugMessage("Sending command to group.", message, "channel", channel, nil)
 		--EMA:Print("Sending command to group.", message, "channel", channel, nil)
 			--EMA.COMMUNICATION_GROUP,
@@ -221,6 +223,7 @@ local function CommandAll( moduleName, commandName, ... )
 			--EMA:Print("testChennel", EMA.COMMAND_PREFIX, channel, EMA.COMMUNICATION_PRIORITY_ALERT)	
 			--return
 	end
+]]	
 	--if the unit is not in the party then it unlikely did not get the party message,
 	for characterName, characterOrder in EMAPrivate.Team.TeamList() do		
 		if UnitInParty( Ambiguate( characterName, "none" ) ) == false then				
