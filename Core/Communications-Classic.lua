@@ -25,6 +25,7 @@ local L = LibStub( "AceLocale-3.0" ):GetLocale( "Core" )
 -- Get libraries.
 local EMAUtilities = LibStub:GetLibrary( "EbonyUtilities-1.0" )
 local AceSerializer = LibStub:GetLibrary( "AceSerializer-3.0" )
+local LibDeflate = LibStub:GetLibrary("LibDeflate")
 
 local EMAHelperSettings = LibStub:GetLibrary( "EMAHelperSettings-1.0" )
 
@@ -173,15 +174,14 @@ local function CommandAll( moduleName, commandName, ... )
 	if EMA.db.useGuildComms == true then
 			EMA:SendCommMessage(
 			EMA.COMMAND_PREFIX,
-			message,
+			LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message)),
 			EMA.COMMUNICATION_GUILD,
 			nil,
 			EMA.COMMUNICATION_PRIORITY_ALERT	
 			)
 		return
 	end	
-	-- toon has to be in a group		
---[[	
+	-- toon has to be in a group			
 	if UnitInBattleground( "player" ) then
 		EMA:DebugMessage( "PvP_INSTANCE")
 		channel = "INSTANCE_CHAT"
@@ -215,7 +215,7 @@ local function CommandAll( moduleName, commandName, ... )
 			--EMA.COMMUNICATION_GROUP,
 			EMA:SendCommMessage(
 			EMA.COMMAND_PREFIX,
-			message,
+			LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message)),
 			channel,
 			nil,
 			EMA.COMMUNICATION_PRIORITY_ALERT
@@ -223,7 +223,6 @@ local function CommandAll( moduleName, commandName, ... )
 			--EMA:Print("testChennel", EMA.COMMAND_PREFIX, channel, EMA.COMMUNICATION_PRIORITY_ALERT)	
 			--return
 	end
-]]	
 	--if the unit is not in the party then it unlikely did not get the party message,
 	for characterName, characterOrder in EMAPrivate.Team.TeamList() do		
 		if UnitInParty( Ambiguate( characterName, "none" ) ) == false then				
@@ -232,7 +231,7 @@ local function CommandAll( moduleName, commandName, ... )
 				EMA:DebugMessage("Sending command to others not in party/raid.", message, "WHISPER", characterName)	
 				EMA:SendCommMessage(
 				EMA.COMMAND_PREFIX,
-				message,
+				LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message)),
 				EMA.COMMUNICATION_WHISPER,
 				characterName,
 				EMA.COMMUNICATION_PRIORITY_ALERT
@@ -262,7 +261,7 @@ local function CommandMaster( moduleName, commandName, ... )
 			EMA:DebugMessage("Sending command to others not in party/raid.", message, "WHISPER", characterName)	
 				EMA:SendCommMessage( 
 				EMA.COMMAND_PREFIX,
-				message,
+				LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message)),
 				EMA.COMMUNICATION_WHISPER,
 				characterName,
 				EMA.COMMUNICATION_PRIORITY_ALERT
@@ -278,7 +277,7 @@ local function CommandToon( moduleName, characterName, commandName, ... )
 			EMA:DebugMessage("Sending command to others not in party/raid.", message, "WHISPER", characterName)	
 				EMA:SendCommMessage( 
 				EMA.COMMAND_PREFIX,
-				message,
+				LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message)),
 				EMA.COMMUNICATION_WHISPER,
 				characterName,
 				EMA.COMMUNICATION_PRIORITY_ALERT
@@ -325,6 +324,7 @@ function EMA:CommandReceived( prefix, message, distribution, sender )
 	--EMA:Print( "Command received: ", prefix, message, distribution, sender )
 	-- Check if the command is for EMA Communications.
 	if prefix == EMA.COMMAND_PREFIX then
+		message = LibDeflate:DecompressDeflate(LibDeflate:DecodeForWoWAddonChannel(message))
 		--checks the char is in the team if not everyone can change settings and we do not want that
 		if EMAPrivate.Team.IsCharacterInTeam( sender ) == true then
 		    EMA:DebugMessage( "Sender is in team list." )
@@ -338,7 +338,7 @@ function EMA:CommandReceived( prefix, message, distribution, sender )
 			local moduleName, commandName, argumentsStringSerialized = strsplit( EMA.COMMAND_SEPERATOR, message )
 			local argumentsTable  = {}
 			-- Are there any arguments?
-			if (argumentsStringSerialized ~= nil) and (argumentsStringSerialized:trim() == "") then 
+			if argumentsStringSerialized == nil or ((argumentsStringSerialized ~= nil) and (argumentsStringSerialized:trim() == "")) then 
 				-- No.
 				else
 					-- Deserialize the arguments.
