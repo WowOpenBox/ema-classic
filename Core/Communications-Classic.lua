@@ -174,7 +174,7 @@ local function CommandAll( moduleName, commandName, ... )
 	if EMA.db.useGuildComms == true then
 			EMA:SendCommMessage(
 			EMA.COMMAND_PREFIX,
-			LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message)),
+			LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message, {level = 9})),
 			EMA.COMMUNICATION_GUILD,
 			nil,
 			EMA.COMMUNICATION_PRIORITY_ALERT	
@@ -215,7 +215,7 @@ local function CommandAll( moduleName, commandName, ... )
 			--EMA.COMMUNICATION_GROUP,
 			EMA:SendCommMessage(
 			EMA.COMMAND_PREFIX,
-			LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message)),
+			LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message, {level = 9})),
 			channel,
 			nil,
 			EMA.COMMUNICATION_PRIORITY_ALERT
@@ -231,7 +231,7 @@ local function CommandAll( moduleName, commandName, ... )
 				EMA:DebugMessage("Sending command to others not in party/raid.", message, "WHISPER", characterName)	
 				EMA:SendCommMessage(
 				EMA.COMMAND_PREFIX,
-				LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message)),
+				LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message, {level = 9})),
 				EMA.COMMUNICATION_WHISPER,
 				characterName,
 				EMA.COMMUNICATION_PRIORITY_ALERT
@@ -261,7 +261,7 @@ local function CommandMaster( moduleName, commandName, ... )
 			EMA:DebugMessage("Sending command to others not in party/raid.", message, "WHISPER", characterName)	
 				EMA:SendCommMessage( 
 				EMA.COMMAND_PREFIX,
-				LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message)),
+				LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message, {level = 9})),
 				EMA.COMMUNICATION_WHISPER,
 				characterName,
 				EMA.COMMUNICATION_PRIORITY_ALERT
@@ -277,7 +277,7 @@ local function CommandToon( moduleName, characterName, commandName, ... )
 			EMA:DebugMessage("Sending command to others not in party/raid.", message, "WHISPER", characterName)	
 				EMA:SendCommMessage( 
 				EMA.COMMAND_PREFIX,
-				LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message)),
+				LibDeflate:EncodeForWoWAddonChannel(LibDeflate:CompressDeflate(message, {level = 9})),
 				EMA.COMMUNICATION_WHISPER,
 				characterName,
 				EMA.COMMUNICATION_PRIORITY_ALERT
