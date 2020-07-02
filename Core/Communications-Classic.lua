@@ -338,7 +338,7 @@ function EMA:CommandReceived( prefix, message, distribution, sender )
 			local moduleName, commandName, argumentsStringSerialized = strsplit( EMA.COMMAND_SEPERATOR, message )
 			local argumentsTable  = {}
 			-- Are there any arguments?
-			if argumentsStringSerialized == nil or ((argumentsStringSerialized ~= nil) and (argumentsStringSerialized:trim() == "")) then 
+			if argumentsStringSerialized == nil or (argumentsStringSerialized ~= nil and argumentsStringSerialized:trim() == "") then 
 				-- No.
 				else
 					-- Deserialize the arguments.
