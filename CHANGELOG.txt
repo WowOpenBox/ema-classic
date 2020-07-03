@@ -2,6 +2,16 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.4-Release-v0.9(121029)
+Game Version: 1.13.4
+Release Date: 03/07/2020
+
+## Communications
+	- WHISPER Communications should now work if your in a party or a raid.
+		-So you do not have to be in a guild or though i would still advise if you can.
+
+---------------------------
+
 EMA Version: v1.13.4-Release-v0.9(121027)
 Game Version: 1.13.4
 Release Date: 30/06/2020
