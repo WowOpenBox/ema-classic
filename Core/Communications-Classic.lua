@@ -180,13 +180,13 @@ local function CommandAll( moduleName, commandName, ... )
 			)
 		return
 	end	
-	-- toon has to be in a group		
 --[[	
+	-- toon has to be in a group	
 	if UnitInBattleground( "player" ) then
 		EMA:DebugMessage( "PvP_INSTANCE")
 		channel = "INSTANCE_CHAT"
 	elseif IsInGroup() then
-		EMA:DebugMessage( "Group")
+		EMA:DebugMessage( "Group")	
 		local isInstance, instanceType = IsInInstance()
 		local name, Type, difficulty, difficultyName, maxPlayers, playerDifficulty, isDynamicInstance = GetInstanceInfo()
 		if isInstance or instanceType == "raid" or IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
@@ -207,9 +207,9 @@ local function CommandAll( moduleName, commandName, ... )
 			end
 		end	
 	end	
-	--EMA:Print( "CHANNEL", channel)
-	if channel then
 	
+	EMA:Print( "CHANNEL", channel)
+	if channel then	
 	EMA:DebugMessage("Sending command to group.", message, "channel", channel, nil)
 		--EMA:Print("Sending command to group.", message, "channel", channel, nil)
 			--EMA.COMMUNICATION_GROUP,
@@ -226,20 +226,18 @@ local function CommandAll( moduleName, commandName, ... )
 ]]	
 	--if the unit is not in the party then it unlikely did not get the party message,
 	for characterName, characterOrder in EMAPrivate.Team.TeamList() do		
-		if UnitInParty( Ambiguate( characterName, "none" ) ) == false then				
-			EMA:DebugMessage( "Toon not in party:", characterName)
+--		if UnitInParty( Ambiguate( characterName, "none" ) ) == true then				
 			if IsCharacterOnline( characterName ) == true then
-				EMA:DebugMessage("Sending command to others not in party/raid.", message, "WHISPER", characterName)	
+				EMA:DebugMessage("Sending command to palyers not in a Guild.", message, "WHISPER", characterName)	
 				EMA:SendCommMessage(
 				EMA.COMMAND_PREFIX,
 				message,
 				EMA.COMMUNICATION_WHISPER,
 				characterName,
-				EMA.COMMUNICATION_PRIORITY_ALERT
+				EMA.COMMUNICATION_PRIORITY_BULK
 				)
 				--EMA:Print("testWis", EMA.COMMAND_PREFIX, EMA.COMMUNICATION_WHISPER, characterName , EMA.COMMUNICATION_PRIORITY_ALERT)	
-			end	
-		end
+		end	
 	end	
 end
 
