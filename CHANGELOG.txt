@@ -2,6 +2,24 @@
 ChangeLogs:
 ---------------------------
 
+EMA Version: v1.13.5-Release-v0.9(121030)
+Game Version: 1.13.5
+Release Date: 07/11/2020
+
+## Isboxer
+	-- Removed isboxer support for now.
+	
+	
+## Item-Bar 
+	- should now work with Spells
+
+## Macro
+	--Added new Macro plugin
+	
+
+
+---------------------------
+
 EMA Version: v1.13.4-Release-v0.9(121029)
 Game Version: 1.13.4
 Release Date: 03/07/2020

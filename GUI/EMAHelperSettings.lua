@@ -347,9 +347,21 @@ function EMAHelperSettings:CreateIcon( settingsControl, width, left, top, iconNa
 	return icon
 end
 
+-------------------------------------------------------------------------------------------------------------
+-- FreeLabel.
+-------------------------------------------------------------------------------------------------------------
+
+function EMAHelperSettings:CreateFreeLabel( settingsControl, width, left, top, text )
+	local label = AceGUI:Create( "Label" )
+	label:SetText( text )
+	settingsControl.widgetSettings:AddChild( label )
+	label:SetWidth( width )
+	label:SetPoint( "TOPLEFT", settingsControl.widgetSettings.content, "TOPLEFT", left, top )
+	return label
+end
 
 -------------------------------------------------------------------------------------------------------------
--- Label.
+-- NormalLabel.
 -------------------------------------------------------------------------------------------------------------
 
 function EMAHelperSettings:GetLabelHeight()
@@ -546,11 +558,7 @@ function EMAHelperSettings:CreateScrollList( list )
 	local rowWidth = list.listWidth - ( columnSpacing * 2 ) - widthOfScrollBar
 	list.listHeight = list.rowsToDisplay * list.rowHeight + ( rowVerticalSpacing * 2 )
 	-- Create the holder frame.
-	list.listFrame = CreateFrame( 
-		"Frame", 
-		list.listFrameName, 
-		list.parentFrame 
-	)
+	list.listFrame = CreateFrame( "Frame", list.listFrameName, list.parentFrame, BackdropTemplateMixin and "BackdropTemplate" or nil )
 	list.listFrame:SetBackdrop( self:CreateBackdrop() )
 	list.listFrame:SetBackdropColor( 0.1, 0.1, 0.1, 0.5 )
 	list.listFrame:SetBackdropBorderColor( 0.4, 0.4, 0.4 )

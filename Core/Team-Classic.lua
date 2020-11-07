@@ -343,6 +343,7 @@ local function SettingsCreateTeamList()
 		EMA.SettingsAddPartyClick,
 		L["BUTTON_ADDALL_HELP"]
 	)
+--[[	
 	EMA.settingsControl.teamListButtonAddIsboxerList = EMAHelperSettings:Icon( 
 		EMA.settingsControl, 
 		iconSize,
@@ -354,13 +355,14 @@ local function SettingsCreateTeamList()
 		EMA.SettingsAddIsboxerListClick,
 		L["BUTTON_ISBOXER_ADD_HELP"]
 	)
+]]	
 	EMA.settingsControl.teamListButtonMoveUp = EMAHelperSettings:Icon( 
 		EMA.settingsControl, 
 		iconSize,
 		iconSize,
 		"Interface\\Addons\\EMA-Classic\\Media\\CharUp.tga", --icon Image
 		left - iconSize - 11,
-		topOfList - verticalSpacing - iconHight * 3, 
+		topOfList - verticalSpacing - iconHight * 2, 
 		L[""], 
 		EMA.SettingsMoveUpClick,
 		L["BUTTON_UP_HELP"]
@@ -371,7 +373,7 @@ local function SettingsCreateTeamList()
 		iconSize,	
 		"Interface\\Addons\\EMA-Classic\\Media\\CharDown.tga", --icon Image
 		left - iconSize - 11,
-		topOfList - verticalSpacing - iconHight * 4,
+		topOfList - verticalSpacing - iconHight * 3,
 		L[""],
 		EMA.SettingsMoveDownClick,
 		L["BUTTON_DOWN_HELP"]		
@@ -382,7 +384,7 @@ local function SettingsCreateTeamList()
 		iconSize,
 		"Interface\\Addons\\EMA-Classic\\Media\\CharRemove.tga", --icon Image
 		left - iconSize - 11 , 
-		topOfList - verticalSpacing - iconHight * 5,
+		topOfList - verticalSpacing - iconHight * 4,
 		L[""], 
 		EMA.SettingsRemoveClick,
 		L["BUTTON_REMOVE_HELP"]
@@ -393,7 +395,7 @@ local function SettingsCreateTeamList()
 		iconSize,
 		"Interface\\Addons\\EMA-Classic\\Media\\CharMaster.tga", --icon Image
 		left - iconSize - 11 , 
-		topOfList - verticalSpacing - iconHight * 6,
+		topOfList - verticalSpacing - iconHight * 5,
 		L[""], 
 		EMA.SettingsSetMasterClick,
 		L["BUTTON_MASTER_HELP"]
@@ -1447,6 +1449,7 @@ function EMA:OnMasterChange( message, characterName )
 	end
 end
 
+--[[
 function EMA:AddIsboxerMembers()
 	if IsAddOnLoaded("Isboxer" ) then
 		for slot, characterName in EMAApi.IsboxerTeamList() do
@@ -1456,6 +1459,8 @@ function EMA:AddIsboxerMembers()
 		EMA:Print(L["ISBOXER_ADDON_NOT_LOADED"])
 	end	
 end
+]]
+
 
 -- LOOT FOR Classic
 
@@ -1974,9 +1979,11 @@ function EMA.SettingsAddPartyClick( event )
 	EMA:AddPartyMembers()
 end
 
+--[[
 function EMA:SettingsAddIsboxerListClick( event )
 	EMA:AddIsboxerMembers()
 end
+]]
 
 function EMA:SettingsInviteClick( event )
 	EMA:InviteTeamToParty(nil)

@@ -15,8 +15,8 @@
 
 	<Script file="Toon-Classic.lua" />
 	<Script file="Talk-Classic.lua" />	
-	
 	<Script file="Follow-Classic.lua" />
+	<Script file="Macro-Classic.lua" />
 	
 	<Script file="Interaction-Classic.lua" />
 	
@@ -32,6 +32,6 @@
 	<Script file="DisplayTeam-Classic.lua" />
 	<Script file="Information-Classic.lua" />
 	<Script file="ItemUse-Classic.lua" />
-	<Script file="ISBoxer-Classic.lua" />
+<!--	<Script file="ISBoxer-Classic.lua" /> -->
 	<Script file="LDBBar.lua" />
 </Ui>
