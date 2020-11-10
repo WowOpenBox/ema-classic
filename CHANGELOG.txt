@@ -1,6 +1,18 @@
 ﻿---------------------------
 ChangeLogs:
 ---------------------------
+EMA Version: v1.13.5-Release-v0.9(121031)
+Game Version: 1.13.5
+Release Date: 10/11/2020
+
+## Follow
+	-- Added a new command to stop follow your current Target.
+		-- KeyBinding can be set the normal way.
+		-- /ema-follow stop all
+		
+		
+
+---------------------------
 
 EMA Version: v1.13.5-Release-v0.9(121030)
 Game Version: 1.13.5

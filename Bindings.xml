@@ -31,6 +31,9 @@
 	<Binding name="FOLLOWTEAIN" category="EMA">
 		--[[dummy]]
 	</Binding>	
+	<Binding name="FOLLOWSTOP" category="EMA">
+		--[[dummy]]
+	</Binding>
 	<!-- ItemUse Bindings-->
 	<Binding name="ITEMUSE1" header="ITEMUSE" category="EMA">
 		--[[dummy]]
