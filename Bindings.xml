@@ -18,6 +18,12 @@
 	<Binding name="TEAMMASTER" category="EMA">
 		--[[dummy]]
 	</Binding>
+	<Binding name="MASTERTARGET" header="ASTERISK" category="EMA">
+		--[[dummy]]
+	</Binding>
+	<Binding name="MASTERASSIST" category="EMA">
+		--[[dummy]]
+	</Binding>
 	<!-- Follow Bindings-->
 	<Binding name="FOLLOWME" header="FOLLOW" category="EMA">
 		--[[dummy]]

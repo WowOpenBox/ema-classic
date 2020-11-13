@@ -278,8 +278,11 @@ L["IN_GROUP"] = "In Group."
 L["FRIENDS_NOT_STRANGERS"] = "Friends Are Not Strangers"
 L["FRIENDS_NOT_STRANGERS_HELP"] = "Ingame Friends Not Stangers"
 L["OOOL"] = "Slaves Opt Out Of Loot"
-L["OOOL_HELP"] = "SLaves Will Pass On Rare Loot"
-
+L["OOOL_HELP"] = "Slaves Will Pass On Rare Loot"
+L["SET_FOCUS_MASTER"] = "Sets Focus To Master* "
+L["SET_MASTER_TARGET"] = "Sets Target To Master* "
+L["SET_MASTER_ASSIST"] = "Sets Assist To Master* "
+L["FAKE_KEY_BINDING"] = "* Needs to Press the key on all clones"
 
 --------------------------
 -- Message Locale

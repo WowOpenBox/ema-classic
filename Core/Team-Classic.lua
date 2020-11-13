@@ -38,10 +38,14 @@ EMA.moduleOrder = 20
 
 
 -- EMA key bindings.
-BINDING_HEADER_TEAM = L["TEAM"]
 BINDING_NAME_TEAMINVITE = L["INVITE_GROUP"]
 BINDING_NAME_TEAMDISBAND = L["DISBAND_GROUP"]
 BINDING_NAME_TEAMMASTER = L["SET_MASTER"]
+BINDING_NAME_MASTERTARGET = L["SET_MASTER_TARGET"]
+BINDING_NAME_MASTERASSIST = L["SET_MASTER_ASSIST"]
+--Headers
+BINDING_HEADER_TEAM = L["TEAM"]
+BINDING_HEADER_ASTERISK  = L["FAKE_KEY_BINDING"]
 
 -- Settings - the values to store and their defaults for the settings database.
 EMA.settings = {
@@ -626,6 +630,27 @@ local function SettingsCreatePartyLootControl( top )
 		EMA.SettingsSetSlavesOptOutToggle,
 		L["OOOL_HELP"]
 	)		
+	EMA.settingsControl.CickInformationlabel = EMAHelperSettings:CreateLabel( 
+		EMA.settingsControl, 
+		headingWidth, 
+		left, 
+		top - headingHeight - checkBoxHeight - radioBoxHeight - checkBoxHeight - labelContinueHeight - labelContinueHeight - checkBoxHeight - checkBoxHeight, 
+		"You Can Use the current [\Click] in macros"
+	)	
+	EMA.settingsControl.CickInformationlabel = EMAHelperSettings:CreateLabel( 
+		EMA.settingsControl, 
+		headingWidth, 
+		left, 
+		top - headingHeight - checkBoxHeight - radioBoxHeight - checkBoxHeight - labelContinueHeight - labelContinueHeight - checkBoxHeight - checkBoxHeight - checkBoxHeight,
+		"[/click EMAAssistMaster]"
+	)
+	EMA.settingsControl.CickInformationlabel = EMAHelperSettings:CreateLabel( 
+		EMA.settingsControl, 
+		headingWidth, 
+		left, 
+		top - headingHeight - checkBoxHeight - radioBoxHeight - checkBoxHeight - labelContinueHeight - labelContinueHeight - checkBoxHeight - checkBoxHeight - checkBoxHeight - checkBoxHeight,
+		"[/click EMATargetMaster]"
+	)
 	return bottomOfSection	
 end
 
@@ -1432,9 +1457,23 @@ local function LeaveTheParty()
 	end
 end
 
+function EMA:UpdateMacros()
+	if InCombatLockdown() then
+		return
+	end
+	local characterName = ( Ambiguate(EMA.db.master, "none" ) )
+	local target = "/target " .. characterName
+	local assist = "/assist " .. characterName
+	--EMA:Print("test", characterName, "M", focus )
+	EMATargetMaster:SetAttribute( "macrotext", target )
+	EMAAssistMaster:SetAttribute( "macrotext", assist )
+end
+
+
 function EMA:OnMasterChange( message, characterName )
 	--EMA:Print("test", message, characterName)
 	local playerName = EMA.characterName
+	EMA:UpdateMacros()
 	if EMA.db.masterChangePromoteLeader == true then
 		if IsInGroup( "player" ) and UnitIsGroupLeader( "player" ) == true and GetMasterName() ~= playerName then
 			PromoteToLeader( Ambiguate( GetMasterName(), "all" ) )
@@ -1618,9 +1657,16 @@ function EMA:OnInitialize()
 	EMATeamSecureButtonMaster:SetAttribute( "type", "macro" )
 	EMATeamSecureButtonMaster:SetAttribute( "macrotext", "/ema-team iammaster" )
 	EMATeamSecureButtonMaster:Hide()
-	--Sets The class of the char.
-	--	setClass()
-
+	
+	EMATargetMaster = CreateFrame( "CheckButton", "EMATargetMaster", nil, "SecureActionButtonTemplate" )
+	EMATargetMaster:SetAttribute( "type", "macro" )
+	EMATargetMaster:Hide()	
+		
+	EMAAssistMaster = CreateFrame( "CheckButton", "EMAAssistMaster", nil, "SecureActionButtonTemplate" )
+	EMAAssistMaster:SetAttribute( "type", "macro" )
+	EMAAssistMaster:Hide()
+	
+	EMA:UpdateMacros()
 end
 
 -- Called when the addon is enabled.
@@ -2101,6 +2147,21 @@ function EMA:UPDATE_BINDINGS()
 	if key2 then 
 		SetOverrideBindingClick( EMA.keyBindingFrame, false, key2, "EMATeamSecureButtonMaster" ) 
 	end
+		local key1, key2 = GetBindingKey( "MASTERTARGET" )		
+	if key1 then 
+		SetOverrideBindingClick( EMA.keyBindingFrame, false, key1, "EMATargetMaster" ) 
+	end
+	if key2 then 
+		SetOverrideBindingClick( EMA.keyBindingFrame, false, key2, "EMATargetMaster" ) 
+	end
+	local key1, key2 = GetBindingKey( "MASTERASSIST" )		
+	if key1 then 
+		SetOverrideBindingClick( EMA.keyBindingFrame, false, key1, "EMAAssistMaster" ) 
+	end
+	if key2 then 
+		SetOverrideBindingClick( EMA.keyBindingFrame, false, key2, "EMAAssistMaster" ) 
+	end
+	
 end
 
 -------------------------------------------------------------------------------------------------------------
