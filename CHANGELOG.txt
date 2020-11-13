@@ -1,10 +1,22 @@
 ﻿---------------------------
 ChangeLogs:
 ---------------------------
-EMA Version: v1.13.5-Release-v0.9(121032)
+EMA Version: v1.13.5-Release-v0.9(121033)
 Game Version: 1.13.5
 Release Date: 13/11/2020
 
+
+## Team
+	-- Added A new KeyBinding Toggle Click To Move. 
+	-- Added A new CommadLine "/ema-team ctm <group>" 
+		- dev note:  (this is a non-boardcasting key to toggle) as well u can set 
+		groups if use the commandline /ema-team ctm <group>, it will not toggle it "on" the the window you send the command from. 
+		(master free) but it will turn it off so if u change windows it will change.
+
+---------------------------
+EMA Version: v1.13.5-Release-v0.9(121032)
+Game Version: 1.13.5
+Release Date: 13/11/2020
 ## Team
 	-- Added 3 New KeyBindings
 		-- Focus Master

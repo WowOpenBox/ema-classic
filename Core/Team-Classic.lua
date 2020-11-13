@@ -41,6 +41,7 @@ EMA.moduleOrder = 20
 BINDING_NAME_TEAMINVITE = L["INVITE_GROUP"]
 BINDING_NAME_TEAMDISBAND = L["DISBAND_GROUP"]
 BINDING_NAME_TEAMMASTER = L["SET_MASTER"]
+BINDING_NAME_CLICKTOMOVE = L["BINDING_CLICK_TO_MOVE"]
 BINDING_NAME_MASTERTARGET = L["SET_MASTER_TARGET"]
 BINDING_NAME_MASTERASSIST = L["SET_MASTER_ASSIST"]
 --Headers
@@ -174,7 +175,15 @@ function EMA:GetConfiguration()
 				usage = "/ema-team push",
 				get = false,
 				set = "EMASendSettings",
-			},				
+			},
+			ctm = {
+				type = "input",
+				name = L["COMMANDLINE_CLICK_TO_MOVE"],
+				desc = L["COMMANDLINE_CLICK_TO_MOVE_HELP"],
+				usage = "/ema-team ctm <group>",
+				get = false,
+				set = "CommandClickToMove",
+			},			
 		},
 	}
 	return configuration
@@ -196,6 +205,8 @@ EMA.COMMAND_SET_MASTER = "EMATeamSetMaster"
 -- Set Minion OffLine
 EMA.COMMAND_SET_OFFLINE = "EMATeamSetOffline"
 EMA.COMMAND_SET_ONLINE = "EMATeamSetOnline"
+EMA.COMMAND_CLICK_TO_MOVE = "EMAClickToMove"
+
 
 
 -------------------------------------------------------------------------------------------------------------
@@ -1488,6 +1499,27 @@ function EMA:OnMasterChange( message, characterName )
 	end
 end
 
+function EMA:CommandClickToMove( info, parameters )
+	local tag = parameters
+	if tag ~= nil and tag:trim() ~= "" then 
+		EMA:EMASendCommandToTeam( EMA.COMMAND_CLICK_TO_MOVE, tag )
+	end
+end
+
+function EMA:ReceiveClickToMove( characterName, tag )
+	local clickToMove = GetCVar("Autointeract")
+	--EMA:Print("test", characterName, tag, clickToMove )
+	if EMAApi.DoesCharacterHaveTag( EMA.characterName, tag ) then
+		if clickToMove == "1" then
+			ConsoleExec("Autointeract 0")	
+		else
+			if characterName ~= EMA.characterName then
+				ConsoleExec("Autointeract 1")
+			end	
+		end
+	end	
+end
+
 --[[
 function EMA:AddIsboxerMembers()
 	if IsAddOnLoaded("Isboxer" ) then
@@ -1619,8 +1651,6 @@ function EMA:CheckSlavesOptOutOfLoot()
 	end
 end
 
-
-
 -------------------------------------------------------------------------------------------------------------
 -- Addon initialization, enabling and disabling.
 -------------------------------------------------------------------------------------------------------------
@@ -1645,27 +1675,35 @@ function EMA:OnInitialize()
 	-- Adds DefaultGroups to GUI
 	EMA.characterGroupList = {}
 	-- Key bindings.
-	EMATeamSecureButtonInvite = CreateFrame( "CheckButton", "EMATeamSecureButtonInvite", nil, "SecureActionButtonTemplate" )
-	EMATeamSecureButtonInvite:SetAttribute( "type", "macro" )
-	EMATeamSecureButtonInvite:SetAttribute( "macrotext", "/ema-team invite" )
-	EMATeamSecureButtonInvite:Hide()	
-	EMATeamSecureButtonDisband = CreateFrame( "CheckButton", "EMATeamSecureButtonDisband", nil, "SecureActionButtonTemplate" )
-	EMATeamSecureButtonDisband:SetAttribute( "type", "macro" )
-	EMATeamSecureButtonDisband:SetAttribute( "macrotext", "/ema-team disband" )
-	EMATeamSecureButtonDisband:Hide()
-	EMATeamSecureButtonMaster = CreateFrame( "CheckButton", "EMATeamSecureButtonMaster", nil, "SecureActionButtonTemplate" )
-	EMATeamSecureButtonMaster:SetAttribute( "type", "macro" )
-	EMATeamSecureButtonMaster:SetAttribute( "macrotext", "/ema-team iammaster" )
-	EMATeamSecureButtonMaster:Hide()
-	
-	EMATargetMaster = CreateFrame( "CheckButton", "EMATargetMaster", nil, "SecureActionButtonTemplate" )
-	EMATargetMaster:SetAttribute( "type", "macro" )
-	EMATargetMaster:Hide()	
+	if InCombatLockdown() == false then
+		EMATeamSecureButtonInvite = CreateFrame( "CheckButton", "EMATeamSecureButtonInvite", nil, "SecureActionButtonTemplate" )
+		EMATeamSecureButtonInvite:SetAttribute( "type", "macro" )
+		EMATeamSecureButtonInvite:SetAttribute( "macrotext", "/ema-team invite" )
+		EMATeamSecureButtonInvite:Hide()	
 		
-	EMAAssistMaster = CreateFrame( "CheckButton", "EMAAssistMaster", nil, "SecureActionButtonTemplate" )
-	EMAAssistMaster:SetAttribute( "type", "macro" )
-	EMAAssistMaster:Hide()
-	
+		EMATeamSecureButtonDisband = CreateFrame( "CheckButton", "EMATeamSecureButtonDisband", nil, "SecureActionButtonTemplate" )
+		EMATeamSecureButtonDisband:SetAttribute( "type", "macro" )
+		EMATeamSecureButtonDisband:SetAttribute( "macrotext", "/ema-team disband" )
+		EMATeamSecureButtonDisband:Hide()
+		
+		EMATeamSecureButtonMaster = CreateFrame( "CheckButton", "EMATeamSecureButtonMaster", nil, "SecureActionButtonTemplate" )
+		EMATeamSecureButtonMaster:SetAttribute( "type", "macro" )
+		EMATeamSecureButtonMaster:SetAttribute( "macrotext", "/ema-team iammaster" )
+		EMATeamSecureButtonMaster:Hide()
+		
+		EMATeamSecureButtonClickToMove = CreateFrame( "CheckButton", "EMATeamSecureButtonClickToMove", nil, "SecureActionButtonTemplate" )
+		EMATeamSecureButtonClickToMove:SetAttribute( "type", "macro" )
+		EMATeamSecureButtonClickToMove:SetAttribute( "macrotext", "/ema-team ctm all" )
+		EMATeamSecureButtonClickToMove:Hide()
+			
+		EMATargetMaster = CreateFrame( "CheckButton", "EMATargetMaster", nil, "SecureActionButtonTemplate" )
+		EMATargetMaster:SetAttribute( "type", "macro" )
+		EMATargetMaster:Hide()	
+			
+		EMAAssistMaster = CreateFrame( "CheckButton", "EMAAssistMaster", nil, "SecureActionButtonTemplate" )
+		EMAAssistMaster:SetAttribute( "type", "macro" )
+		EMAAssistMaster:Hide()
+	end
 	EMA:UpdateMacros()
 end
 
@@ -2161,7 +2199,13 @@ function EMA:UPDATE_BINDINGS()
 	if key2 then 
 		SetOverrideBindingClick( EMA.keyBindingFrame, false, key2, "EMAAssistMaster" ) 
 	end
-	
+	local key1, key2 = GetBindingKey( "CLICKTOMOVE" )		
+	if key1 then 
+		SetOverrideBindingClick( EMA.keyBindingFrame, false, key1, "EMATeamSecureButtonClickToMove" ) 
+	end
+	if key2 then 
+		SetOverrideBindingClick( EMA.keyBindingFrame, false, key2, "EMATeamSecureButtonClickToMove" ) 
+	end
 end
 
 -------------------------------------------------------------------------------------------------------------
@@ -2169,31 +2213,26 @@ end
 -------------------------------------------------------------------------------------------------------------
 
 function EMA:EMAOnCommandReceived( sender, commandName, ... )
+	if IsCharacterInTeam( sender ) == false then
+		return
+	end	
 	if commandName == EMA.COMMAND_LEAVE_PARTY then
-		if IsCharacterInTeam( sender ) == true then
-			LeaveTheParty()
-		end
+		LeaveTheParty()
 	end
 	if commandName == EMA.COMMAND_SET_MASTER then
-		if IsCharacterInTeam( sender ) == true then
-			EMA:ReceiveCommandSetMaster( ... )
-		end	
+		EMA:ReceiveCommandSetMaster( ... )	
 	end
-	--Ebony
 	if commandName == EMA.COMMAND_SET_OFFLINE then
-		if IsCharacterInTeam( sender ) == true then
-			EMA.ReceivesetOffline( ... )
-		end
+		EMA:ReceivesetOffline( ... )
 	end
 	if commandName == EMA.COMMAND_SET_ONLINE then
-		if IsCharacterInTeam( sender ) == true then
-			EMA.ReceivesetOnline( ... )
-		end
+		EMA:ReceivesetOnline( ... )
 	end
 	if commandName == EMA.COMMAND_TAG_PARTY then
-		if IsCharacterInTeam( sender ) == true then
-			EMA.doTagParty( characterName, tag, ... )
-		end	
+		EMA:doTagParty( characterName, tag, ... )
+	end
+	if commandName == EMA.COMMAND_CLICK_TO_MOVE then
+		EMA:ReceiveClickToMove( sender, ... )
 	end	
 end
 
